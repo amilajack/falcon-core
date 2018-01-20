@@ -31,6 +31,8 @@ export default class BaseProvider {
 
   logs: Array<string> = [];
 
+  _graphQLServerIsRunning: bool = false;
+
   static DEFAULT_LIMIT: number = 1000;
 
   static limitSelect = null;

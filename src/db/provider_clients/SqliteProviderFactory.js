@@ -1,7 +1,11 @@
 // @flow
 import sqlite3 from 'sqlite3';
-// import sqlite3, { Database } from 'sqlite3';
+import express from 'express';
+import getPort from 'get-port';
+import graphqlHTTP from 'express-graphql';
+import cors from 'cors';
 import { identify } from 'sql-query-identifier';
+import { buildSchemaFromDatabase } from 'tuql';
 import createLogger from '../../Logger';
 import BaseProvider from './BaseProvider';
 import type {
@@ -171,6 +175,39 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     });
     const finalQuery = queries.join('\n');
     return this.driverExecuteQuery({ query: finalQuery }).then(res => res.data);
+  }
+
+  getGraphQLServerPort() {
+    return this.graphQLServerPort;
+  }
+
+  async startGraphQLServer(): Promise<void> {
+    const app = express();
+    const schema = await buildSchemaFromDatabase(this.connection.dbConfig.database);
+    const port = await getPort();
+    app.use('/graphql', cors(), graphqlHTTP({ schema }));
+
+    return new Promise((resolve) => {
+      this.graphQLServer = app.listen(this.defaultGraphQLPort, () => {
+        this.graphQLServerPort = port;
+        console.log(` > Running at http://localhost:${port}/graphql`);
+        resolve();
+      });
+      this._graphQLServerIsRunning = true;
+    });
+  }
+
+  async stopGraphQLServer(): Promise<void> {
+    if (this.graphQLServerIsRunning()) {
+      this.graphQLServer.close();
+      this.graphQLServer = undefined;
+      this.graphQLServerPort = undefined;
+      this._graphQLServerIsRunning = false;
+    }
+  }
+
+  graphQLServerIsRunning() {
+    return this._graphQLServerIsRunning;
   }
 
   /**

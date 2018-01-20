@@ -97,6 +97,9 @@ export interface ProviderInterface {
   getLogs: () => Promise<logType>,
   setLogs: () => Promise<void>,
 
+  graphQLServerPort: number,
+  getGraphQLServerPort: () => number,
+
   /**
    * @TODO: Table creation methods
    */
@@ -154,6 +157,16 @@ export interface ProviderInterface {
     referencedTable: string,
     keyType: string
   },
+
+  /**
+   * Dynamically generate a graphql schema for a database and start
+   * a graphql server based on that schema
+   */
+  startGraphQLServer: () => Promise<void>,
+  stopGraphQLServer: () => Promise<void>,
+  graphQLServer: Object;
+  _graphQLServerIsRunning: bool;
+  graphQLServerIsRunning: () => bool;
 
   /**
    * @TODO: Basic CRUD Operations. Given a database name, table name,
