@@ -188,7 +188,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     app.use('/graphql', cors(), graphqlHTTP({ schema }));
 
     return new Promise((resolve) => {
-      this.graphQLServer = app.listen(this.defaultGraphQLPort, () => {
+      this.graphQLServer = app.listen(port, () => {
         this.graphQLServerPort = port;
         console.log(` > Running at http://localhost:${port}/graphql`);
         resolve();
