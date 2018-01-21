@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import cassandraDriver from 'cassandra-driver';
 
-export default function run(config, before) {
+export default function run(config) {
   beforeAll(async () => {
     const client = new cassandraDriver.Client({
       contactPoints: [config.host]
