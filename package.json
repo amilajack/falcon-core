@@ -12,7 +12,9 @@
     "lint": "eslint --cache --format=node_modules/eslint-formatter-pretty .",
     "lint-fix": "prettier --single-quote --write \"{,!(flow-typed|lib)/**}/*.{js,jsx}\" && yarn lint -- --fix",
     "prepublish": "npm run build && npm run flow-prepublish",
-    "test": "find ./test/databases/ -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test jest",
+    "prepush": "npm test",
+    "test": "npm run test:sqlite",
+    "test-all-dbs": "find ./test/databases/ -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test jest",
     "coverage": "npm run test:sqlite -- --coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "test:mysql": "cross-env NODE_ENV=test DB_CLIENTS=mysql jest test/Databases.spec.js",
@@ -20,7 +22,7 @@
     "test:sqlserver": "find ./test/databases/sqlserver -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=sqlserver jest test/Databases.spec.js",
     "test:postgresql": "find ./test/databases/postgresql -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=postgresql jest test/Databases.spec.js",
     "test:cassandra": "find ./test/databases/cassandra -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=cassandra jest test/Databases.spec.js",
-    "test-all": "npm run lint && npm run flow && npm run test && npm run build",
+    "test-all": "npm run lint && npm run flow && npm test && npm run build",
     "watch": "cross-env NODE_ENV=development babel --out-dir lib src --source-maps --watch"
   },
   "keywords": [
@@ -95,6 +97,7 @@
     "flow-copy-source": "^1.2.1",
     "flow-runtime": "^0.16.0",
     "flow-typed": "^2.2.3",
+    "husky": "^0.14.3",
     "jest-cli": "^22.1.3"
   },
   "jest": {

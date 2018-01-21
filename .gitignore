@@ -33,3 +33,4 @@ node_modules
 .eslintcache
 test/fixtures/.tmp.sqlectron.json
 sqlectron.db
+foo
