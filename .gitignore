@@ -34,3 +34,4 @@ node_modules
 test/fixtures/.tmp.sqlectron.json
 sqlectron.db
 foo
+flow-typed
