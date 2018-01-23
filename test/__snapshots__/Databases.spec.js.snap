@@ -222,8 +222,6 @@ exports[`Database sqlite given is already connected Export shoud fail on unsuppo
 
 exports[`Database sqlite given is already connected Export shoud fail when passing both "tables" and "table" 1`] = `"You cannot give both \\"tables\\" and \\"table\\". Choose one"`;
 
-exports[`Database sqlite given is already connected Get .getRoutineCreateScript should return CREATE PROCEDURE/FUNCTION script 1`] = `undefined`;
-
 exports[`Database sqlite given is already connected Get .getTableColumns should list all tables keys 1`] = `
 Array [
   Object {
@@ -462,7 +460,7 @@ Array [
     "affectedRows": 1,
     "command": "DELETE",
     "fields": Array [],
-    "rowCount": undefined,
+    "rowCount": 0,
     "rows": Array [],
   },
 ]
@@ -474,14 +472,14 @@ Array [
     "affectedRows": 2,
     "command": "DELETE",
     "fields": Array [],
-    "rowCount": undefined,
+    "rowCount": 0,
     "rows": Array [],
   },
   Object {
     "affectedRows": 2,
     "command": "DELETE",
     "fields": Array [],
-    "rowCount": undefined,
+    "rowCount": 0,
     "rows": Array [],
   },
 ]
@@ -493,7 +491,7 @@ Array [
     "affectedRows": 1,
     "command": "INSERT",
     "fields": Array [],
-    "rowCount": undefined,
+    "rowCount": 0,
     "rows": Array [],
   },
 ]
@@ -505,14 +503,14 @@ Array [
     "affectedRows": 1,
     "command": "INSERT",
     "fields": Array [],
-    "rowCount": undefined,
+    "rowCount": 0,
     "rows": Array [],
   },
   Object {
     "affectedRows": 1,
     "command": "INSERT",
     "fields": Array [],
-    "rowCount": undefined,
+    "rowCount": 0,
     "rows": Array [],
   },
 ]
@@ -695,7 +693,7 @@ Array [
     "affectedRows": 1,
     "command": "UPDATE",
     "fields": Array [],
-    "rowCount": undefined,
+    "rowCount": 0,
     "rows": Array [],
   },
 ]
@@ -707,14 +705,14 @@ Array [
     "affectedRows": 2,
     "command": "UPDATE",
     "fields": Array [],
-    "rowCount": undefined,
+    "rowCount": 0,
     "rows": Array [],
   },
   Object {
     "affectedRows": 2,
     "command": "UPDATE",
     "fields": Array [],
-    "rowCount": undefined,
+    "rowCount": 0,
     "rows": Array [],
   },
 ]

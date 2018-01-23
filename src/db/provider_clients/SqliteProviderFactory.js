@@ -530,8 +530,8 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
   }
 
   // @NOT_SUPPORTED
-  getRoutineCreateScript() {
-    return Promise.resolve('');
+  async getRoutineCreateScript() {
+    return '';
   }
 
   /**
@@ -569,7 +569,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
       rows,
       command: statement.type || (isSelect && 'SELECT'),
       fields: Object.keys(rows[0] || {}).map(name => ({ name })),
-      rowCount: data && data.length,
+      rowCount: rows.length,
       affectedRows: changes || 0
     };
   }

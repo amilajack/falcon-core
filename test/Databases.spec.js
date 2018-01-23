@@ -447,13 +447,15 @@ describe('Database', () => {
           });
 
           describe('.getRoutineCreateScript', () => {
-            it('should return CREATE PROCEDURE/FUNCTION script', async () => {
-              const [createScript] = await dbConn.getRoutineCreateScript(
-                'users_count',
-                'Procedure'
-              );
-              expect(createScript).toMatchSnapshot();
-            });
+            if (dbClient !== 'sqlite') {
+              it('should return CREATE PROCEDURE/FUNCTION script', async () => {
+                const [createScript] = await dbConn.getRoutineCreateScript(
+                  'users_count',
+                  'Procedure'
+                );
+                expect(createScript).toMatchSnapshot();
+              });
+            }
           });
         });
 
@@ -509,7 +511,6 @@ describe('Database', () => {
             });
           });
         }
-
 
         describe('GraphQL', () => {
           it('should start and stop graphql server', async () => {
