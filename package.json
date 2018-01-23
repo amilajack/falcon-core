@@ -12,8 +12,6 @@
     "lint": "eslint --cache --format=node_modules/eslint-formatter-pretty .",
     "lint-fix": "prettier --single-quote --write \"{,!(flow-typed|lib)/**}/*.{js,jsx}\" && yarn lint -- --fix",
     "prepublish": "npm run build && npm run flow-prepublish",
-    "pre-commit": "npm run prepublish",
-    "pre-push": "npm test",
     "test": "npm run test:sqlite",
     "test-all-dbs": "find ./test/databases/ -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test jest",
     "coverage": "npm run test:sqlite -- --coverage",
@@ -25,6 +23,12 @@
     "test:cassandra": "find ./test/databases/cassandra -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=cassandra jest test/Databases.spec.js",
     "test-all": "npm run lint && npm run flow && npm test && npm run build",
     "watch": "cross-env NODE_ENV=development babel --out-dir lib src --source-maps --watch"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run prepublish",
+      "pre-push": "npm test"
+    }
   },
   "keywords": [
     "falcon",
