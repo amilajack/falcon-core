@@ -15,7 +15,7 @@ export function getConfigPath() {
     : path.join(homedir(), '.sqlectron.json');
 }
 
-export function fileExists(filename: string): Promise<bool> {
+export function fileExists(filename: string) {
   return new Promise((resolve) => {
     fs.stat(filename, (err, stats) => {
       if (err) return resolve(false);
@@ -32,7 +32,7 @@ export function fileExistsSync(filename: string) {
   }
 }
 
-export function writeFile(filename: string, data: string): Promise<void> {
+export function writeFile(filename: string, data: string) {
   return new Promise((resolve, reject) => {
     fs.writeFile(filename, data, (err) => {
       if (err) return reject(err);
@@ -57,7 +57,7 @@ export function resolveHomePathToAbsolute(filename: string) {
   return path.join(homedir(), filename.substring(2));
 }
 
-export function readFile(filename: string): Promise<string> {
+export function readFile(filename: string) {
   const filePath = resolveHomePathToAbsolute(filename);
   return new Promise((resolve, reject) => {
     fs.readFile(path.resolve(filePath), (err, data) => {
@@ -67,7 +67,7 @@ export function readFile(filename: string): Promise<string> {
   });
 }
 
-export function readJSONFile(filename: string): Promise<Object> {
+export function readJSONFile(filename: string) {
   return readFile(filename).then(data => JSON.parse(data));
 }
 
@@ -77,7 +77,7 @@ export function readJSONFileSync(filename: string) {
   return JSON.parse(data.toString());
 }
 
-export function getPort(): Promise<number> {
+export function getPort() {
   return new Promise((resolve, reject) => {
     pf.getPort({ host: 'localhost' }, (err, port) => {
       if (err) return reject(err);

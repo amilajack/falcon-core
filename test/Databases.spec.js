@@ -1,6 +1,7 @@
 // @flow
 import path from 'path';
 import { readFileSync, unlinkSync } from 'fs';
+import { expect as chaiExpect } from 'chai';
 import { db } from '../src';
 import config from './databases/config';
 import setupSQLite from './databases/sqlite/setup';
@@ -508,6 +509,26 @@ describe('Database', () => {
             });
           });
         }
+
+
+        describe('GraphQL', () => {
+          it('should start and stop graphql server', async () => {
+            expect(dbConn.graphQLServerIsRunning()).toEqual(false);
+            await dbConn.startGraphQLServer();
+            expect(dbConn.graphQLServerIsRunning()).toEqual(true);
+            await dbConn.stopGraphQLServer();
+            expect(dbConn.graphQLServerIsRunning()).toEqual(false);
+          });
+
+          it('should have a port number', async () => {
+            expect(dbConn.graphQLServerIsRunning()).toEqual(false);
+            await dbConn.startGraphQLServer();
+            chaiExpect(dbConn.getGraphQLServerPort()).to.be.a('number');
+            await dbConn.stopGraphQLServer();
+            expect(dbConn.graphQLServerIsRunning()).toEqual(false);
+            expect(dbConn.getGraphQLServerPort()).toEqual(undefined);
+          });
+        });
 
         // @TODO
         // describe('Import', () => {})

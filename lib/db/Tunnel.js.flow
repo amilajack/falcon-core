@@ -58,7 +58,7 @@ async function configTunnel(serverInfo): Promise<tunnelConfigType> {
   return config;
 }
 
-export default function Tunnel(serverInfo: Object): Promise<Object> {
+export default function Tunnel(serverInfo: Object) {
   const logger = createLogger('db:tunnel');
 
   return new Promise(async (resolve, reject) => {
