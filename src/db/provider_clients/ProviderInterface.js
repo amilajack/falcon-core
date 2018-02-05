@@ -59,6 +59,11 @@ export type queryResponseType = {
   affectedRows: number
 };
 
+type connectionValidationType = {
+  success: bool,
+  errorMessages: Array<string>
+};
+
 type logType = {
   type: 'falcon' | 'user' | 'profile' | 'trace',
   query: string,
@@ -248,6 +253,8 @@ export interface ProviderInterface {
    * to
    */
   isOnline: () => Promise<bool>,
+
+  testConnection: (connection: Object) => Promise<connectionValidationType>,
 
   /**
     * The following methods return sql query statements that are specific to the
