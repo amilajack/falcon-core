@@ -29,35 +29,7 @@ npm install falcon-core --save
 ```
 
 ## Example
-```js
-import path from 'path';
-import { db, config } from 'falcon-core';
-
-const serverInfo = {
-  database: path.join(__dirname, 'demo.sqlite'),
-  client: 'sqlite'
-};
-
-async function main() {
-  const serverSession = db.createServer(serverInfo);
-  const connection = await serverSession.createConnection('demo.sqlite');
-  await connection.connect(serverInfo);
-
-  // Connection APIs
-  console.log(await connection.getTableSelectScript('albums'));
-  console.log(await connection.listTables());
-  console.log(await connection.listDatabases());
-  console.log(await connection.getTableColumns('albums'));
-  console.log(await connection.getTableValues('albums'));
-
-  // Export API's
-  console.log(await connection.exportJson('./tmp.json', {
-    table: 'users'
-  }));
-}
-
-main();
-```
+See the [falcon-core-example](https://github.com/amilajack/falcon-core-example/) repo
 
 ## Related
 * [falcon](https://github.com/falcon-client/falcon)
