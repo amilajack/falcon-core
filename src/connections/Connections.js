@@ -1,11 +1,8 @@
 // @flow
 // Manage saved connections to databases. Encrypts passwords
-import keytar from 'keytar';
 import Store from 'electron-store';
-import { error } from 'util';
 
-
-type connectionValidationType = {
+export type connectionValidationType = {
   errorMessages: Array<{
     fieldName: string,
     message: string
@@ -13,11 +10,13 @@ type connectionValidationType = {
   passed: bool
 };
 
-type connectionType = {
+export type connectionType = {
   // The internal id for the connection
   id: string,
   // The name of the connection
   name: string,
+  // The color of the connection
+  color?: string | 'default',
   // Which database the connection is for
   type: 'sqlite' | 'mysql' | 'postgres' | 'mssql',
   // These are properties that are specific to certain databases.
@@ -46,6 +45,9 @@ const FinalStore = process.env.NODE_ENV === 'test'
  * method can be modified
  */
 export default class Connections {
+  /**
+   * @private
+   */
   store = new FinalStore({
     defaults: {
       connections: []
@@ -54,98 +56,35 @@ export default class Connections {
 
   /**
    * @TODO
+   * @private
    */
   async validateBeforeCreation(connection: connectionType): Promise<connectionValidationType> {
-    const isFilePath = await import('is-valid-path');
-    const Joi = await import('joi');
-    const fs = await import('fs');
-    const Database = await import('better-sqlite3');
-
-    const customJoi = Joi.extend(joi => ({
-      base: joi.string(),
-      name: 'string',
-      language: {
-        file: 'needs to be a file',
-        file_exists: 'does not exist',
-        sqlite_valid: 'is not valid'
-      },
-      rules: [
-        {
-          name: 'file',
-          validate(params, value, state, options) {
-            return !isFilePath(value)
-              ? this.createError('string.file', { v: value, q: params.q }, state, options)
-              : value;
-          }
-        },
-        {
-          name: 'file_exists',
-          validate(params, value, state, options) {
-            return fs.existsSync(value)
-              ? value
-              : this.createError('string.file_exists', { v: value, q: params.q }, state, options);
-          }
-        },
-        {
-          name: 'sqlite_valid',
-          validate(params, value, state, options) {
-            let db;
-            let passed = true;
-            try {
-              db = new Database(value, {
-                readonly: true,
-                fileMustExist: true
-              });
-              if (db.pragma('quick_check', true) !== 'ok') {
-                passed = false;
-              }
-            } catch (e) {
-              passed = false;
-            } finally {
-              if (db) {
-                db.close();
-              }
-            }
-
-            return passed
-              ? value
-              : this.createError('string.sqlite_valid', { v: value, q: params.q }, state, options);
-          }
-        }
-      ]
-    }));
-
-    const schema = (() => {
-      switch (connection.type) {
-        case 'sqlite': {
-          return customJoi.object().keys({
-            id: customJoi.string().required(),
-            name: customJoi.string().required(),
-            database: customJoi.string().file().file_exists().sqlite_valid()
-              .required(),
-            type: customJoi.string().required()
-          });
-        }
-        default: {
-          throw new Error(`Unknown database type "${connection.type}". This probably means it is not supported`);
-        }
+    switch (connection.type) {
+      case 'sqlite': {
+        const { default: sqliteConnectionValidation } = await import('./SqliteConnectionValidation.js');
+        return sqliteConnectionValidation(connection);
       }
-    })();
-
-    const errors = customJoi.validate(connection, schema, { abortEarly: false });
-    if (errors.error) {
-      if (errors.error.details.length > 0) {
-        return errors.error.details;
+      default: {
+        throw new Error(`Unknown database type "${connection.type}". This probably means it is not supported`);
       }
     }
-
-    return [];
   }
 
-  async create(connection: connectionType) {
+  async create(connection: connectionType): Promise<connectionValidationType | connectionType> {
+    const rndm = await import('rndm');
+    const connectionWithDefaults = {
+      id: `conn-${rndm(16)}`,
+      color: 'gray',
+      ...connection
+    };
+    const validation = await this.validateBeforeCreation(connectionWithDefaults);
+    if (validation.errorMessages.length > 0) {
+      return validation;
+    }
     const connections = await this.getAll();
-    connections.push(connection);
+    connections.push(connectionWithDefaults);
     this.store.set('connections', connections);
+    return connectionWithDefaults;
   }
 
   /**
@@ -165,10 +104,15 @@ export default class Connections {
   /**
    * Update a connection by giving a new config
    */
-  async update(connectionId: string, connection: connectionType): Promise<void> {
+  async update(connectionId: string, connection: connectionType): Promise<connectionValidationType | connectionType> {
     const connections = await this.getAll();
     const connectionToUpdateIndex =
       connections.findIndex(conn => conn.id === connectionId);
+
+    const validation = await this.validateBeforeCreation(connection);
+    if (validation.errorMessages.length > 0) {
+      return validation;
+    }
 
     switch (connectionToUpdateIndex) {
       case -1: {
@@ -180,6 +124,7 @@ export default class Connections {
     }
 
     this.store.set('connections', connections);
+    return connection;
   }
 
   async getAll(): Promise<Array<connectionType>> {

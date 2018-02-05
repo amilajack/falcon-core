@@ -6,9 +6,9 @@ async function connectionFactory(connections, connectionCount: number = 1) {
   for (let i = 0; i < array.length; i++) {
     array[i] = await connections.create({
       id: `test-id-${i + 1}`,
+      type: 'sqlite',
       name: `test-connection-${i + 1}`,
-      password: 'test-password',
-      type: 'sqlite'
+      database: '/Users/amila/Desktop/demo.sqlite'
     });
   }
   return Promise.all(array);
@@ -37,7 +37,7 @@ describe('Connections', function testConnections() {
     expect(newConnections).toMatchSnapshot();
   });
 
-  it('should update a single connection', async () => {
+  it.only('should update a single connection', async () => {
     const connections = await this.connections.getAll();
     const connectionIdToDelete = connections[0].id;
     await this.connections.update(connectionIdToDelete, {

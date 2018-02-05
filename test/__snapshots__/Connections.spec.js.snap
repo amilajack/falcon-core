@@ -264,21 +264,24 @@ Array [
 exports[`Connections should update a single connection 1`] = `
 Array [
   Object {
-    "id": "test-id-foo",
-    "name": "test-connection-foo",
-    "password": "test-password",
+    "color": "gray",
+    "database": "/Users/amila/Desktop/demo.sqlite",
+    "id": "test-id-1",
+    "name": "test-connection-1",
     "type": "sqlite",
   },
   Object {
+    "color": "gray",
+    "database": "/Users/amila/Desktop/demo.sqlite",
     "id": "test-id-2",
     "name": "test-connection-2",
-    "password": "test-password",
     "type": "sqlite",
   },
   Object {
+    "color": "gray",
+    "database": "/Users/amila/Desktop/demo.sqlite",
     "id": "test-id-3",
     "name": "test-connection-3",
-    "password": "test-password",
     "type": "sqlite",
   },
 ]
