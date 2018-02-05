@@ -63,6 +63,8 @@
     "express": "^4.16.2",
     "express-graphql": "^0.6.11",
     "get-port": "^3.2.0",
+    "is-valid-path": "^0.1.1",
+    "joi": "^13.1.2",
     "json2csv": "^3.11.5",
     "keytar": "^4.1.0",
     "mssql": "^4.1.0",
@@ -76,14 +78,14 @@
     "tuql": "^1.5.0",
     "util.promisify": "^1.0.0",
     "uuid": "^3.2.1",
-    "valida": "^2.4.0",
-    "validator": "^9.4.0"
+    "valida": "^2.4.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
     "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-dynamic-import-node": "^1.2.0",
     "babel-plugin-flow-runtime": "^0.15.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",

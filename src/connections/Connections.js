@@ -2,21 +2,28 @@
 // Manage saved connections to databases. Encrypts passwords
 import keytar from 'keytar';
 import Store from 'electron-store';
-import validator from 'validator';
+import { error } from 'util';
+
 
 type connectionValidationType = {
-  message: string,
+  errorMessages: Array<{
+    fieldName: string,
+    message: string
+  }>,
   passed: bool
 };
 
 type connectionType = {
+  // The internal id for the connection
   id: string,
+  // The name of the connection
   name: string,
-  password: string,
+  // Which database the connection is for
   type: 'sqlite' | 'mysql' | 'postgres' | 'mssql',
   // These are properties that are specific to certain databases.
   // The pervious properties are required for all databases
   meta?: {
+    password?: string,
     database?: string,
     port?: number,
     host?: string,
@@ -32,6 +39,12 @@ const FinalStore = process.env.NODE_ENV === 'test'
   ? require('conf') // eslint-disable-line
   : Store;
 
+/**
+ * This class is a general manager for falcon database connections.
+ * It can be extended to fit the needs of specific databases. For
+ * example, if a specific database requires encryption, the .get()
+ * method can be modified
+ */
 export default class Connections {
   store = new FinalStore({
     defaults: {
@@ -39,17 +52,65 @@ export default class Connections {
     }
   });
 
+  /**
+   * @TODO
+   */
   async validateBeforeCreation(connection: connectionType): Promise<connectionValidationType> {
-    switch (connection.type) {
-      case 'sqlite': {
-        // connection is require and is a string
-        // database is required and is a string
-        return [];
+    const isFilePath = await import('is-valid-path');
+    const Joi = await import('joi');
+    const fs = await import('fs');
+
+    const customJoi = Joi.extend(joi => ({
+      base: joi.string(),
+      name: 'string',
+      language: {
+        file: 'needs to be a file',
+        file_exists: 'does not exist'
+      },
+      rules: [
+        {
+          name: 'file',
+          validate(params, value, state, options) {
+            return !isFilePath(value)
+              ? this.createError('string.file', { v: value, q: params.q }, state, options)
+              : value;
+          }
+        },
+        {
+          name: 'file_exists',
+          validate(params, value, state, options) {
+            return fs.existsSync(value)
+              ? value
+              : this.createError('string.file_exists', { v: value, q: params.q }, state, options);
+          }
+        }
+      ]
+    }));
+
+    const schema = (() => {
+      switch (connection.type) {
+        case 'sqlite': {
+          return customJoi.object().keys({
+            id: customJoi.string().required(),
+            name: customJoi.string().required(),
+            database: customJoi.string().file().file_exists().required(),
+            type: customJoi.string().required()
+          });
+        }
+        default: {
+          throw new Error(`Unknown database type "${connection.type}". This probably means it is not supported`);
+        }
       }
-      default: {
-        throw new Error(`Unknown database type "${connection.type}". This probably means it is not supported`);
+    })();
+
+    const errors = customJoi.validate(connection, schema, { abortEarly: false });
+    if (errors.error) {
+      if (errors.error.details.length > 0) {
+        return errors.error.details;
       }
     }
+
+    return [];
   }
 
   async create(connection: connectionType) {

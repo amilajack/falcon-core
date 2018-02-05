@@ -49,6 +49,150 @@ Array [
 ]
 `;
 
+exports[`Connections should perform basic validation 1`] = `
+Array [
+  Object {
+    "context": Object {
+      "key": "id",
+      "label": "id",
+      "value": 12,
+    },
+    "message": "\\"id\\" must be a string",
+    "path": Array [
+      "id",
+    ],
+    "type": "string.base",
+  },
+  Object {
+    "context": Object {
+      "key": "name",
+      "label": "name",
+    },
+    "message": "\\"name\\" is required",
+    "path": Array [
+      "name",
+    ],
+    "type": "any.required",
+  },
+  Object {
+    "context": Object {
+      "key": "database",
+      "label": "database",
+      "q": undefined,
+      "v": "aJ@#LJ#@KL$KL@#sdf",
+    },
+    "message": "\\"database\\" needs to be a file",
+    "path": Array [
+      "database",
+    ],
+    "type": "string.file",
+  },
+  Object {
+    "context": Object {
+      "key": "database",
+      "label": "database",
+      "q": undefined,
+      "v": "aJ@#LJ#@KL$KL@#sdf",
+    },
+    "message": "\\"database\\" does not exist",
+    "path": Array [
+      "database",
+    ],
+    "type": "string.file_exists",
+  },
+]
+`;
+
+exports[`Connections should perform basic validation 2`] = `
+Array [
+  Object {
+    "context": Object {
+      "key": "id",
+      "label": "id",
+      "value": 12,
+    },
+    "message": "\\"id\\" must be a string",
+    "path": Array [
+      "id",
+    ],
+    "type": "string.base",
+  },
+  Object {
+    "context": Object {
+      "key": "name",
+      "label": "name",
+    },
+    "message": "\\"name\\" is required",
+    "path": Array [
+      "name",
+    ],
+    "type": "any.required",
+  },
+  Object {
+    "context": Object {
+      "key": "database",
+      "label": "database",
+      "q": undefined,
+      "v": "/usr/foo",
+    },
+    "message": "\\"database\\" does not exist",
+    "path": Array [
+      "database",
+    ],
+    "type": "string.file_exists",
+  },
+]
+`;
+
+exports[`Connections should perform basic validation 3`] = `
+Array [
+  Object {
+    "context": Object {
+      "key": "name",
+      "label": "name",
+    },
+    "message": "\\"name\\" is required",
+    "path": Array [
+      "name",
+    ],
+    "type": "any.required",
+  },
+  Object {
+    "context": Object {
+      "key": "database",
+      "label": "database",
+      "q": undefined,
+      "v": "/usr/foo",
+    },
+    "message": "\\"database\\" does not exist",
+    "path": Array [
+      "database",
+    ],
+    "type": "string.file_exists",
+  },
+]
+`;
+
+exports[`Connections should perform basic validation 4`] = `
+Array [
+  Object {
+    "context": Object {
+      "key": "database",
+      "label": "database",
+      "q": undefined,
+      "v": "/usr/foo",
+    },
+    "message": "\\"database\\" does not exist",
+    "path": Array [
+      "database",
+    ],
+    "type": "string.file_exists",
+  },
+]
+`;
+
+exports[`Connections should perform basic validation 5`] = `Array []`;
+
 exports[`Connections should update a single connection 1`] = `
 Array [
   Object {
