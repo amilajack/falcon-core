@@ -91,4 +91,14 @@ describe('Connections', function testConnections() {
     }))
       .toMatchSnapshot();
   });
+
+  it('should check if a sqlite file is valid or not', async () => {
+    expect(await this.connections.validateBeforeCreation({
+      id: 'foo',
+      name: 'foo',
+      database: '/Users/amila/Desktop/demo.sqlite',
+      type: 'sqlite'
+    }))
+      .toEqual([]);
+  });
 });

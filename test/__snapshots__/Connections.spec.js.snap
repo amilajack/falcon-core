@@ -100,6 +100,19 @@ Array [
     ],
     "type": "string.file_exists",
   },
+  Object {
+    "context": Object {
+      "key": "database",
+      "label": "database",
+      "q": undefined,
+      "v": "aJ@#LJ#@KL$KL@#sdf",
+    },
+    "message": "\\"database\\" is not valid",
+    "path": Array [
+      "database",
+    ],
+    "type": "string.sqlite_valid",
+  },
 ]
 `;
 
@@ -141,6 +154,19 @@ Array [
     ],
     "type": "string.file_exists",
   },
+  Object {
+    "context": Object {
+      "key": "database",
+      "label": "database",
+      "q": undefined,
+      "v": "/usr/foo",
+    },
+    "message": "\\"database\\" is not valid",
+    "path": Array [
+      "database",
+    ],
+    "type": "string.sqlite_valid",
+  },
 ]
 `;
 
@@ -170,6 +196,19 @@ Array [
     ],
     "type": "string.file_exists",
   },
+  Object {
+    "context": Object {
+      "key": "database",
+      "label": "database",
+      "q": undefined,
+      "v": "/usr/foo",
+    },
+    "message": "\\"database\\" is not valid",
+    "path": Array [
+      "database",
+    ],
+    "type": "string.sqlite_valid",
+  },
 ]
 `;
 
@@ -188,10 +227,39 @@ Array [
     ],
     "type": "string.file_exists",
   },
+  Object {
+    "context": Object {
+      "key": "database",
+      "label": "database",
+      "q": undefined,
+      "v": "/usr/foo",
+    },
+    "message": "\\"database\\" is not valid",
+    "path": Array [
+      "database",
+    ],
+    "type": "string.sqlite_valid",
+  },
 ]
 `;
 
-exports[`Connections should perform basic validation 5`] = `Array []`;
+exports[`Connections should perform basic validation 5`] = `
+Array [
+  Object {
+    "context": Object {
+      "key": "database",
+      "label": "database",
+      "q": undefined,
+      "v": "/usr/local/bin/npm",
+    },
+    "message": "\\"database\\" is not valid",
+    "path": Array [
+      "database",
+    ],
+    "type": "string.sqlite_valid",
+  },
+]
+`;
 
 exports[`Connections should update a single connection 1`] = `
 Array [

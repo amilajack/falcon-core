@@ -59,13 +59,15 @@ export default class Connections {
     const isFilePath = await import('is-valid-path');
     const Joi = await import('joi');
     const fs = await import('fs');
+    const Database = await import('better-sqlite3');
 
     const customJoi = Joi.extend(joi => ({
       base: joi.string(),
       name: 'string',
       language: {
         file: 'needs to be a file',
-        file_exists: 'does not exist'
+        file_exists: 'does not exist',
+        sqlite_valid: 'is not valid'
       },
       rules: [
         {
@@ -83,6 +85,32 @@ export default class Connections {
               ? value
               : this.createError('string.file_exists', { v: value, q: params.q }, state, options);
           }
+        },
+        {
+          name: 'sqlite_valid',
+          validate(params, value, state, options) {
+            let db;
+            let passed = true;
+            try {
+              db = new Database(value, {
+                readonly: true,
+                fileMustExist: true
+              });
+              if (db.pragma('quick_check', true) !== 'ok') {
+                passed = false;
+              }
+            } catch (e) {
+              passed = false;
+            } finally {
+              if (db) {
+                db.close();
+              }
+            }
+
+            return passed
+              ? value
+              : this.createError('string.sqlite_valid', { v: value, q: params.q }, state, options);
+          }
         }
       ]
     }));
@@ -93,7 +121,8 @@ export default class Connections {
           return customJoi.object().keys({
             id: customJoi.string().required(),
             name: customJoi.string().required(),
-            database: customJoi.string().file().file_exists().required(),
+            database: customJoi.string().file().file_exists().sqlite_valid()
+              .required(),
             type: customJoi.string().required()
           });
         }
