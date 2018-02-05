@@ -4,7 +4,7 @@ import Connections from '../src/connections/Connections';
 async function connectionFactory(connections, connectionCount: number = 1) {
   const array = new Array(connectionCount);
   for (let i = 0; i < array.length; i++) {
-    array[i] = await connections.create({
+    array[i] = await connections.add({
       id: `test-id-${i + 1}`,
       type: 'sqlite',
       name: `test-connection-${i + 1}`,
@@ -21,7 +21,7 @@ describe('Connections', function testConnections() {
   });
 
   afterEach(async () => {
-    await this.connections.deleteAll();
+    await this.connections.removeAll();
   });
 
   it('should get all connections', async () => {
@@ -32,7 +32,7 @@ describe('Connections', function testConnections() {
   it('should delete a single connection', async () => {
     const connections = await this.connections.getAll();
     const connectionIdToDelete = connections[0].id;
-    await this.connections.delete(connectionIdToDelete);
+    await this.connections.remove(connectionIdToDelete);
     const newConnections = await this.connections.getAll();
     expect(newConnections).toMatchSnapshot();
   });

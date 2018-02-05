@@ -7,7 +7,10 @@ export type connectionValidationType = {
     fieldName: string,
     message: string
   }>,
-  passed: bool
+  passed: bool,
+  data?: {
+    [property: string]: string
+  }
 };
 
 export type connectionType = {
@@ -70,7 +73,7 @@ export default class Connections {
     }
   }
 
-  async create(connection: connectionType): Promise<connectionValidationType | connectionType> {
+  async add(connection: connectionType): Promise<connectionValidationType> {
     const rndm = await import('rndm');
     const connectionWithDefaults = {
       id: `conn-${rndm(16)}`,
@@ -81,30 +84,38 @@ export default class Connections {
     if (validation.errorMessages.length > 0) {
       return validation;
     }
+
     const connections = await this.getAll();
     connections.push(connectionWithDefaults);
     this.store.set('connections', connections);
-    return connectionWithDefaults;
+
+    return {
+      errorMessages: [],
+      passed: true,
+      data: {
+        connection: connectionWithDefaults
+      }
+    };
   }
 
   /**
-   * Delete a connection by it's id
+   * Remove a connection by it's id
    */
-  async delete(connectionId: string) {
+  async remove(connectionId: string) {
     const connections = await this.getAll();
     const filteredConnections =
       connections.filter(connection => connection.id !== connectionId);
     this.store.set('connections', filteredConnections);
   }
 
-  async deleteAll() {
+  async removeAll() {
     await this.store.set('connections', []);
   }
 
   /**
    * Update a connection by giving a new config
    */
-  async update(connectionId: string, connection: connectionType): Promise<connectionValidationType | connectionType> {
+  async update(connectionId: string, connection: connectionType): Promise<connectionValidationType> {
     const connections = await this.getAll();
     const connectionToUpdateIndex =
       connections.findIndex(conn => conn.id === connectionId);
@@ -124,7 +135,14 @@ export default class Connections {
     }
 
     this.store.set('connections', connections);
-    return connection;
+
+    return {
+      errorMessages: [],
+      passed: true,
+      data: {
+        connection
+      }
+    };
   }
 
   async getAll(): Promise<Array<connectionType>> {
