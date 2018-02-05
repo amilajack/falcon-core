@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Connections should delete a single connection 1`] = `
+Array [
+  Object {
+    "id": "test-id-2",
+    "name": "test-connection-2",
+    "password": "test-password",
+    "type": "sqlite",
+  },
+  Object {
+    "id": "test-id-3",
+    "name": "test-connection-3",
+    "password": "test-password",
+    "type": "sqlite",
+  },
+]
+`;
+
+exports[`Connections should get a single connection 1`] = `
+Object {
+  "id": "test-id-3",
+  "name": "test-connection-3",
+  "password": "test-password",
+  "type": "sqlite",
+}
+`;
+
+exports[`Connections should get all connections 1`] = `
+Array [
+  Object {
+    "id": "test-id-1",
+    "name": "test-connection-1",
+    "password": "test-password",
+    "type": "sqlite",
+  },
+  Object {
+    "id": "test-id-2",
+    "name": "test-connection-2",
+    "password": "test-password",
+    "type": "sqlite",
+  },
+  Object {
+    "id": "test-id-3",
+    "name": "test-connection-3",
+    "password": "test-password",
+    "type": "sqlite",
+  },
+]
+`;
+
+exports[`Connections should update a single connection 1`] = `
+Array [
+  Object {
+    "id": "test-id-foo",
+    "name": "test-connection-foo",
+    "password": "test-password",
+    "type": "sqlite",
+  },
+  Object {
+    "id": "test-id-2",
+    "name": "test-connection-2",
+    "password": "test-password",
+    "type": "sqlite",
+  },
+  Object {
+    "id": "test-id-3",
+    "name": "test-connection-3",
+    "password": "test-password",
+    "type": "sqlite",
+  },
+]
+`;
