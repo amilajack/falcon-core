@@ -116,7 +116,7 @@
   "jest": {
     "testEnvironment": "node",
     "collectCoverageFrom": [
-      "src/db/provider_clients/SqliteProviderFactory.js"
+      "src/database/provider_clients/SqliteProviderFactory.js"
     ]
   }
 }

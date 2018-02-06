@@ -3,8 +3,8 @@
 .*/node_modules/*
 .*/lib/*
 .*/coverage/*
-.*/src/db/Client.js
-.*/src/db/ClientType.js
+.*/src/databases/Client.js
+.*/src/databases/ClientType.js
 .*/git/.*
 
 [options]

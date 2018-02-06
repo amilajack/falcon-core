@@ -6,7 +6,7 @@ import Database from 'better-sqlite3';
 import type {
   connectionValidationType,
   connectionType
-} from './Connections';
+} from '../ConnectionManager';
 
 export default async function SqliteConnectionValidation(connection: connectionType): Promise<connectionValidationType> {
   const customJoi = Joi.extend(joi => ({

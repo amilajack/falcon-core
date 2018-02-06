@@ -9,7 +9,7 @@ export type connectionValidationType = {
   }>,
   passed: bool,
   data?: {
-    [property: string]: string
+    connection: connectionType
   }
 };
 
@@ -53,7 +53,8 @@ export default class Connections {
    */
   store = new FinalStore({
     defaults: {
-      connections: []
+      connections: [],
+      queries: []
     }
   });
 
@@ -64,7 +65,8 @@ export default class Connections {
   async validateBeforeCreation(connection: connectionType): Promise<connectionValidationType> {
     switch (connection.type) {
       case 'sqlite': {
-        const { default: sqliteConnectionValidation } = await import('./SqliteConnectionValidation.js');
+        const { default: sqliteConnectionValidation } =
+          await import('./validation/SqliteConnectionValidation.js');
         return sqliteConnectionValidation(connection);
       }
       default: {

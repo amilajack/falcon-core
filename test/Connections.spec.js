@@ -1,5 +1,5 @@
 // @flow
-import Connections from '../src/connections/Connections';
+import Connections from '../src/config/ConnectionManager';
 
 async function connectionFactory(connections, connectionCount: number = 1) {
   const array = new Array(connectionCount);
