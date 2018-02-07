@@ -1,6 +1,7 @@
 // @flow
-import BaseManager from './BaseManager';
+import BaseManager from './ConnectionManager';
 import type { ManagerInterface } from './ManagerInterface';
+import type { databaseType } from './ConnectionManager';
 
 type queryType = {
   // The internal id for the query
@@ -8,7 +9,7 @@ type queryType = {
   // The name of the query
   name: string,
   // The type of database which the query was created for
-  databaseType: 'sqlite' | 'mysql' | 'postgres' | 'mssql',
+  databaseType: databaseType,
   // The connection which the query belongs to
   connectionId: string,
   // The query's text

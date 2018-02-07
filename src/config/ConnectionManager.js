@@ -13,6 +13,8 @@ export type connectionValidationType = {
   }
 };
 
+export type databaseType = 'sqlite' | 'mysql' | 'postgres' | 'mssql';
+
 export type connectionType = {
   // The internal id for the connection
   id: string,
@@ -21,7 +23,7 @@ export type connectionType = {
   // The color of the connection
   color?: string | 'default',
   // Which database the connection is for
-  type: 'sqlite' | 'mysql' | 'postgres' | 'mssql',
+  type: databaseType,
   // These are properties that are specific to certain databases.
   // The pervious properties are required for all databases
   meta?: {
@@ -47,7 +49,7 @@ const FinalStore = process.env.NODE_ENV === 'test'
  * example, if a specific database requires encryption, the .get()
  * method can be modified
  */
-export default class Connections {
+export default class ConnectionManager {
   /**
    * @private
    */
