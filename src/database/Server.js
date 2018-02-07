@@ -1,7 +1,7 @@
 // @flow
 import Client from './Client';
 import { CLIENTS } from './provider_clients';
-import type { ProviderInterface } from './provider_clients/ProviderInterface';
+import type { ProviderInterface, databasesType } from './provider_clients/ProviderInterface';
 
 type serverType = {
   db: { [dbName: string]: ProviderInterface },
@@ -13,7 +13,7 @@ type serverType = {
  */
 type serverConfigType = {
   +database: string,
-  +client: 'mysql' | 'sqlite' | 'postgresql' | 'sqlserver' | 'cassandra',
+  +client: databasesType,
   +socketPath?: string,
   +host?: string
 };

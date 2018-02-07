@@ -1,6 +1,8 @@
 // @flow
 import type { sshTunnelType, tunnelConfigType } from '../Tunnel';
 
+export type databasesType = 'mysql' | 'sqlite' | 'postgresql' | 'sqlserver' | 'cassandra';
+
 export type serverType = {
   db: {
     [dbName: string]: {}

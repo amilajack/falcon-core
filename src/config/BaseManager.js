@@ -1,11 +1,11 @@
 // @flow
 // Manage saved items to databases. Encrypts passwords
 import Store from 'electron-store';
-import type { databaseType } from './ConnectionManager';
+import type { databasesType } from '../database/provider_clients/ProviderInterface';
 
 type itemType = {
   id: string,
-  type: databaseType,
+  type: databasesType,
   [prop: string]: string,
 };
 
@@ -46,10 +46,15 @@ export default class BaseManager {
   });
 
   /**
-   * @TODO
    * @private
+   * @abstract
    */
-  async validateBeforeCreation(item: itemType): Promise<itemValidationType> {}
+  async validateBeforeCreation(item: itemType): Promise<itemValidationType> {
+    return {
+      errorMessages: [],
+      passed: true
+    };
+  }
 
   async add(item: itemType): Promise<itemValidationType> {
     const rndm = await import('rndm');
