@@ -5,7 +5,7 @@ export type databasesType = 'mysql' | 'sqlite' | 'postgresql' | 'sqlserver' | 'c
 
 export type serverType = {
   db: {
-    [dbName: string]: {}
+    [dbName: string]: ProviderInterface
   },
   sshTunnel: sshTunnelType,
   config: {

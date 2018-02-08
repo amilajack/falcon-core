@@ -79,7 +79,7 @@ export function createServer(serverConfig: serverConfigType) {
      * After the server session has been created, connect to a given
      * database
      */
-    createConnection(dbName: string): ProviderInterface {
+    async createConnection(dbName: string): Promise<ProviderInterface> {
       // If connection to database already exists in pool, return in
       if (server.db[dbName]) {
         return server.db[dbName];
@@ -92,7 +92,7 @@ export function createServer(serverConfig: serverConfigType) {
       };
 
       // Add the connection to the 'connection pool'
-      server.db[dbName] = Client(server, database);
+      server.db[dbName] = await Client(server, database);
       // @TODO: Handles only sqlite/sqlite3/db files
       return server.db[dbName];
     }

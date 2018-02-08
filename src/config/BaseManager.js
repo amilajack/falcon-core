@@ -16,7 +16,7 @@ export type itemValidationType = {
   }>,
   passed: bool,
   data?: {
-    [prop: string]: string,
+    [prop: string]: any,
   }
 };
 
@@ -34,7 +34,7 @@ const FinalStore = process.env.NODE_ENV === 'test'
  * method can be modified
  */
 export default class BaseManager {
-  itemType: 'connections' | 'query';
+  itemType: 'connections' | 'queries';
   /**
    * @private
    */
