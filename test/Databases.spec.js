@@ -154,7 +154,9 @@ describe('Database', () => {
               const usersValuesBefore = await dbConn.getTableValues('users');
               expect(usersValuesBefore).toHaveLength(1);
               expect(await dbConn.getTableValues('users')).toMatchSnapshot();
-              await dbConn.delete('users', ['1', '2', '3']);
+              await dbConn.delete('users', ['1', '3']);
+              expect(await dbConn.getTableValues('users')).toMatchSnapshot();
+              await dbConn.delete('users', [2], true);
               expect(await dbConn.getTableValues('users')).toMatchSnapshot();
               const usersValuesAfter = await dbConn.getTableValues('users');
               expect(usersValuesAfter).toHaveLength(0);
