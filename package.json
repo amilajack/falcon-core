@@ -16,11 +16,11 @@
     "test-all-dbs": "find ./test/databases/ -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test jest",
     "coverage": "npm run test:sqlite -- --coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "test:mysql": "cross-env NODE_ENV=test DB_CLIENTS=mysql jest test/{Databases.spec.js,Connections.spec.js}",
-    "test:sqlite": "find ./test/databases/sqlite -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=sqlite jest test/{Databases.spec.js,Connections.spec.js}",
-    "test:sqlserver": "find ./test/databases/sqlserver -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=sqlserver jest test/{Databases.spec.js,Connections.spec.js}",
-    "test:postgresql": "find ./test/databases/postgresql -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=postgresql jest test/{Databases.spec.js,Connections.spec.js}",
-    "test:cassandra": "find ./test/databases/cassandra -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=cassandra jest test/{Databases.spec.js,Connections.spec.js}",
+    "test:mysql": "cross-env NODE_ENV=test DB_CLIENTS=mysql jest test/*.js --runInBand",
+    "test:sqlite": "find ./test/databases/sqlite -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=sqlite jest test/*.js --runInBand",
+    "test:sqlserver": "find ./test/databases/sqlserver -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=sqlserver jest test/*.js --runInBand",
+    "test:postgresql": "find ./test/databases/postgresql -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=postgresql jest test/*.js --runInBand",
+    "test:cassandra": "find ./test/databases/cassandra -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=cassandra jest test/*.js --runInBand",
     "test-all": "npm run lint && npm run flow && npm test && npm run build",
     "watch": "cross-env NODE_ENV=development babel --out-dir lib src --source-maps --watch"
   },
@@ -57,7 +57,7 @@
   },
   "dependencies": {
     "better-sqlite3": "^4.1.0",
-    "cassandra-driver": "^3.3.0",
+    "cassandra-driver": "^3.4.0",
     "cors": "^2.8.4",
     "debug": "^3.1.0",
     "electron-store": "^1.3.0",
@@ -87,7 +87,7 @@
     "babel-eslint": "^8.2.1",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-dynamic-import-node": "^1.2.0",
-    "babel-plugin-flow-runtime": "^0.15.0",
+    "babel-plugin-flow-runtime": "^0.17.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.26.0",
@@ -99,24 +99,23 @@
     "conf": "^1.4.0",
     "coveralls": "^3.0.0",
     "cross-env": "^5.1.3",
-    "dotenv": "^4.0.0",
-    "electron": "^1.7.12",
-    "eslint": "^4.15.0",
+    "dotenv": "^5.0.0",
+    "eslint": "^4.17.0",
     "eslint-config-bliss": "^1.0.20",
     "eslint-formatter-pretty": "^1.3.0",
     "eslint-plugin-flowtype-errors": "^3.3.7",
-    "flow-bin": "^0.63.1",
-    "flow-copy-source": "^1.2.1",
-    "flow-runtime": "^0.16.0",
-    "flow-typed": "^2.2.3",
+    "flow-bin": "^0.65.0",
+    "flow-copy-source": "^1.3.0",
+    "flow-runtime": "^0.17.0",
+    "flow-typed": "^2.3.0",
     "husky": "^0.15.0-rc.3",
-    "jest-cli": "^22.1.3",
+    "jest-cli": "^22.2.1",
     "rndm": "^1.2.0"
   },
   "jest": {
     "testEnvironment": "node",
     "collectCoverageFrom": [
-      "src/db/provider_clients/SqliteProviderFactory.js"
+      "src/database/provider_clients/SqliteProviderFactory.js"
     ]
   }
 }

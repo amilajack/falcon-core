@@ -13,7 +13,7 @@ function loadConfig() {
   return readJSONFile(TMP_FIXTURE_PATH);
 }
 
-describe('servers', () => {
+describe.skip('servers', () => {
   beforeEach(async () => {
     const data = await readJSONFile(FIXTURE_PATH);
     await writeJSONFile(TMP_FIXTURE_PATH, data);

@@ -3,15 +3,17 @@
 exports[`Connections should delete a single connection 1`] = `
 Array [
   Object {
+    "color": "gray",
+    "database": "/Users/amila/Desktop/demo.sqlite",
     "id": "test-id-2",
     "name": "test-connection-2",
-    "password": "test-password",
     "type": "sqlite",
   },
   Object {
+    "color": "gray",
+    "database": "/Users/amila/Desktop/demo.sqlite",
     "id": "test-id-3",
     "name": "test-connection-3",
-    "password": "test-password",
     "type": "sqlite",
   },
 ]
@@ -19,9 +21,10 @@ Array [
 
 exports[`Connections should get a single connection 1`] = `
 Object {
+  "color": "gray",
+  "database": "/Users/amila/Desktop/demo.sqlite",
   "id": "test-id-3",
   "name": "test-connection-3",
-  "password": "test-password",
   "type": "sqlite",
 }
 `;
@@ -29,236 +32,127 @@ Object {
 exports[`Connections should get all connections 1`] = `
 Array [
   Object {
+    "color": "gray",
+    "database": "/Users/amila/Desktop/demo.sqlite",
     "id": "test-id-1",
     "name": "test-connection-1",
-    "password": "test-password",
     "type": "sqlite",
   },
   Object {
+    "color": "gray",
+    "database": "/Users/amila/Desktop/demo.sqlite",
     "id": "test-id-2",
     "name": "test-connection-2",
-    "password": "test-password",
     "type": "sqlite",
   },
   Object {
+    "color": "gray",
+    "database": "/Users/amila/Desktop/demo.sqlite",
     "id": "test-id-3",
     "name": "test-connection-3",
-    "password": "test-password",
     "type": "sqlite",
   },
 ]
 `;
 
 exports[`Connections should perform basic validation 1`] = `
-Array [
-  Object {
-    "context": Object {
-      "key": "id",
-      "label": "id",
-      "value": 12,
+Object {
+  "errorMessages": Array [
+    Object {
+      "fieldName": "id",
+      "message": "\\"id\\" must be a string",
     },
-    "message": "\\"id\\" must be a string",
-    "path": Array [
-      "id",
-    ],
-    "type": "string.base",
-  },
-  Object {
-    "context": Object {
-      "key": "name",
-      "label": "name",
+    Object {
+      "fieldName": "name",
+      "message": "\\"name\\" is required",
     },
-    "message": "\\"name\\" is required",
-    "path": Array [
-      "name",
-    ],
-    "type": "any.required",
-  },
-  Object {
-    "context": Object {
-      "key": "database",
-      "label": "database",
-      "q": undefined,
-      "v": "aJ@#LJ#@KL$KL@#sdf",
+    Object {
+      "fieldName": "database",
+      "message": "\\"database\\" needs to be a file",
     },
-    "message": "\\"database\\" needs to be a file",
-    "path": Array [
-      "database",
-    ],
-    "type": "string.file",
-  },
-  Object {
-    "context": Object {
-      "key": "database",
-      "label": "database",
-      "q": undefined,
-      "v": "aJ@#LJ#@KL$KL@#sdf",
+    Object {
+      "fieldName": "database",
+      "message": "\\"database\\" does not exist",
     },
-    "message": "\\"database\\" does not exist",
-    "path": Array [
-      "database",
-    ],
-    "type": "string.file_exists",
-  },
-  Object {
-    "context": Object {
-      "key": "database",
-      "label": "database",
-      "q": undefined,
-      "v": "aJ@#LJ#@KL$KL@#sdf",
+    Object {
+      "fieldName": "database",
+      "message": "\\"database\\" is not valid",
     },
-    "message": "\\"database\\" is not valid",
-    "path": Array [
-      "database",
-    ],
-    "type": "string.sqlite_valid",
-  },
-]
+  ],
+  "passed": false,
+}
 `;
 
 exports[`Connections should perform basic validation 2`] = `
-Array [
-  Object {
-    "context": Object {
-      "key": "id",
-      "label": "id",
-      "value": 12,
+Object {
+  "errorMessages": Array [
+    Object {
+      "fieldName": "id",
+      "message": "\\"id\\" must be a string",
     },
-    "message": "\\"id\\" must be a string",
-    "path": Array [
-      "id",
-    ],
-    "type": "string.base",
-  },
-  Object {
-    "context": Object {
-      "key": "name",
-      "label": "name",
+    Object {
+      "fieldName": "name",
+      "message": "\\"name\\" is required",
     },
-    "message": "\\"name\\" is required",
-    "path": Array [
-      "name",
-    ],
-    "type": "any.required",
-  },
-  Object {
-    "context": Object {
-      "key": "database",
-      "label": "database",
-      "q": undefined,
-      "v": "/usr/foo",
+    Object {
+      "fieldName": "database",
+      "message": "\\"database\\" does not exist",
     },
-    "message": "\\"database\\" does not exist",
-    "path": Array [
-      "database",
-    ],
-    "type": "string.file_exists",
-  },
-  Object {
-    "context": Object {
-      "key": "database",
-      "label": "database",
-      "q": undefined,
-      "v": "/usr/foo",
+    Object {
+      "fieldName": "database",
+      "message": "\\"database\\" is not valid",
     },
-    "message": "\\"database\\" is not valid",
-    "path": Array [
-      "database",
-    ],
-    "type": "string.sqlite_valid",
-  },
-]
+  ],
+  "passed": false,
+}
 `;
 
 exports[`Connections should perform basic validation 3`] = `
-Array [
-  Object {
-    "context": Object {
-      "key": "name",
-      "label": "name",
+Object {
+  "errorMessages": Array [
+    Object {
+      "fieldName": "name",
+      "message": "\\"name\\" is required",
     },
-    "message": "\\"name\\" is required",
-    "path": Array [
-      "name",
-    ],
-    "type": "any.required",
-  },
-  Object {
-    "context": Object {
-      "key": "database",
-      "label": "database",
-      "q": undefined,
-      "v": "/usr/foo",
+    Object {
+      "fieldName": "database",
+      "message": "\\"database\\" does not exist",
     },
-    "message": "\\"database\\" does not exist",
-    "path": Array [
-      "database",
-    ],
-    "type": "string.file_exists",
-  },
-  Object {
-    "context": Object {
-      "key": "database",
-      "label": "database",
-      "q": undefined,
-      "v": "/usr/foo",
+    Object {
+      "fieldName": "database",
+      "message": "\\"database\\" is not valid",
     },
-    "message": "\\"database\\" is not valid",
-    "path": Array [
-      "database",
-    ],
-    "type": "string.sqlite_valid",
-  },
-]
+  ],
+  "passed": false,
+}
 `;
 
 exports[`Connections should perform basic validation 4`] = `
-Array [
-  Object {
-    "context": Object {
-      "key": "database",
-      "label": "database",
-      "q": undefined,
-      "v": "/usr/foo",
+Object {
+  "errorMessages": Array [
+    Object {
+      "fieldName": "database",
+      "message": "\\"database\\" does not exist",
     },
-    "message": "\\"database\\" does not exist",
-    "path": Array [
-      "database",
-    ],
-    "type": "string.file_exists",
-  },
-  Object {
-    "context": Object {
-      "key": "database",
-      "label": "database",
-      "q": undefined,
-      "v": "/usr/foo",
+    Object {
+      "fieldName": "database",
+      "message": "\\"database\\" is not valid",
     },
-    "message": "\\"database\\" is not valid",
-    "path": Array [
-      "database",
-    ],
-    "type": "string.sqlite_valid",
-  },
-]
+  ],
+  "passed": false,
+}
 `;
 
 exports[`Connections should perform basic validation 5`] = `
-Array [
-  Object {
-    "context": Object {
-      "key": "database",
-      "label": "database",
-      "q": undefined,
-      "v": "/usr/local/bin/npm",
+Object {
+  "errorMessages": Array [
+    Object {
+      "fieldName": "database",
+      "message": "\\"database\\" is not valid",
     },
-    "message": "\\"database\\" is not valid",
-    "path": Array [
-      "database",
-    ],
-    "type": "string.sqlite_valid",
-  },
-]
+  ],
+  "passed": false,
+}
 `;
 
 exports[`Connections should update a single connection 1`] = `

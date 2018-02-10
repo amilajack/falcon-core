@@ -1,5 +1,6 @@
 // @flow
-import Connections from '../src/connections/Connections';
+/* eslint no-await-in-loop: 0 */
+import Connections from '../src/config/ConnectionManager';
 
 async function connectionFactory(connections, connectionCount: number = 1) {
   const array = new Array(connectionCount);
@@ -37,7 +38,7 @@ describe('Connections', function testConnections() {
     expect(newConnections).toMatchSnapshot();
   });
 
-  it.only('should update a single connection', async () => {
+  it('should update a single connection', async () => {
     const connections = await this.connections.getAll();
     const connectionIdToDelete = connections[0].id;
     await this.connections.update(connectionIdToDelete, {
@@ -99,6 +100,6 @@ describe('Connections', function testConnections() {
       database: '/Users/amila/Desktop/demo.sqlite',
       type: 'sqlite'
     }))
-      .toEqual([]);
+      .toEqual({ errorMessages: [], passed: true });
   });
 });

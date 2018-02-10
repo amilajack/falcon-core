@@ -1,11 +1,10 @@
 // @flow
 import * as config from './Config';
-import * as servers from './Servers';
-import * as db from './db';
-import { setLogger } from './Logger';
-import Connections from './connections/Connections';
+import * as db from './database';
+import ConnectionManager from './config/ConnectionManager';
+import QueryManager from './config/QueryManager';
 
-export { config, servers, db, setLogger, Connections };
+export { config, db, ConnectionManager, QueryManager };
 
 export type {
   ProviderInterface,
@@ -16,9 +15,9 @@ export type {
   queryArgsType,
   queryResponseType,
   FactoryType
-} from './db/provider_clients/ProviderInterface';
+} from './database/provider_clients/ProviderInterface';
 
 export type {
   connectionValidationType,
   connectionType
-} from './connections/Connections';
+} from './config/ConnectionManager';
