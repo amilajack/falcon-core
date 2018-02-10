@@ -29,7 +29,31 @@ Object {
 }
 `;
 
-exports[`Connections should get all connections 1`] = `Array []`;
+exports[`Connections should get all connections 1`] = `
+Array [
+  Object {
+    "color": "gray",
+    "database": "/Users/amila/Desktop/demo.sqlite",
+    "id": "test-id-1",
+    "name": "test-connection-1",
+    "type": "sqlite",
+  },
+  Object {
+    "color": "gray",
+    "database": "/Users/amila/Desktop/demo.sqlite",
+    "id": "test-id-2",
+    "name": "test-connection-2",
+    "type": "sqlite",
+  },
+  Object {
+    "color": "gray",
+    "database": "/Users/amila/Desktop/demo.sqlite",
+    "id": "test-id-3",
+    "name": "test-connection-3",
+    "type": "sqlite",
+  },
+]
+`;
 
 exports[`Connections should perform basic validation 1`] = `
 Object {
@@ -133,6 +157,13 @@ Object {
 
 exports[`Connections should update a single connection 1`] = `
 Array [
+  Object {
+    "color": "gray",
+    "database": "/Users/amila/Desktop/demo.sqlite",
+    "id": "test-id-1",
+    "name": "test-connection-1",
+    "type": "sqlite",
+  },
   Object {
     "color": "gray",
     "database": "/Users/amila/Desktop/demo.sqlite",
