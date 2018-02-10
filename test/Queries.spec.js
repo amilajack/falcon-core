@@ -1,4 +1,5 @@
 // @flow
+/* eslint no-await-in-loop: 0 */
 import Queries from '../src/config/QueryManager';
 
 async function queryFactory(queries, queryCount: number = 1) {
@@ -6,9 +7,10 @@ async function queryFactory(queries, queryCount: number = 1) {
   for (let i = 0; i < array.length; i++) {
     array[i] = await queries.add({
       id: `test-id-${i + 1}`,
-      type: 'sqlite',
       name: `test-query-${i + 1}`,
-      database: '/Users/amila/Desktop/demo.sqlite'
+      type: 'sqlite',
+      query: 'SELECT * FROM users',
+      color: 'default'
     });
   }
   return Promise.all(array);
@@ -60,45 +62,30 @@ describe('Queries', function testQueries() {
   it('should perform basic validation', async () => {
     expect(await this.queries.validateBeforeCreation({
       id: 12,
-      database: 'aJ@#LJ#@KL$KL@#sdf',
       type: 'sqlite'
     }))
       .toMatchSnapshot();
     expect(await this.queries.validateBeforeCreation({
       id: 12,
-      database: '/usr/foo',
       type: 'sqlite'
     }))
       .toMatchSnapshot();
     expect(await this.queries.validateBeforeCreation({
       id: 'foo',
-      database: '/usr/foo',
-      type: 'sqlite'
-    }))
-      .toMatchSnapshot();
-    expect(await this.queries.validateBeforeCreation({
-      id: 'foo',
-      name: 'foo',
-      database: '/usr/foo',
       type: 'sqlite'
     }))
       .toMatchSnapshot();
     expect(await this.queries.validateBeforeCreation({
       id: 'foo',
       name: 'foo',
-      database: '/usr/local/bin/npm',
       type: 'sqlite'
     }))
       .toMatchSnapshot();
-  });
-
-  it('should check if a sqlite file is valid or not', async () => {
     expect(await this.queries.validateBeforeCreation({
       id: 'foo',
       name: 'foo',
-      database: '/Users/amila/Desktop/demo.sqlite',
       type: 'sqlite'
     }))
-      .toEqual({ errorMessages: [], passed: true });
+      .toMatchSnapshot();
   });
 });

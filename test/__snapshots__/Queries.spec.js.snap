@@ -1,0 +1,162 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Queries should delete a single query 1`] = `
+Array [
+  Object {
+    "color": "default",
+    "id": "test-id-2",
+    "name": "test-query-2",
+    "query": "SELECT * FROM users",
+    "type": "sqlite",
+  },
+  Object {
+    "color": "default",
+    "id": "test-id-3",
+    "name": "test-query-3",
+    "query": "SELECT * FROM users",
+    "type": "sqlite",
+  },
+]
+`;
+
+exports[`Queries should get a single query 1`] = `
+Object {
+  "color": "default",
+  "id": "test-id-3",
+  "name": "test-query-3",
+  "query": "SELECT * FROM users",
+  "type": "sqlite",
+}
+`;
+
+exports[`Queries should get all queries 1`] = `
+Array [
+  Object {
+    "color": "default",
+    "id": "test-id-1",
+    "name": "test-query-1",
+    "query": "SELECT * FROM users",
+    "type": "sqlite",
+  },
+  Object {
+    "color": "default",
+    "id": "test-id-2",
+    "name": "test-query-2",
+    "query": "SELECT * FROM users",
+    "type": "sqlite",
+  },
+  Object {
+    "color": "default",
+    "id": "test-id-3",
+    "name": "test-query-3",
+    "query": "SELECT * FROM users",
+    "type": "sqlite",
+  },
+]
+`;
+
+exports[`Queries should perform basic validation 1`] = `
+Object {
+  "errorMessages": Array [
+    Object {
+      "fieldName": "id",
+      "message": "\\"id\\" must be a string",
+    },
+    Object {
+      "fieldName": "name",
+      "message": "\\"name\\" is required",
+    },
+    Object {
+      "fieldName": "query",
+      "message": "\\"query\\" is required",
+    },
+  ],
+  "passed": false,
+}
+`;
+
+exports[`Queries should perform basic validation 2`] = `
+Object {
+  "errorMessages": Array [
+    Object {
+      "fieldName": "id",
+      "message": "\\"id\\" must be a string",
+    },
+    Object {
+      "fieldName": "name",
+      "message": "\\"name\\" is required",
+    },
+    Object {
+      "fieldName": "query",
+      "message": "\\"query\\" is required",
+    },
+  ],
+  "passed": false,
+}
+`;
+
+exports[`Queries should perform basic validation 3`] = `
+Object {
+  "errorMessages": Array [
+    Object {
+      "fieldName": "name",
+      "message": "\\"name\\" is required",
+    },
+    Object {
+      "fieldName": "query",
+      "message": "\\"query\\" is required",
+    },
+  ],
+  "passed": false,
+}
+`;
+
+exports[`Queries should perform basic validation 4`] = `
+Object {
+  "errorMessages": Array [
+    Object {
+      "fieldName": "query",
+      "message": "\\"query\\" is required",
+    },
+  ],
+  "passed": false,
+}
+`;
+
+exports[`Queries should perform basic validation 5`] = `
+Object {
+  "errorMessages": Array [
+    Object {
+      "fieldName": "query",
+      "message": "\\"query\\" is required",
+    },
+  ],
+  "passed": false,
+}
+`;
+
+exports[`Queries should update a single query 1`] = `
+Array [
+  Object {
+    "color": "default",
+    "id": "test-id-1",
+    "name": "test-query-1",
+    "query": "SELECT * FROM users",
+    "type": "sqlite",
+  },
+  Object {
+    "color": "default",
+    "id": "test-id-2",
+    "name": "test-query-2",
+    "query": "SELECT * FROM users",
+    "type": "sqlite",
+  },
+  Object {
+    "color": "default",
+    "id": "test-id-3",
+    "name": "test-query-3",
+    "query": "SELECT * FROM users",
+    "type": "sqlite",
+  },
+]
+`;

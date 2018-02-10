@@ -1,5 +1,6 @@
 // @flow
 import BaseManager from './BaseManager';
+import Joi from 'joi';
 import type { itemValidationType } from './BaseManager';
 import type { ManagerInterface } from './ManagerInterface';
 import type { databasesType } from '../database/provider_clients/ProviderInterface';
@@ -14,18 +15,18 @@ export type queryType = {
   // The connection which the query belongs to
   connectionId: string,
   // The query's text
-  query: string
+  query: string,
+  // The optional color highlighting of the query
+  color?: string
 };
 
 async function validateQuery(query: queryType): Promise<itemValidationType> {
-  const Joi = await import('joi');
   const schema = Joi.object().keys({
     id: Joi.string().required(),
     name: Joi.string().required(),
-    color: Joi.string(),
-    database: Joi.string().file().file_exists().sqlite_valid()
-      .required(),
-    type: Joi.string().required()
+    type: Joi.string().required(),
+    query: Joi.string().required(),
+    color: Joi.string()
   });
 
   const errors = Joi.validate(

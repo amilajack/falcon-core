@@ -1,4 +1,5 @@
 // @flow
+/* eslint no-await-in-loop: 0 */
 import Connections from '../src/config/ConnectionManager';
 
 async function connectionFactory(connections, connectionCount: number = 1) {
