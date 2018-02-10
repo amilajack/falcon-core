@@ -66,7 +66,7 @@ type connectionValidationType = {
   errorMessages: Array<string>
 };
 
-type logType = {
+export type logType = {
   type: 'falcon' | 'user' | 'profile' | 'trace',
   query: string,
   duration: number,
@@ -101,7 +101,7 @@ export interface ProviderInterface {
    * Log related types
    */
   logs: Array<logType>,
-  getLogs: () => Promise<logType>,
+  getLogs: () => Promise<Array<logType>>,
   setLogs: () => Promise<void>,
 
   graphQLServerPort: number,
@@ -183,7 +183,7 @@ export interface ProviderInterface {
   // @TODO: What exactly did sqlectron expected should be returned here?
   delete: (
     table: string,
-    keys: Array<string> | Array<number>
+    keys: Array<string | number>
   ) => Promise<{ timing: number }>,
   insert: (
     table: string,

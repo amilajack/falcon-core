@@ -12,7 +12,8 @@ import type { sshTunnelType } from '../Tunnel';
 import type {
   serverType,
   databaseType,
-  exportOptionsType
+  exportOptionsType,
+  logType
 } from './ProviderInterface';
 
 promisify.shim();
@@ -29,7 +30,7 @@ export default class BaseProvider {
 
   database: databaseType;
 
-  logs: Array<string> = [];
+  logs: Array<logType> = [];
 
   _graphQLServerIsRunning: bool = false;
 
@@ -258,6 +259,12 @@ export default class BaseProvider {
       throw new Error('There is no connection available.');
     }
     return true;
+  }
+
+  checkUnsupported(exportOptions: exportOptionsType) {
+    if (!exportOptions) {
+      throw new Error('No exportOptions passed');
+    }
   }
 
   async getJsonString(exportOptions: exportOptionsType) {

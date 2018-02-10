@@ -1,11 +1,11 @@
 // @flow
 // Manage saved items to databases. Encrypts passwords
-import Store from 'electron-store';
 import type { databasesType } from '../database/provider_clients/ProviderInterface';
 
 type itemType = {
   id: string,
   type: databasesType,
+  meta?: any,
   [prop: string]: string,
 };
 
@@ -25,7 +25,7 @@ export type itemValidationType = {
 // in the testing environment
 const FinalStore = process.env.NODE_ENV === 'test'
   ? require('conf') // eslint-disable-line
-  : Store;
+  : require('electron-store');
 
 /**
  * This class is a general manager for falcon database items.

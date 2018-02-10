@@ -37,7 +37,7 @@ describe('Connections', function testConnections() {
     expect(newConnections).toMatchSnapshot();
   });
 
-  it.only('should update a single connection', async () => {
+  it('should update a single connection', async () => {
     const connections = await this.connections.getAll();
     const connectionIdToDelete = connections[0].id;
     await this.connections.update(connectionIdToDelete, {
@@ -99,6 +99,6 @@ describe('Connections', function testConnections() {
       database: '/Users/amila/Desktop/demo.sqlite',
       type: 'sqlite'
     }))
-      .toEqual([]);
+      .toEqual({ errorMessages: [], passed: true });
   });
 });

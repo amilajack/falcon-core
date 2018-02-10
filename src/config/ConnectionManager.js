@@ -1,6 +1,5 @@
 // @flow
 // Manage saved connections to databases. Encrypts passwords
-// import Store from 'electron-store';
 import BaseManager from './BaseManager';
 import type { ManagerInterface } from './ManagerInterface';
 import type { databasesType } from '../database/provider_clients/ProviderInterface';

@@ -6,6 +6,7 @@ import graphqlHTTP from 'express-graphql';
 import cors from 'cors';
 import { identify } from 'sql-query-identifier';
 import { buildSchemaFromDatabase } from 'tuql';
+import type { Application } from 'express';
 import createLogger from '../../Logger';
 import BaseProvider from './BaseProvider';
 import type {
@@ -15,7 +16,8 @@ import type {
   exportOptionsType,
   queryType,
   queryResponseType,
-  databaseType
+  databaseType,
+  logType
 } from './ProviderInterface';
 
 type queryArgsType = {
@@ -49,9 +51,14 @@ type tableKeyType = {
 class SqliteProvider extends BaseProvider implements ProviderInterface {
   connection: connectionType;
 
-  sqliteErrors = {
-    CANCELED: 'SQLITE_INTERRUPT'
-  };
+  graphQLServer: Application;
+
+  graphQLServerPort: ?number;
+
+  /**
+   * @private
+   */
+  privateGraphQLServerIsRunning: bool = false;
 
   constructor(server: Object, database: Object, connection: Object) {
     super(server, database);
@@ -82,14 +89,19 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     return Promise.resolve(`SELECT * FROM ${this.wrapIdentifier(table)} LIMIT ${limit}`);
   }
 
-  async getLogs() {
+  async getLogs(): Promise<Array<logType>> {
     return this.logs.map(log => ({
       ...log,
       query: log.query.replace(/(\r\n|\n|\r)/gm, '')
     }));
   }
 
-  async setLogs() {}
+  /**
+   * @TODO
+   */
+  async setLogs() {
+    return Promise.resolve();
+  }
 
   query(queryText: string): Promise<queryType> {
     let queryConnection = null;
@@ -197,7 +209,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
         console.log(` > Running at http://localhost:${port}/graphql`);
         resolve();
       });
-      this._graphQLServerIsRunning = true;
+      this.privateGraphQLServerIsRunning = true;
     });
   }
 
@@ -206,12 +218,12 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
       this.graphQLServer.close();
       this.graphQLServer = undefined;
       this.graphQLServerPort = undefined;
-      this._graphQLServerIsRunning = false;
+      this.privateGraphQLServerIsRunning = false;
     }
   }
 
   graphQLServerIsRunning() {
-    return this._graphQLServerIsRunning;
+    return this.privateGraphQLServerIsRunning;
   }
 
   /**
@@ -220,7 +232,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
    */
   async delete(
     table: string,
-    keys: Array<string> | Array<number>
+    keys: Array<string | number>
   ): Promise<{ timing: number }> {
     const primaryKey = await this.getPrimaryKeyColumn(table);
     const conditions = keys.map(key => `${primaryKey.name} = "${key}"`);
@@ -547,7 +559,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     return Promise.resolve(true);
   }
 
-  async truncateAllTables() {
+  truncateAllTables(): Promise<void> {
     return this.runWithConnection(async () => {
       const tables: Array<{ name: string }> = await this.listTables();
 
@@ -559,8 +571,8 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
 
       // @TODO: Check if sqlite_sequence exists then execute:
       //        DELETE FROM sqlite_sequence WHERE name='${table}';
-
-      return this.driverExecuteQuery({ query: truncateAllQuery });
+      const result = await this.driverExecuteQuery({ query: truncateAllQuery });
+      return result;
     });
   }
 
@@ -644,7 +656,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
       : this.runWithConnection(identifyStatementsRunQuery);
   }
 
-  runWithConnection(run: () => Promise<Array<Object>>) {
+  runWithConnection(run: () => Promise<Array<Object>>): Promise<void> {
     return new Promise((resolve, reject) => {
       sqlite3.verbose();
 

@@ -5,7 +5,7 @@ import type { ProviderInterface, databasesType } from './provider_clients/Provid
 
 type serverType = {
   db: { [dbName: string]: ProviderInterface },
-  sshTunnel?: { close: () => void } | null
+  sshTunnel?: { close: () => void }
 };
 
 /**
