@@ -60,32 +60,42 @@ describe('Queries', function testQueries() {
   });
 
   it('should perform basic validation', async () => {
-    expect(await this.queries.validateBeforeCreation({
-      id: 12,
-      type: 'sqlite'
-    }))
-      .toMatchSnapshot();
-    expect(await this.queries.validateBeforeCreation({
-      id: 12,
-      type: 'sqlite'
-    }))
-      .toMatchSnapshot();
-    expect(await this.queries.validateBeforeCreation({
-      id: 'foo',
-      type: 'sqlite'
-    }))
-      .toMatchSnapshot();
-    expect(await this.queries.validateBeforeCreation({
-      id: 'foo',
-      name: 'foo',
-      type: 'sqlite'
-    }))
-      .toMatchSnapshot();
-    expect(await this.queries.validateBeforeCreation({
-      id: 'foo',
-      name: 'foo',
-      type: 'sqlite'
-    }))
-      .toMatchSnapshot();
+    expect(() => {
+      this.queries.validateBeforeCreation({
+        id: 12,
+        type: 'sqlite'
+      });
+    })
+      .toThrowErrorMatchingSnapshot();
+    expect(() => {
+      this.queries.validateBeforeCreation({
+        id: 12,
+        type: 'sqlite'
+      });
+    })
+      .toThrowErrorMatchingSnapshot();
+    expect(() => {
+      this.queries.validateBeforeCreation({
+        id: 'foo',
+        type: 'sqlite'
+      });
+    })
+      .toThrowErrorMatchingSnapshot();
+    expect(() => {
+      this.queries.validateBeforeCreation({
+        id: 'foo',
+        name: 'foo',
+        type: 'sqlite'
+      });
+    })
+      .toThrowErrorMatchingSnapshot();
+    expect(() => {
+      this.queries.validateBeforeCreation({
+        id: 'foo',
+        name: 'foo',
+        type: 'sqlite'
+      });
+    })
+      .toThrowErrorMatchingSnapshot();
   });
 });

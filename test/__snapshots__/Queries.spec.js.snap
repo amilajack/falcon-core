@@ -55,85 +55,15 @@ Array [
 ]
 `;
 
-exports[`Queries should perform basic validation 1`] = `
-Object {
-  "errorMessages": Array [
-    Object {
-      "fieldName": "id",
-      "message": "\\"id\\" must be a string",
-    },
-    Object {
-      "fieldName": "name",
-      "message": "\\"name\\" is required",
-    },
-    Object {
-      "fieldName": "query",
-      "message": "\\"query\\" is required",
-    },
-  ],
-  "passed": false,
-}
-`;
+exports[`Queries should perform basic validation 1`] = `"Failed validation: [{\\"message\\":\\"\\\\\\"id\\\\\\" must be a string\\",\\"fieldName\\":\\"id\\"},{\\"message\\":\\"\\\\\\"name\\\\\\" is required\\",\\"fieldName\\":\\"name\\"},{\\"message\\":\\"\\\\\\"query\\\\\\" is required\\",\\"fieldName\\":\\"query\\"}]"`;
 
-exports[`Queries should perform basic validation 2`] = `
-Object {
-  "errorMessages": Array [
-    Object {
-      "fieldName": "id",
-      "message": "\\"id\\" must be a string",
-    },
-    Object {
-      "fieldName": "name",
-      "message": "\\"name\\" is required",
-    },
-    Object {
-      "fieldName": "query",
-      "message": "\\"query\\" is required",
-    },
-  ],
-  "passed": false,
-}
-`;
+exports[`Queries should perform basic validation 2`] = `"Failed validation: [{\\"message\\":\\"\\\\\\"id\\\\\\" must be a string\\",\\"fieldName\\":\\"id\\"},{\\"message\\":\\"\\\\\\"name\\\\\\" is required\\",\\"fieldName\\":\\"name\\"},{\\"message\\":\\"\\\\\\"query\\\\\\" is required\\",\\"fieldName\\":\\"query\\"}]"`;
 
-exports[`Queries should perform basic validation 3`] = `
-Object {
-  "errorMessages": Array [
-    Object {
-      "fieldName": "name",
-      "message": "\\"name\\" is required",
-    },
-    Object {
-      "fieldName": "query",
-      "message": "\\"query\\" is required",
-    },
-  ],
-  "passed": false,
-}
-`;
+exports[`Queries should perform basic validation 3`] = `"Failed validation: [{\\"message\\":\\"\\\\\\"name\\\\\\" is required\\",\\"fieldName\\":\\"name\\"},{\\"message\\":\\"\\\\\\"query\\\\\\" is required\\",\\"fieldName\\":\\"query\\"}]"`;
 
-exports[`Queries should perform basic validation 4`] = `
-Object {
-  "errorMessages": Array [
-    Object {
-      "fieldName": "query",
-      "message": "\\"query\\" is required",
-    },
-  ],
-  "passed": false,
-}
-`;
+exports[`Queries should perform basic validation 4`] = `"Failed validation: [{\\"message\\":\\"\\\\\\"query\\\\\\" is required\\",\\"fieldName\\":\\"query\\"}]"`;
 
-exports[`Queries should perform basic validation 5`] = `
-Object {
-  "errorMessages": Array [
-    Object {
-      "fieldName": "query",
-      "message": "\\"query\\" is required",
-    },
-  ],
-  "passed": false,
-}
-`;
+exports[`Queries should perform basic validation 5`] = `"Failed validation: [{\\"message\\":\\"\\\\\\"query\\\\\\" is required\\",\\"fieldName\\":\\"query\\"}]"`;
 
 exports[`Queries should update a single query 1`] = `
 Array [

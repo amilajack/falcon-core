@@ -59,47 +59,57 @@ describe('Connections', function testConnections() {
   });
 
   it('should perform basic validation', async () => {
-    expect(await this.connections.validateBeforeCreation({
-      id: 12,
-      database: 'aJ@#LJ#@KL$KL@#sdf',
-      type: 'sqlite'
-    }))
-      .toMatchSnapshot();
-    expect(await this.connections.validateBeforeCreation({
-      id: 12,
-      database: '/usr/foo',
-      type: 'sqlite'
-    }))
-      .toMatchSnapshot();
-    expect(await this.connections.validateBeforeCreation({
-      id: 'foo',
-      database: '/usr/foo',
-      type: 'sqlite'
-    }))
-      .toMatchSnapshot();
-    expect(await this.connections.validateBeforeCreation({
-      id: 'foo',
-      name: 'foo',
-      database: '/usr/foo',
-      type: 'sqlite'
-    }))
-      .toMatchSnapshot();
-    expect(await this.connections.validateBeforeCreation({
-      id: 'foo',
-      name: 'foo',
-      database: '/usr/local/bin/npm',
-      type: 'sqlite'
-    }))
-      .toMatchSnapshot();
+    expect(() => {
+      this.connections.validateBeforeCreation({
+        id: 12,
+        database: 'aJ@#LJ#@KL$KL@#sdf',
+        type: 'sqlite'
+      });
+    })
+      .toThrowErrorMatchingSnapshot();
+    expect(() => {
+      this.connections.validateBeforeCreation({
+        id: 12,
+        database: '/usr/foo',
+        type: 'sqlite'
+      });
+    })
+      .toThrowErrorMatchingSnapshot();
+    expect(() => {
+      this.connections.validateBeforeCreation({
+        id: 'foo',
+        database: '/usr/foo',
+        type: 'sqlite'
+      });
+    })
+      .toThrowErrorMatchingSnapshot();
+    expect(() => {
+      this.connections.validateBeforeCreation({
+        id: 'foo',
+        name: 'foo',
+        database: '/usr/foo',
+        type: 'sqlite'
+      });
+    })
+      .toThrowErrorMatchingSnapshot();
+    expect(() => {
+      this.connections.validateBeforeCreation({
+        id: 'foo',
+        name: 'foo',
+        database: '/usr/local/bin/npm',
+        type: 'sqlite'
+      });
+    })
+      .toThrowErrorMatchingSnapshot();
   });
 
   it('should check if a sqlite file is valid or not', async () => {
-    expect(await this.connections.validateBeforeCreation({
+    expect(this.connections.validateBeforeCreation({
       id: 'foo',
       name: 'foo',
       database: '/Users/amila/Desktop/demo.sqlite',
       type: 'sqlite'
     }))
-      .toEqual({ errorMessages: [], passed: true });
+      .toEqual(undefined);
   });
 });

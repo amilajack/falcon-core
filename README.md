@@ -2,7 +2,7 @@ falcon-core
 ===========
 The cross-database ORM that powers [falcon](https://github.com/falcon-client/falcon)
 
-**Requires `node >= 8` and `npm >= 5`**
+**Requires `node >= 9` and `npm >= 5`**
 
 [![Build Status](https://travis-ci.com/amilajack/falcon-core.svg?branch=master&maxAge=2592)](https://travis-ci.com/amilajack/falcon-core)
 
