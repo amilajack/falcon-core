@@ -6,6 +6,8 @@
   "author": "The Falcon Team",
   "scripts": {
     "build": "cross-env NODE_ENV=production rm -rf lib && babel -d lib/ src/ --source-maps",
+    "coverage": "npm run test:sqlite -- --coverage",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "flow": "flow",
     "flow-prepublish": "flow-copy-source src lib",
     "flow-typed": "flow-typed install",
@@ -13,20 +15,18 @@
     "lint-fix": "prettier --single-quote --write \"{,!(flow-typed|lib)/**}/*.{js,jsx}\" && yarn lint -- --fix",
     "prepublish": "npm run build && npm run flow-prepublish",
     "test": "npm run test:sqlite",
-    "test-all-dbs": "find ./test/databases/ -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test jest",
-    "coverage": "npm run test:sqlite -- --coverage",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "test:mysql": "cross-env NODE_ENV=test DB_CLIENTS=mysql jest test/*.js --runInBand",
     "test:sqlite": "find ./test/databases/sqlite -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=sqlite jest test/*.js --runInBand",
     "test:sqlserver": "find ./test/databases/sqlserver -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=sqlserver jest test/*.js --runInBand",
     "test:postgresql": "find ./test/databases/postgresql -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=postgresql jest test/*.js --runInBand",
     "test:cassandra": "find ./test/databases/cassandra -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=cassandra jest test/*.js --runInBand",
     "test-all": "npm run lint && npm run flow && npm test && npm run build",
+    "test-all-dbs": "find ./test/databases/ -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test jest",
     "watch": "cross-env NODE_ENV=development babel --out-dir lib src --source-maps --watch"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run prepublish",
+      "pre-commit": "npm run prepublish && npm test && git add --all",
       "pre-push": "npm test"
     }
   },
