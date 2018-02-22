@@ -57,13 +57,15 @@ class CassandraProvider extends BaseProvider implements ProviderInterface {
       const params = [database, table];
       this.connection.execute(sql, params, (err, data) => {
         if (err) return reject(err);
-        return resolve(data.rows
-          // force pks be placed at the results beginning
-          .sort((a, b) => b.position - a.position)
-          .map(row => ({
-            columnName: row.column_name,
-            dataType: row.type
-          })));
+        return resolve(
+          data.rows
+            // force pks be placed at the results beginning
+            .sort((a, b) => b.position - a.position)
+            .map(row => ({
+              columnName: row.column_name,
+              dataType: row.type
+            }))
+        );
       });
     });
   }
@@ -97,12 +99,14 @@ class CassandraProvider extends BaseProvider implements ProviderInterface {
 
       this.connection.execute(sql, params, (err, data) => {
         if (err) return reject(err);
-        return resolve(data.rows.map(row => ({
-          constraintName: null,
-          columnName: row.column_name,
-          referencedTable: null,
-          keyType: 'PRIMARY KEY'
-        })));
+        return resolve(
+          data.rows.map(row => ({
+            constraintName: null,
+            columnName: row.column_name,
+            referencedTable: null,
+            keyType: 'PRIMARY KEY'
+          }))
+        );
       });
     });
   }
@@ -143,7 +147,9 @@ class CassandraProvider extends BaseProvider implements ProviderInterface {
   }
 
   getQuerySelectTop(table: string, limit: number) {
-    return Promise.resolve(`SELECT * FROM ${this.wrapIdentifier(table)} LIMIT ${limit}`);
+    return Promise.resolve(
+      `SELECT * FROM ${this.wrapIdentifier(table)} LIMIT ${limit}`
+    );
   }
 
   getTableCreateScript() {
@@ -173,7 +179,7 @@ class CassandraProvider extends BaseProvider implements ProviderInterface {
     `;
     const [result] = await this.executeQuery(sql);
     const tables = result.rows.map(row => row.table_name);
-    const promises = tables.map((t) => {
+    const promises = tables.map(t => {
       const truncateSQL = `
       TRUNCATE TABLE ${this.wrapIdentifier(database)}.${this.wrapIdentifier(t)};
     `;
@@ -191,9 +197,8 @@ class CassandraProvider extends BaseProvider implements ProviderInterface {
       rows: data.rows || [],
       fields: data.columns || [],
       rowCount: isSelect ? data.rowLength || 0 : undefined,
-      affectedRows: !isSelect && !isNaN(data.rowLength)
-        ? data.rowLength
-        : undefined
+      affectedRows:
+        !isSelect && !isNaN(data.rowLength) ? data.rowLength : undefined
     };
   }
 

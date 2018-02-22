@@ -7,7 +7,7 @@ type itemType = {
   id: string,
   type: databasesType,
   meta?: any,
-  [prop: string]: string,
+  [prop: string]: string
 };
 
 export type itemValidationType = {
@@ -15,18 +15,19 @@ export type itemValidationType = {
     fieldName: string,
     message: string
   }>,
-  passed: bool,
+  passed: boolean,
   data?: {
-    [prop: string]: any,
+    [prop: string]: any
   }
 };
 
 // We can't import electron in jest so electron-store won't work.
 // We need to use 'conf' as a drop-in replacement for electron-store
 // in the testing environment
-const FinalStore = process.env.NODE_ENV === 'test'
-  ? require('conf') // eslint-disable-line
-  : require('electron-store');
+const FinalStore =
+  process.env.NODE_ENV === 'test'
+    ? require('conf') // eslint-disable-line
+    : require('electron-store');
 
 /**
  * This class is a general manager for falcon database items.
@@ -80,8 +81,7 @@ export default class BaseManager {
    */
   async remove(itemId: string) {
     const items = await this.getAll();
-    const filtereditems =
-      items.filter(item => item.id !== itemId);
+    const filtereditems = items.filter(item => item.id !== itemId);
     this.store.set(this.itemType, filtereditems);
   }
 
@@ -94,8 +94,7 @@ export default class BaseManager {
    */
   async update(itemId: string, item: itemType): Promise<itemValidationType> {
     const items = await this.getAll();
-    const itemToUpdateIndex =
-      items.findIndex(itm => itm.id === itemId);
+    const itemToUpdateIndex = items.findIndex(itm => itm.id === itemId);
 
     try {
       await this.validateBeforeCreation(item);
@@ -129,12 +128,13 @@ export default class BaseManager {
 
   async get(itemId: string): Promise<itemType> {
     const items = await this.getAll();
-    const itemIndex =
-      items.findIndex(conn => conn.id === itemId);
+    const itemIndex = items.findIndex(conn => conn.id === itemId);
 
     switch (itemIndex) {
       case -1: {
-        throw new Error(`Item type "${this.itemType}" with id "${itemId}" not found`);
+        throw new Error(
+          `Item type "${this.itemType}" with id "${itemId}" not found`
+        );
       }
       default: {
         return items[itemIndex];
@@ -151,7 +151,10 @@ type dataType = {
 export class FalconError extends Error {
   data: dataType;
 
-  constructor(message: string = 'Validation failed', data: dataType = { errors: [] }) {
+  constructor(
+    message: string = 'Validation failed',
+    data: dataType = { errors: [] }
+  ) {
     super(message);
     this.data = data;
   }

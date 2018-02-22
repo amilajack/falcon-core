@@ -22,7 +22,7 @@ import type {
 
 type queryArgsType = {
   query: string,
-  multiple?: bool,
+  multiple?: boolean,
   params?: Array<string>
 };
 
@@ -58,7 +58,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
   /**
    * @private
    */
-  privateGraphQLServerIsRunning: bool = false;
+  privateGraphQLServerIsRunning: boolean = false;
 
   constructor(server: Object, database: Object, connection: Object) {
     super(server, database);
@@ -86,7 +86,9 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
   }
 
   getQuerySelectTop(table: string, limit: number) {
-    return Promise.resolve(`SELECT * FROM ${this.wrapIdentifier(table)} LIMIT ${limit}`);
+    return Promise.resolve(
+      `SELECT * FROM ${this.wrapIdentifier(table)} LIMIT ${limit}`
+    );
   }
 
   async getLogs(): Promise<Array<logType>> {
@@ -151,8 +153,10 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     rows: Array<{ [string]: any }>
   ): Promise<{ timing: number }> {
     const tableColumns = await this.getTableColumnNames(table);
-    const rowSqls = rows.map((row) => {
-      const rowData = tableColumns.map(key => (row[key] ? `'${row[key]}'` : 'NULL'));
+    const rowSqls = rows.map(row => {
+      const rowData = tableColumns.map(
+        key => (row[key] ? `'${row[key]}'` : 'NULL')
+      );
       return `(${rowData.join(', ')})`;
     });
     const query = `
@@ -176,9 +180,11 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     }>
   ): Promise<{ timing: number }> {
     const tablePrimaryKey = await this.getPrimaryKeyColumn(table);
-    const queries = records.map((record) => {
+    const queries = records.map(record => {
       const columnNames = Object.keys(record.changes);
-      const edits = columnNames.map(columnName => `${columnName} = '${record.changes[columnName]}'`);
+      const edits = columnNames.map(
+        columnName => `${columnName} = '${record.changes[columnName]}'`
+      );
       return `
         UPDATE ${table}
         SET ${edits.join(', ')}
@@ -199,11 +205,13 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     }
 
     const app = express();
-    const schema = await buildSchemaFromDatabase(this.connection.dbConfig.database);
+    const schema = await buildSchemaFromDatabase(
+      this.connection.dbConfig.database
+    );
     const port = await getPort();
     app.use('/graphql', cors(), graphqlHTTP({ schema }));
 
-    await new Promise((resolve) => {
+    await new Promise(resolve => {
       this.graphQLServer = app.listen(port, () => {
         this.graphQLServerPort = port;
         console.log(` > Running at http://localhost:${port}/graphql`);
@@ -240,12 +248,16 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
       DELETE FROM ${table}
       WHERE ${conditions.join(' OR ')}
     `;
-    const results = await this.driverExecuteQuery({ query }).then(res => res.data);
+    const results = await this.driverExecuteQuery({ query }).then(
+      res => res.data
+    );
     return results;
   }
 
-  getVersion() {
-    return this.driverExecuteQuery({ query: 'SELECT sqlite_version()' }).then(res => res.data[0]['sqlite_version()']);
+  getVersion(): Promise<number | string> {
+    return this.driverExecuteQuery({ query: 'SELECT sqlite_version()' }).then(
+      res => res.data[0]['sqlite_version()']
+    );
   }
 
   /**
@@ -253,10 +265,12 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
    */
   async getTableColumns(
     table: string,
-    raw: bool = false
+    raw: boolean = false
   ): Promise<Array<tableKeyType>> {
     const sql = `PRAGMA table_info(${table})`;
-    const rawResults = this.driverExecuteQuery({ query: sql }).then(res => res.data);
+    const rawResults = this.driverExecuteQuery({ query: sql }).then(
+      res => res.data
+    );
     return raw ? rawResults : rawResults.then(res => res);
   }
 
@@ -284,7 +298,8 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
       WHERE type='table'
     `;
     return this.driverExecuteQuery({ query: sql }).then(res =>
-      res.data.map(table => table.name));
+      res.data.map(table => table.name)
+    );
   }
 
   /**
@@ -325,7 +340,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
   ) {
     // Used to make verify that each columns actually exist within the table
     const originalColumns = await this.getTableColumnNames(table);
-    columns.forEach((column) => {
+    columns.forEach(column => {
       if (!originalColumns.includes(column.oldColumnName)) {
         throw new Error(`${column.oldColumnName} is not a column in ${table}`);
       }
@@ -351,7 +366,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     PRAGMA foreign_keys=on;`;
 
     // @TODO: Can probably make this more efficient
-    columns.forEach((column) => {
+    columns.forEach(column => {
       sql = sql.replace(column.oldColumnName, column.newColumnName);
     });
 
@@ -367,7 +382,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
   async dropTableColumns(table: string, columnsToDrop: Array<string>) {
     const temp = await this.getTableColumnNames(table);
 
-    columnsToDrop.forEach((e) => {
+    columnsToDrop.forEach(e => {
       if (!temp.includes(e)) {
         throw new Error(`${e} is not a column in ${table}`);
       }
@@ -376,8 +391,12 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     const permittedColumns = temp.filter(col => !columnsToDrop.includes(col));
     // Create an sql statement that creates a new table excluding dropped columns
     const propertiesArr = await this.getTablePropertiesSql(table);
-    const filteredPropertiesArr = propertiesArr.filter(row =>
-      !columnsToDrop.includes(row.substring(row.indexOf('"') + 1, row.lastIndexOf('"'))));
+    const filteredPropertiesArr = propertiesArr.filter(
+      row =>
+        !columnsToDrop.includes(
+          row.substring(row.indexOf('"') + 1, row.lastIndexOf('"'))
+        )
+    );
     const sql = `
     PRAGMA foreign_keys=off;
     BEGIN TRANSACTION;
@@ -430,15 +449,22 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     // Formats each argument to start on a new line with no extra white space
     // and wraps the column name in an "<identifier>" format. Does not
     // wrap constraints
-    return betweenParaentheses.map(row =>
-      `\n\t${row.includes('PRIMARY') || row.includes('FOREIGN')
-        ? row.trim().replace(/\r|\n|/g, '').replace(/\s{2,}/g, ' ')
-        : row
-          .trim()
-          .replace(/\r|\n|/g, '')
-          .replace(/\s{2,}/g, ' ')
-          .replace(/\[|\]|"|'/g, '')
-          .replace(/\[\w+\]|"\w+"|'\w+'|\w+/, '"$&"')}`);
+    return betweenParaentheses.map(
+      row =>
+        `\n\t${
+          row.includes('PRIMARY') || row.includes('FOREIGN')
+            ? row
+                .trim()
+                .replace(/\r|\n|/g, '')
+                .replace(/\s{2,}/g, ' ')
+            : row
+                .trim()
+                .replace(/\r|\n|/g, '')
+                .replace(/\s{2,}/g, ' ')
+                .replace(/\[|\]|"|'/g, '')
+                .replace(/\[\w+\]|"\w+"|'\w+'|\w+/, '"$&"')
+        }`
+    );
   }
 
   async listTables() {
@@ -564,9 +590,11 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
       const tables: Array<{ name: string }> = await this.listTables();
 
       const truncateAllQuery = tables
-        .map(table => `
+        .map(
+          table => `
           DELETE FROM ${table.name};
-        `)
+        `
+        )
         .join('');
 
       // @TODO: Check if sqlite_sequence exists then execute:
@@ -644,7 +672,8 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
         runQuery(connection, statement).then(result => ({
           ...result,
           statement
-        })));
+        }))
+      );
 
       return queryArgs.multiple
         ? Promise.all(results)
@@ -662,7 +691,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
 
       const db = new sqlite3.Database(
         this.connection.dbConfig.database,
-        async (err) => {
+        async err => {
           if (err) {
             return reject(err);
           }
@@ -713,10 +742,13 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
   checkUnsupported(exportOptions: exportOptionsType) {
     const unsupportedOptions = ['views', 'procedures', 'functions', 'rows'];
     const hasUnsupported = Object.keys(exportOptions).some(option =>
-      unsupportedOptions.includes(option));
+      unsupportedOptions.includes(option)
+    );
 
     if (hasUnsupported) {
-      throw new Error(`Unsupported properties passed: ${JSON.stringify(exportOptions)}`);
+      throw new Error(
+        `Unsupported properties passed: ${JSON.stringify(exportOptions)}`
+      );
     }
   }
 }

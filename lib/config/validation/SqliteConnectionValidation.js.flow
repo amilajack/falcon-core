@@ -9,7 +9,9 @@ import type {
   connectionType
 } from '../ConnectionManager';
 
-export default function SqliteConnectionValidation(connection: connectionType): Promise<connectionValidationType> {
+export default function SqliteConnectionValidation(
+  connection: connectionType
+): Promise<connectionValidationType> {
   const customJoi = Joi.extend(joi => ({
     base: joi.string(),
     name: 'string',
@@ -23,7 +25,12 @@ export default function SqliteConnectionValidation(connection: connectionType): 
         name: 'file',
         validate(params, value, state, options) {
           return !isFilePath(value)
-            ? this.createError('string.file', { v: value, q: params.q }, state, options)
+            ? this.createError(
+                'string.file',
+                { v: value, q: params.q },
+                state,
+                options
+              )
             : value;
         }
       },
@@ -32,7 +39,12 @@ export default function SqliteConnectionValidation(connection: connectionType): 
         validate(params, value, state, options) {
           return fs.existsSync(value)
             ? value
-            : this.createError('string.file_exists', { v: value, q: params.q }, state, options);
+            : this.createError(
+                'string.file_exists',
+                { v: value, q: params.q },
+                state,
+                options
+              );
         }
       },
       {
@@ -59,13 +71,14 @@ export default function SqliteConnectionValidation(connection: connectionType): 
           return passed
             ? value
             : this.createError(
-              'string.sqlite_valid', {
-                v: value,
-                q: params.q
-              },
-              state,
-              options
-            );
+                'string.sqlite_valid',
+                {
+                  v: value,
+                  q: params.q
+                },
+                state,
+                options
+              );
         }
       }
     ]
@@ -75,18 +88,18 @@ export default function SqliteConnectionValidation(connection: connectionType): 
     id: customJoi.string().required(),
     name: customJoi.string().required(),
     color: customJoi.string(),
-    database: customJoi.string().file().file_exists().sqlite_valid()
+    database: customJoi
+      .string()
+      .file()
+      .file_exists()
+      .sqlite_valid()
       .required(),
     type: customJoi.string().required()
   });
 
-  const errors = customJoi.validate(
-    connection,
-    schema,
-    {
-      abortEarly: false
-    }
-  );
+  const errors = customJoi.validate(connection, schema, {
+    abortEarly: false
+  });
 
   if (errors.error) {
     if (errors.error.details.length > 0) {

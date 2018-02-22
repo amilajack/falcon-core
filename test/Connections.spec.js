@@ -65,24 +65,21 @@ describe('Connections', function testConnections() {
         database: 'aJ@#LJ#@KL$KL@#sdf',
         type: 'sqlite'
       });
-    })
-      .toThrowErrorMatchingSnapshot();
+    }).toThrowErrorMatchingSnapshot();
     expect(() => {
       this.connections.validateBeforeCreation({
         id: 12,
         database: '/usr/foo',
         type: 'sqlite'
       });
-    })
-      .toThrowErrorMatchingSnapshot();
+    }).toThrowErrorMatchingSnapshot();
     expect(() => {
       this.connections.validateBeforeCreation({
         id: 'foo',
         database: '/usr/foo',
         type: 'sqlite'
       });
-    })
-      .toThrowErrorMatchingSnapshot();
+    }).toThrowErrorMatchingSnapshot();
     expect(() => {
       this.connections.validateBeforeCreation({
         id: 'foo',
@@ -90,8 +87,7 @@ describe('Connections', function testConnections() {
         database: '/usr/foo',
         type: 'sqlite'
       });
-    })
-      .toThrowErrorMatchingSnapshot();
+    }).toThrowErrorMatchingSnapshot();
     expect(() => {
       this.connections.validateBeforeCreation({
         id: 'foo',
@@ -99,17 +95,17 @@ describe('Connections', function testConnections() {
         database: '/usr/local/bin/npm',
         type: 'sqlite'
       });
-    })
-      .toThrowErrorMatchingSnapshot();
+    }).toThrowErrorMatchingSnapshot();
   });
 
   it('should check if a sqlite file is valid or not', async () => {
-    expect(this.connections.validateBeforeCreation({
-      id: 'foo',
-      name: 'foo',
-      database: '/Users/amila/Desktop/demo.sqlite',
-      type: 'sqlite'
-    }))
-      .toEqual(undefined);
+    expect(
+      this.connections.validateBeforeCreation({
+        id: 'foo',
+        name: 'foo',
+        database: '/Users/amila/Desktop/demo.sqlite',
+        type: 'sqlite'
+      })
+    ).toEqual(undefined);
   });
 });

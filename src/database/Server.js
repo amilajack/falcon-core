@@ -1,7 +1,10 @@
 // @flow
 import Client from './Client';
 import { CLIENTS } from './provider_clients';
-import type { ProviderInterface, databasesType } from './provider_clients/ProviderInterface';
+import type {
+  ProviderInterface,
+  databasesType
+} from './provider_clients/ProviderInterface';
 
 type serverType = {
   db: { [dbName: string]: ProviderInterface },

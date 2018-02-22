@@ -98,7 +98,9 @@ describe.skip('servers', () => {
 
       const configAfter = await loadConfig();
       expect(configAfter.servers).toHaveLength(configBefore.servers.length);
-      expect(configAfter.servers.find(srv => srv.id === id)).toEqual(serverToUpdate);
+      expect(configAfter.servers.find(srv => srv.id === id)).toEqual(
+        serverToUpdate
+      );
     });
   });
 
@@ -122,7 +124,9 @@ describe.skip('servers', () => {
         expect(createdServer).toEqual(newServer);
 
         const configAfter = await loadConfig();
-        expect(configAfter.servers).toHaveLength(configBefore.servers.length + 1);
+        expect(configAfter.servers).toHaveLength(
+          configBefore.servers.length + 1
+        );
       });
     });
 
@@ -146,7 +150,9 @@ describe.skip('servers', () => {
 
         const configAfter = await loadConfig();
         expect(configAfter.servers).toHaveLength(configBefore.servers.length);
-        expect(configAfter.servers.find(srv => srv.id === id)).toEqual(serverToUpdate);
+        expect(configAfter.servers.find(srv => srv.id === id)).toEqual(
+          serverToUpdate
+        );
       });
     });
   });
@@ -158,7 +164,9 @@ describe.skip('servers', () => {
       const configAfter = await loadConfig();
 
       expect(configAfter.servers).toHaveLength(configBefore.servers.length - 1);
-      expect(configAfter.servers.find(srv => srv.name === 'pg-vm')).toEqual(undefined);
+      expect(configAfter.servers.find(srv => srv.name === 'pg-vm')).toEqual(
+        undefined
+      );
     });
   });
 });

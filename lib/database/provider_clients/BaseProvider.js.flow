@@ -32,7 +32,7 @@ export default class BaseProvider {
 
   logs: Array<logType> = [];
 
-  _graphQLServerIsRunning: bool = false;
+  _graphQLServerIsRunning: boolean = false;
 
   static DEFAULT_LIMIT: number = 1000;
 
@@ -45,11 +45,15 @@ export default class BaseProvider {
 
   async connect() {
     if (this.database.connecting) {
-      throw new Error('There is already a connection in progress for this server. Aborting this new request.');
+      throw new Error(
+        'There is already a connection in progress for this server. Aborting this new request.'
+      );
     }
 
     if (this.database.connecting) {
-      throw new Error('There is already a connection in progress for this database. Aborting this new request.');
+      throw new Error(
+        'There is already a connection in progress for this database. Aborting this new request.'
+      );
     }
 
     try {
@@ -100,7 +104,7 @@ export default class BaseProvider {
       }
 
       sshTunnel.on('success', resolve);
-      sshTunnel.on('error', (error) => {
+      sshTunnel.on('error', error => {
         logger().error('ssh error %j', error);
         reject(error);
       });
@@ -125,10 +129,14 @@ export default class BaseProvider {
     const { only, ignore } = schema;
 
     if (only && only.length) {
-      where.push(`${schemaField} IN (${only.map(name => `'${name}'`).join(',')})`);
+      where.push(
+        `${schemaField} IN (${only.map(name => `'${name}'`).join(',')})`
+      );
     }
     if (ignore && ignore.length) {
-      where.push(`${schemaField} NOT IN (${ignore.map(name => `'${name}'`).join(',')})`);
+      where.push(
+        `${schemaField} NOT IN (${ignore.map(name => `'${name}'`).join(',')})`
+      );
     }
 
     return where.join(' AND ');
@@ -147,11 +155,15 @@ export default class BaseProvider {
     const { only, ignore } = database;
 
     if (only && only.length) {
-      where.push(`${databaseField} IN (${only.map(name => `'${name}'`).join(',')})`);
+      where.push(
+        `${databaseField} IN (${only.map(name => `'${name}'`).join(',')})`
+      );
     }
 
     if (ignore && ignore.length) {
-      where.push(`${databaseField} NOT IN (${ignore.map(name => `'${name}'`).join(',')})`);
+      where.push(
+        `${databaseField} NOT IN (${ignore.map(name => `'${name}'`).join(',')})`
+      );
     }
 
     return where.join(' AND ');
@@ -175,9 +187,10 @@ export default class BaseProvider {
     let limitValue = limit;
 
     await this.loadConfigLimit();
-    limitValue = BaseProvider.limitSelect === 'number'
-      ? BaseProvider.limitSelect
-      : BaseProvider.DEFAULT_LIMIT;
+    limitValue =
+      BaseProvider.limitSelect === 'number'
+        ? BaseProvider.limitSelect
+        : BaseProvider.DEFAULT_LIMIT;
 
     return this.database.connection.getQuerySelectTop(
       table,
@@ -288,7 +301,9 @@ export default class BaseProvider {
 
     // Multiple tables
     if ('tables' in exportOptions) {
-      const results = await Promise.all(exportOptions.tables.map(tableName => getSingleTable(tableName))).then(tableJsonStrings => tableJsonStrings.join(','));
+      const results = await Promise.all(
+        exportOptions.tables.map(tableName => getSingleTable(tableName))
+      ).then(tableJsonStrings => tableJsonStrings.join(','));
 
       return ['[', ...results, ']'].join('');
     }
@@ -299,7 +314,9 @@ export default class BaseProvider {
 
   async getCsvString(exportOptions: exportOptionsType) {
     if ('tables' in exportOptions) {
-      throw new Error('Exporting multiple tables to csv is currently not supported');
+      throw new Error(
+        'Exporting multiple tables to csv is currently not supported'
+      );
     }
 
     const jsonString = await this.getJsonString(exportOptions);

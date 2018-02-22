@@ -28,13 +28,9 @@ function validateQuery(query: queryType) {
     color: Joi.string()
   });
 
-  const errors = Joi.validate(
-    query,
-    schema,
-    {
-      abortEarly: false
-    }
-  );
+  const errors = Joi.validate(query, schema, {
+    abortEarly: false
+  });
 
   if (errors.error) {
     if (errors.error.details.length > 0) {
@@ -51,7 +47,8 @@ function validateQuery(query: queryType) {
   }
 }
 
-export default class QueryManager<T> extends BaseManager implements ManagerInterface<T> {
+export default class QueryManager<T> extends BaseManager
+  implements ManagerInterface<T> {
   itemType = 'queries';
 
   validateBeforeCreation(query: queryType) {
@@ -61,7 +58,11 @@ export default class QueryManager<T> extends BaseManager implements ManagerInter
         break;
       }
       default: {
-        throw new Error(`Unknown database type "${this.itemType}". This probably means it is not supported`);
+        throw new Error(
+          `Unknown database type "${
+            this.itemType
+          }". This probably means it is not supported`
+        );
       }
     }
   }

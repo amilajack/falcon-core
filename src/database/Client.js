@@ -23,6 +23,8 @@ export default function Client(
     // case 'postgresql':
     //   return PostgresqlProviderFactory(server, database);
     default:
-      throw new Error(`Database client type "${server.config.client}" not recognized`);
+      throw new Error(
+        `Database client type "${server.config.client}" not recognized`
+      );
   }
 }

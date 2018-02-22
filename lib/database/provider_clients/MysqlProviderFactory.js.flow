@@ -69,7 +69,7 @@ class MysqlProvider extends BaseProvider implements ProviderInterface {
     let rejected = false;
 
     return new Promise((resolve, reject) => {
-      const rejectErr = (err) => {
+      const rejectErr = err => {
         if (!rejected) {
           rejected = true;
           reject(err);
@@ -81,7 +81,7 @@ class MysqlProvider extends BaseProvider implements ProviderInterface {
           return rejectErr(errPool);
         }
 
-        _connection.on('error', (error) => {
+        _connection.on('error', error => {
           // it will be handled later in the next query execution
           logger().error('Connection fatal error %j', error);
         });
@@ -303,7 +303,8 @@ class MysqlProvider extends BaseProvider implements ProviderInterface {
     }
 
     return data.map((_, index) =>
-      this.parseRowQueryResult(data[index], fields[index], commands[index]));
+      this.parseRowQueryResult(data[index], fields[index], commands[index])
+    );
   }
 
   query(queryText: string) {
@@ -316,13 +317,14 @@ class MysqlProvider extends BaseProvider implements ProviderInterface {
 
     return {
       execute() {
-        return this.runWithConnection(async (connection) => {
+        return this.runWithConnection(async connection => {
           const connectionClient = { connection };
-          const {
-            data: dataPid
-          } = await this.driverExecuteQuery(connectionClient, {
-            query: 'SELECT connection_id() AS pid'
-          });
+          const { data: dataPid } = await this.driverExecuteQuery(
+            connectionClient,
+            {
+              query: 'SELECT connection_id() AS pid'
+            }
+          );
 
           pid = dataPid[0].pid;
 
@@ -418,11 +420,15 @@ class MysqlProvider extends BaseProvider implements ProviderInterface {
       const { data } = await this.driverExecuteQuery({ query: sql });
 
       const truncateAllQuery = data
-        .map(row => `
+        .map(
+          row => `
           SET FOREIGN_KEY_CHECKS = 0;
-          TRUNCATE TABLE ${this.wrapIdentifier(schema)}.${this.wrapIdentifier(row.table_name)};
+          TRUNCATE TABLE ${this.wrapIdentifier(schema)}.${this.wrapIdentifier(
+            row.table_name
+          )};
           SET FOREIGN_KEY_CHECKS = 1;
-        `)
+        `
+        )
         .join('');
 
       return this.driverExecuteQuery({ query: truncateAllQuery });

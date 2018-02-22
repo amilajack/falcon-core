@@ -4,9 +4,9 @@ type itemValidationType = {
     fieldName: string,
     message: string
   }>,
-  passed: bool,
+  passed: boolean,
   data?: {
-    [prop: string]: string,
+    [prop: string]: string
   }
 };
 
@@ -18,9 +18,9 @@ export type errorObject = {
 };
 
 export interface ManagerInterface<T> {
-  add: (item: T) => Promise<itemValidationType>,
-  remove: (itemId: string) => Promise<void>,
-  removeAll: () => Promise<void>,
-  get: (itemId: string) => Promise<T>,
-  getAll: () => Promise<Array<T>>,
+  add: (item: T) => Promise<itemValidationType>;
+  remove: (itemId: string) => Promise<void>;
+  removeAll: () => Promise<void>;
+  get: (itemId: string) => Promise<T>;
+  getAll: () => Promise<Array<T>>;
 }

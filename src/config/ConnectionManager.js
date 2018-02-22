@@ -10,7 +10,7 @@ export type connectionValidationType = {
     fieldName: string,
     message: string
   }>,
-  passed: bool,
+  passed: boolean,
   data?: {
     connection: connectionType
   }
@@ -43,7 +43,8 @@ export type connectionType = {
  * example, if a specific database requires encryption, the .get()
  * method can be modified
  */
-export default class ConnectionManager<T> extends BaseManager implements ManagerInterface<T> {
+export default class ConnectionManager<T> extends BaseManager
+  implements ManagerInterface<T> {
   itemType = 'connections';
 
   /**
@@ -57,7 +58,11 @@ export default class ConnectionManager<T> extends BaseManager implements Manager
         break;
       }
       default: {
-        throw new Error(`Unknown database type "${connection.type}". This probably means it is not supported`);
+        throw new Error(
+          `Unknown database type "${
+            connection.type
+          }". This probably means it is not supported`
+        );
       }
     }
   }

@@ -65,37 +65,32 @@ describe('Queries', function testQueries() {
         id: 12,
         type: 'sqlite'
       });
-    })
-      .toThrowErrorMatchingSnapshot();
+    }).toThrowErrorMatchingSnapshot();
     expect(() => {
       this.queries.validateBeforeCreation({
         id: 12,
         type: 'sqlite'
       });
-    })
-      .toThrowErrorMatchingSnapshot();
+    }).toThrowErrorMatchingSnapshot();
     expect(() => {
       this.queries.validateBeforeCreation({
         id: 'foo',
         type: 'sqlite'
       });
-    })
-      .toThrowErrorMatchingSnapshot();
-    expect(() => {
-      this.queries.validateBeforeCreation({
-        id: 'foo',
-        name: 'foo',
-        type: 'sqlite'
-      });
-    })
-      .toThrowErrorMatchingSnapshot();
+    }).toThrowErrorMatchingSnapshot();
     expect(() => {
       this.queries.validateBeforeCreation({
         id: 'foo',
         name: 'foo',
         type: 'sqlite'
       });
-    })
-      .toThrowErrorMatchingSnapshot();
+    }).toThrowErrorMatchingSnapshot();
+    expect(() => {
+      this.queries.validateBeforeCreation({
+        id: 'foo',
+        name: 'foo',
+        type: 'sqlite'
+      });
+    }).toThrowErrorMatchingSnapshot();
   });
 });
