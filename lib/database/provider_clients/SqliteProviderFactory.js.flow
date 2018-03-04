@@ -43,7 +43,7 @@ type tableKeyType = {
   type: string,
   notnull: 0 | 1,
   dflt_value: string,
-  pk: 0 | 1
+  pk: 0 | 1 | 2
 };
 
 // @TODO: Why does logging in constructor vs logging in driver execute
@@ -435,7 +435,11 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
    * in a format such that getCreateTableSql() and dropTable() can
    */
   async getTablePropertiesSql(table: string): Promise<Array<String>> {
-    const sql = `SELECT sql FROM sqlite_master WHERE name='${table}';`;
+    const sql = `
+      SELECT sql
+      FROM sqlite_master
+      WHERE name='${table}';
+    `;
     const creationScript = await this.driverExecuteQuery({
       query: sql
     }).then(res => res.data[0].sql.trim());
@@ -583,6 +587,19 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
    */
   isOnline() {
     return Promise.resolve(true);
+  }
+
+  truncateTable(table: string): Promise<void> {
+    return this.runWithConnection(async () => {
+      const truncateSingleQuery = `DELETE FROM ${table}`;
+
+      // @TODO: Check if sqlite_sequence exists then execute:
+      //        DELETE FROM sqlite_sequence WHERE name='${table}';
+      const result = await this.driverExecuteQuery({
+        query: truncateSingleQuery
+      });
+      return result;
+    });
   }
 
   truncateAllTables(): Promise<void> {

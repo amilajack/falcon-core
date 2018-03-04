@@ -2029,9 +2029,16 @@ eslint-plugin-compat@^2.1.0:
     mdn-browser-compat-data "^0.0.20"
     requireindex "^1.1.0"
 
-eslint-plugin-flowtype-errors@^3.3.6, eslint-plugin-flowtype-errors@^3.3.7:
+eslint-plugin-flowtype-errors@^3.3.6:
   version "3.3.7"
   resolved "https://registry.yarnpkg.com/eslint-plugin-flowtype-errors/-/eslint-plugin-flowtype-errors-3.3.7.tgz#da8fbfde0d3a887bc4513fbb2e8dd9e227433953"
+  dependencies:
+    babel-runtime "^6.26.0"
+    slash "^1.0.0"
+
+eslint-plugin-flowtype-errors@^3.6.1-0:
+  version "3.6.1-0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-flowtype-errors/-/eslint-plugin-flowtype-errors-3.6.1-0.tgz#905747a76dc6612265a1c6912b4671bc7aefada9"
   dependencies:
     babel-runtime "^6.26.0"
     slash "^1.0.0"
@@ -4717,6 +4724,10 @@ prepend-http@^1.0.1:
 preserve@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
+
+prettier@^1.11.1:
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.11.1.tgz#61e43fc4cd44e68f2b0dfc2c38cd4bb0fccdcc75"
 
 prettier@^1.8.2:
   version "1.10.2"

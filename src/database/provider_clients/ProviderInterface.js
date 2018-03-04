@@ -143,7 +143,7 @@ export interface ProviderInterface {
   /**
    * Retrival operations
    */
-  getVersion: () => Promise<string>;
+  getVersion: () => Promise<string | number>;
   getConnectionType: () => Promise<'local' | 'ssh' | 'insecure'>;
   getTableReferences: (table: string) => Promise<Array<string>>;
   getTableValues: (table: string) => Promise<Array<Object>>;
