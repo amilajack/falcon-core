@@ -425,9 +425,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
    */
   async getCreateTableSql(table: string): Promise<string> {
     const createTableArgs = await this.getTablePropertiesSql(table);
-    return `
-    CREATE TABLE ${table} (${createTableArgs.join()}
-    )`;
+    return `CREATE TABLE ${table} (${createTableArgs.join()})`;
   }
 
   /**

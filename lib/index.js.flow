@@ -1,10 +1,9 @@
 // @flow
-import * as config from './Config';
-import * as db from './database';
-import ConnectionManager from './config/ConnectionManager';
-import QueryManager from './config/QueryManager';
-
-export { config, db, ConnectionManager, QueryManager };
+export * as config from './Config';
+export * as db from './database';
+export ConnectionManager from './config/ConnectionManager';
+export QueryManager from './config/QueryManager';
+export { FalconError } from './config/BaseManager';
 
 export type {
   ProviderInterface,
@@ -16,6 +15,8 @@ export type {
   queryResponseType,
   FactoryType
 } from './database/provider_clients/ProviderInterface';
+
+export type { itemValidationType } from './config/BaseManager';
 
 export type {
   connectionValidationType,
