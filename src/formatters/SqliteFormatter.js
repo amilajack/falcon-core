@@ -12,10 +12,10 @@ type inputType = {
 const sep = '~::~';
 
 type mapperFn =
-  ((str: string) => (string | Array<string>)) |
-  ((str: Array<string>) => string) |
-  (str: inputType) => string;
-type fnsType = Array<(mapperFn)>;
+  | ((str: string) => string | Array<string>)
+  | ((str: Array<string>) => string)
+  | ((str: inputType) => string);
+type fnsType = Array<mapperFn>;
 
 const transform = (val, ...fns: fnsType): string | Array<string> =>
   fns.reduce((acc, fn) => fn(acc), val);
@@ -31,7 +31,9 @@ const subqueryLevel = (str, level) =>
 
 type replaceType = (f: any, a: any) => string;
 
-const allReplacements = (tab: string): Array<[RegExp, string | replaceType]> => [
+const allReplacements = (
+  tab: string
+): Array<[RegExp, string | replaceType]> => [
   [/ AND /gi, `${sep + tab}AND `],
   [/ BETWEEN /gi, `${sep + tab}BETWEEN `],
   [/ CASE /gi, `${sep + tab}CASE `],
