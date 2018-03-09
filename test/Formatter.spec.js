@@ -42,14 +42,14 @@ const unchangedKeywords = [
 ];
 
 describe('Formatters', () => {
-  it('should format Sqlite', () => {
+  const numSpaces = 2;
+  const tab = ' '.repeat(numSpaces);
+
+  it('should format basic sqlite statement', () => {
     expect(SqliteFormatter('SELECT * FROM users')).toEqual(
       'SELECT *\nFROM users'
     );
   });
-
-  const numSpaces = 2;
-  const tab = ' '.repeat(numSpaces);
 
   it('formatting a full SELECT query', () => {
     expect(
@@ -74,7 +74,7 @@ describe('Formatters', () => {
     ).toEqual(`DELETE\nFROM a\nWHERE a.b = 1\n${tab}AND a.c = 2`);
   });
 
-  describe('formatSql', () => {
+  describe('SqliteFormatter', () => {
     describe('formatting of tabbed keywords', () => {
       tabbedKeywords.forEach(word => {
         it(`formatting of '${word}'`, () => {
