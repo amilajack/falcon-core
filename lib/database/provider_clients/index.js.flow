@@ -1,8 +1,8 @@
 // @flow
-import cassandra from './CassandraProviderFactory';
 import sqlite from './SqliteProviderFactory';
-import mysql from './MysqlProviderFactory';
-import postgresql from './PostgresqlProviderFactory';
+// import cassandra from './CassandraProviderFactory';
+// import mysql from './MysqlProviderFactory';
+// import postgresql from './PostgresqlProviderFactory';
 // import sqlserver from './SqlserverProviderFactory';
 
 /**
@@ -64,8 +64,8 @@ export const CLIENTS = [
 
 export default {
   // sqlserver,
-  postgresql,
-  mysql,
+  // postgresql,
+  // mysql,
+  // cassandra,
   sqlite,
-  cassandra
 };
