@@ -67,5 +67,5 @@ export default {
   // postgresql,
   // mysql,
   // cassandra,
-  sqlite,
+  sqlite
 };

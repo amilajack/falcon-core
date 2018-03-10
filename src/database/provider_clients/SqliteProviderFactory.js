@@ -1,11 +1,8 @@
 // @flow
 import sqlite3 from 'sqlite3';
-import express from 'express';
 import getPort from 'get-port';
-import graphqlHTTP from 'express-graphql';
 import cors from 'cors';
 import { identify } from 'sql-query-identifier';
-import { buildSchemaFromDatabase } from 'tuql';
 import type { Application } from 'express';
 import createLogger from '../../Logger';
 import BaseProvider from './BaseProvider';
@@ -200,6 +197,15 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
   }
 
   async startGraphQLServer(): Promise<void> {
+    const [a, b, c] = await Promise.all([
+      import('express-graphql'),
+      import('tuql'),
+      import('express')
+    ]);
+    const { default: graphqlHTTP } = a;
+    const { buildSchemaFromDatabase } = b;
+    const { default: express } = c;
+
     if (this.graphQLServerIsRunning()) {
       return;
     }
