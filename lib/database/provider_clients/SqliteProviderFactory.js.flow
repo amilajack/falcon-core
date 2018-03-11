@@ -197,14 +197,12 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
   }
 
   async startGraphQLServer(): Promise<void> {
-    const [a, b, c] = await Promise.all([
+    const [graphqlHTTP, tuql, express] = await Promise.all([
       import('express-graphql'),
       import('tuql'),
       import('express')
     ]);
-    const { default: graphqlHTTP } = a;
-    const { buildSchemaFromDatabase } = b;
-    const { default: express } = c;
+    const { buildSchemaFromDatabase } = tuql
 
     if (this.graphQLServerIsRunning()) {
       return;
