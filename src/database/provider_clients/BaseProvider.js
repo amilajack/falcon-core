@@ -4,11 +4,9 @@ import { writeFile } from 'fs';
 import json2csv from 'json2csv';
 import SqliteJsonExport from 'sqlite-json-export';
 import promisify from 'util.promisify';
-import Tunnel from '../Tunnel';
 import clients from './';
 import * as config from '../../Config';
 import createLogger from '../../Logger';
-import type { sshTunnelType } from '../Tunnel';
 import type {
   serverType,
   databaseType,
@@ -64,29 +62,8 @@ export default class BaseProvider {
         this.database.connection.disconnect();
       }
 
-      // reuse existing tunnel
-      if (this.server.config.ssh && !this.server.sshTunnel) {
-        logger().debug('creating ssh tunnel');
-        this.server.sshTunnel = await Tunnel(this.server.config);
-
-        const { address, port } = this.server.sshTunnel.address();
-        logger().debug(
-          'ssh forwarding through local connection %s:%d',
-          address,
-          port
-        );
-
-        this.server.config.localHost = address;
-        this.server.config.localPort = port;
-      }
-
       const driver = clients[this.server.config.client];
-
-      const [connection] = await Promise.all([
-        driver(this.server, this.database),
-        this.handleSSHError(this.server.sshTunnel)
-      ]);
-
+      const connection = await driver(this.server, this.database);
       this.database.connection = connection;
     } catch (err) {
       logger().error('Connection error %j', err);
@@ -95,22 +72,6 @@ export default class BaseProvider {
     } finally {
       this.database.connecting = false;
     }
-  }
-
-  handleSSHError(sshTunnel?: sshTunnelType) {
-    return new Promise((resolve, reject) => {
-      if (!sshTunnel) {
-        return resolve(true);
-      }
-
-      sshTunnel.on('success', resolve);
-      sshTunnel.on('error', error => {
-        logger().error('ssh error %j', error);
-        reject(error);
-      });
-
-      return resolve(true);
-    });
   }
 
   buildSchemaFilter(

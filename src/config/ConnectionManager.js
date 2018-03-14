@@ -6,14 +6,14 @@ import type { ManagerInterface } from './ManagerInterface';
 import type { databasesType } from '../database/provider_clients/ProviderInterface';
 
 export type connectionValidationType = {
+  passed: boolean,
+  data?: {
+    connection: connectionType
+  },
   errorMessages: Array<{
     fieldName: string,
     message: string
   }>,
-  passed: boolean,
-  data?: {
-    connection: connectionType
-  }
 };
 
 export type connectionType = {
@@ -51,10 +51,10 @@ export default class ConnectionManager<T> extends BaseManager
    * @TODO
    * @private
    */
-  validateBeforeCreation(connection: connectionType) {
+  async validateBeforeCreation(connection: connectionType) {
     switch (connection.type) {
       case 'sqlite': {
-        sqliteConnectionValidation(connection);
+        await sqliteConnectionValidation(connection);
         break;
       }
       default: {

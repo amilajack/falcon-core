@@ -1,18 +1,19 @@
 {
   "presets": [
-    ["env", {
-      "targets": {
-        "node": 8
-      }
-    }],
     "stage-0",
     "flow"
   ],
   "env": {
     "development": {
+      "presets": [
+        ["env", { "targets": { "node": 8 } }]
+      ],
       "plugins": ["dynamic-import-node"]
     },
     "test": {
+      "presets": [
+        ["env", { "targets": { "node": 8 } }]
+      ],
       "plugins": ["dynamic-import-node"]
     }
   }

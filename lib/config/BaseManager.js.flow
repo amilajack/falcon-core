@@ -61,7 +61,7 @@ export default class BaseManager {
       ...item
     };
 
-    this.validateBeforeCreation(item);
+    await this.validateBeforeCreation(item);
 
     const items = await this.getAll();
     items.push(itemWithDefaults);
