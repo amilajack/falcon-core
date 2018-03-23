@@ -3,10 +3,11 @@
   "version": "0.1.0-4",
   "description": "The cross-database ORM that powers falcon",
   "main": "lib/index.js",
+  "module": "es/index.js",
   "author": "The Falcon Team",
   "scripts": {
-    "build": "cross-env NODE_ENV=production rm -rf lib && babel -d lib/ src/ --source-maps && npm run flow-prepublish",
-    "build:es": "rm -rf es && cross-env BABEL_ENV=production NODE_ENV=production babel -d es/ src/ --source-maps",
+    "build": "cross-env NODE_ENV=production rm -rf lib && babel -d lib/ src/ --source-maps && npm run build:es && npm run flow-prepublish",
+    "build:es": "rm -rf es && cross-env BABEL_ENV=es NODE_ENV=production babel -d es/ src/ --source-maps",
     "coverage": "npm run test:sqlite --coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "flow": "flow",

@@ -25,6 +25,8 @@ export type connectionType = {
   color?: string | 'default',
   // Which database the connection is for
   type: databasesType,
+  // An optional database to connect to
+  database?: string,
   // These are properties that are specific to certain databases.
   // The pervious properties are required for all databases
   meta?: {

@@ -15,6 +15,15 @@
         ["env", { "targets": { "node": 8 } }]
       ],
       "plugins": ["dynamic-import-node"]
+    },
+    "es": {
+      "presets": [
+        ["env", {
+          "targets": { "node": 8 },
+          "useBuiltIns": true,
+          "modules": false
+        }]
+      ]
     }
   }
 }
