@@ -74,6 +74,7 @@
     "mysql": "^2.15.0",
     "pg": "^7.4.1",
     "portfinder": "^1.0.13",
+    "rndm": "^1.2.0",
     "sql-query-identifier": "^1.1.0",
     "sqlite-json-export": "0.0.1",
     "sqlite3": "^3.1.13",
@@ -114,8 +115,7 @@
     "flow-typed": "^2.3.0",
     "husky": "^0.15.0-rc.3",
     "jest-cli": "^22.3.0",
-    "prettier": "^1.11.1",
-    "rndm": "^1.2.0"
+    "prettier": "^1.11.1"
   },
   "jest": {
     "testEnvironment": "node",
