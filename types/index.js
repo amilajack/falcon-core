@@ -7,7 +7,8 @@ export type {
   queryType,
   queryArgsType,
   queryResponseType,
-  FactoryType
+  FactoryType,
+  logType
 } from '../src/database/provider_clients/ProviderInterface';
 
 export type { itemValidationType } from '../src/config/BaseManager';
