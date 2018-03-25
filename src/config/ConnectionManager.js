@@ -13,7 +13,7 @@ export type connectionValidationType = {
   errorMessages: Array<{
     fieldName: string,
     message: string
-  }>,
+  }>
 };
 
 export type connectionType = {

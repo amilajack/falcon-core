@@ -202,7 +202,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
       import('tuql'),
       import('express')
     ]);
-    const { buildSchemaFromDatabase } = tuql
+    const { buildSchemaFromDatabase } = tuql;
 
     if (this.graphQLServerIsRunning()) {
       return;

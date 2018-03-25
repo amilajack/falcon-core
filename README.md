@@ -6,6 +6,15 @@ The cross-database ORM that powers [falcon](https://github.com/falcon-client/fal
 
 [![Build Status](https://travis-ci.com/amilajack/falcon-core.svg?branch=master&maxAge=2592)](https://travis-ci.com/amilajack/falcon-core)
 
+## Setup
+```bash
+git clone https://github.com/amilajack/falcon-core
+cd falcon-core
+lerna bootstrap
+lerna run build
+yarn build
+```
+
 ## Roadmap
 ### Release 1.0.0
   * Add documentation
