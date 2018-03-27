@@ -113,7 +113,7 @@ describe('Connections', function testConnections() {
       await this.connections.add({
         id: 'foo',
         name: 'foo',
-        database: '/usr/local/bin/npm',
+        database: __filename,
         type: 'sqlite'
       });
     } catch (e) {
