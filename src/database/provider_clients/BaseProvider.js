@@ -1,7 +1,7 @@
 // @flow
 import util from 'util';
 import { writeFile } from 'fs';
-import json2csv from 'json2csv';
+import { Parser as Json2CsvParser } from 'json2csv';
 import SqliteJsonExport from 'sqlite-json-export';
 import promisify from 'util.promisify';
 import clients from './';
@@ -279,14 +279,12 @@ export default class BaseProvider {
         'Exporting multiple tables to csv is currently not supported'
       );
     }
-
     const jsonString = await this.getJsonString(exportOptions);
     const parsedJson = JSON.parse(jsonString);
-
-    return json2csv({
-      data: parsedJson,
+    const json2csvParser = new Json2CsvParser({
       fields: Object.keys(parsedJson[0])
     });
+    return json2csvParser.parse(parsedJson);
   }
 
   async exportJson(filename: string, exportOptions: exportOptionsType) {

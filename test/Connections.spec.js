@@ -1,5 +1,6 @@
 // @flow
 /* eslint no-await-in-loop: 0 */
+import path from 'path';
 import Connections from '../src/config/ConnectionManager';
 
 async function connectionFactory(connections, connectionCount: number = 1) {
@@ -9,10 +10,22 @@ async function connectionFactory(connections, connectionCount: number = 1) {
       id: `test-id-${i + 1}`,
       type: 'sqlite',
       name: `test-connection-${i + 1}`,
-      database: '/Users/amila/Desktop/demo.sqlite'
+      database: path.join(__dirname, 'databases/sqlite/demo.sqlite')
     });
   }
   return Promise.all(array);
+}
+
+function removeDatabaseProperty(object: Object): Object {
+  const foo = { ...object };
+  delete foo.database;
+  assertDatabaseProperty(object);
+  return foo;
+}
+
+function assertDatabaseProperty(object: Object): Object {
+  expect(object).toHaveProperty('database');
+  expect(object.database).toBeTruthy();
 }
 
 describe('Connections', function testConnections() {
@@ -27,7 +40,7 @@ describe('Connections', function testConnections() {
 
   it('should get all connections', async () => {
     const connections = await this.connections.getAll();
-    expect(connections).toMatchSnapshot();
+    expect(connections.map(removeDatabaseProperty)).toMatchSnapshot();
   });
 
   it('should delete a single connection', async () => {
@@ -35,7 +48,7 @@ describe('Connections', function testConnections() {
     const connectionIdToDelete = connections[0].id;
     await this.connections.remove(connectionIdToDelete);
     const newConnections = await this.connections.getAll();
-    expect(newConnections).toMatchSnapshot();
+    expect(newConnections.map(removeDatabaseProperty)).toMatchSnapshot();
   });
 
   it('should update a single connection', async () => {
@@ -48,14 +61,14 @@ describe('Connections', function testConnections() {
       type: 'sqlite'
     });
     const newConnections = await this.connections.getAll();
-    expect(newConnections).toMatchSnapshot();
+    expect(newConnections.map(removeDatabaseProperty)).toMatchSnapshot();
   });
 
   it('should get a single connection', async () => {
     const connections = await this.connections.getAll();
     const connectionId = connections[2].id;
     const connection = await this.connections.get(connectionId);
-    expect(connection).toMatchSnapshot();
+    expect(removeDatabaseProperty(connection)).toMatchSnapshot();
   });
 
   it('should perform basic validation', async () => {
@@ -100,7 +113,7 @@ describe('Connections', function testConnections() {
       await this.connections.add({
         id: 'foo',
         name: 'foo',
-        database: '/usr/local/bin/npm',
+        database: __filename,
         type: 'sqlite'
       });
     } catch (e) {
@@ -109,14 +122,14 @@ describe('Connections', function testConnections() {
   });
 
   it('should check if a sqlite file is valid or not', async () => {
-    const database = '/Users/amila/Desktop/demo.sqlite';
-    expect(
-      await this.connections.add({
-        id: 'foo',
-        name: 'foo',
-        type: 'sqlite',
-        database
-      })
-    ).toMatchSnapshot();
+    const database = path.join(__dirname, 'databases/sqlite/demo.sqlite');
+    const conn = await this.connections.add({
+      id: 'foo',
+      name: 'foo',
+      type: 'sqlite',
+      database
+    });
+    conn.data.item = removeDatabaseProperty(conn.data.item);
+    expect(conn).toMatchSnapshot();
   });
 });

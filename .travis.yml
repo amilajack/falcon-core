@@ -9,7 +9,7 @@ cache: yarn
 
 before_install:
   - node -v
-  - yarn -V
+  - yarn -v
   # postgres
   - createdb sqlectron
   - psql -d sqlectron -a -f test/databases/postgresql/schema/schema.sql

@@ -5,7 +5,6 @@ Object {
   "data": Object {
     "item": Object {
       "color": "gray",
-      "database": "/Users/amila/Desktop/demo.sqlite",
       "id": "foo",
       "name": "foo",
       "type": "sqlite",
@@ -20,14 +19,12 @@ exports[`Connections should delete a single connection 1`] = `
 Array [
   Object {
     "color": "gray",
-    "database": "/Users/amila/Desktop/demo.sqlite",
     "id": "test-id-2",
     "name": "test-connection-2",
     "type": "sqlite",
   },
   Object {
     "color": "gray",
-    "database": "/Users/amila/Desktop/demo.sqlite",
     "id": "test-id-3",
     "name": "test-connection-3",
     "type": "sqlite",
@@ -38,7 +35,6 @@ Array [
 exports[`Connections should get a single connection 1`] = `
 Object {
   "color": "gray",
-  "database": "/Users/amila/Desktop/demo.sqlite",
   "id": "test-id-3",
   "name": "test-connection-3",
   "type": "sqlite",
@@ -49,21 +45,18 @@ exports[`Connections should get all connections 1`] = `
 Array [
   Object {
     "color": "gray",
-    "database": "/Users/amila/Desktop/demo.sqlite",
     "id": "test-id-1",
     "name": "test-connection-1",
     "type": "sqlite",
   },
   Object {
     "color": "gray",
-    "database": "/Users/amila/Desktop/demo.sqlite",
     "id": "test-id-2",
     "name": "test-connection-2",
     "type": "sqlite",
   },
   Object {
     "color": "gray",
-    "database": "/Users/amila/Desktop/demo.sqlite",
     "id": "test-id-3",
     "name": "test-connection-3",
     "type": "sqlite",
@@ -85,21 +78,18 @@ exports[`Connections should update a single connection 1`] = `
 Array [
   Object {
     "color": "gray",
-    "database": "/Users/amila/Desktop/demo.sqlite",
     "id": "test-id-1",
     "name": "test-connection-1",
     "type": "sqlite",
   },
   Object {
     "color": "gray",
-    "database": "/Users/amila/Desktop/demo.sqlite",
     "id": "test-id-2",
     "name": "test-connection-2",
     "type": "sqlite",
   },
   Object {
     "color": "gray",
-    "database": "/Users/amila/Desktop/demo.sqlite",
     "id": "test-id-3",
     "name": "test-connection-3",
     "type": "sqlite",
