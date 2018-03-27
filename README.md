@@ -2,7 +2,7 @@ falcon-core
 ===========
 The cross-database ORM that powers [falcon](https://github.com/falcon-client/falcon)
 
-**Requires `node >= 9` and `npm >= 5`**
+**Requires `node >= 9` and `yarn >= 0.22.0`**
 
 [![Build Status](https://api.travis-ci.com/amilajack/falcon-core.svg?token=stGf151gAJ11ZUi8LyvG&branch=master)](https://travis-ci.com/amilajack/falcon-core)
 
@@ -30,7 +30,7 @@ yarn build
 
 ## Installation
 ```bash
-npm install falcon-core --save
+yarn add falcon-core
 ```
 
 ## Example
