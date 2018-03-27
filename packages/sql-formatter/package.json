@@ -1,0 +1,12 @@
+{
+  "name": "@falcon-client/sql-formatter",
+  "version": "0.0.1",
+  "author": "Amila Welihinda <amilajack@gmail.com>",
+  "license": "MIT",
+  "main": "./src/index.js",
+  "module": "./src/index.js",
+  "scripts": {
+    "test": "jest test/*.spec.js",
+    "watch": "cross-env NODE_ENV=development babel --out-dir lib src --source-maps --watch"
+  }
+}

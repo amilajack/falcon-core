@@ -1,6 +1,7 @@
 import isFilePath from 'is-valid-path';
 import Joi from 'joi';
 import fs from 'fs';
+import path from 'path';
 import Database from 'better-sqlite3';
 import { FalconError } from '../BaseManager';
 
@@ -10,14 +11,20 @@ export default function SqliteConnectionValidation(connection) {
     base: joi.string(),
     name: 'string',
     language: {
-      file: 'needs to be a file',
+      file_has_absolute_path: 'needs to be an absolute path',
+      file_is_valid: 'needs to be a file',
       file_exists: 'does not exist',
       sqlite_valid: 'is not valid'
     },
     rules: [{
-      name: 'file',
+      name: 'file_has_absolute_path',
       validate(params, value, state, options) {
-        return !isFilePath(value) ? this.createError('string.file', { v: value, q: params.q }, state, options) : value;
+        return !path.isAbsolute(value) ? this.createError('string.file_has_absolute_path', { v: value, q: params.q }, state, options) : value;
+      }
+    }, {
+      name: 'file_is_valid',
+      validate(params, value, state, options) {
+        return !isFilePath(value) ? this.createError('string.file_is_valid', { v: value, q: params.q }, state, options) : value;
       }
     }, {
       name: 'file_exists',
@@ -34,7 +41,7 @@ export default function SqliteConnectionValidation(connection) {
             readonly: true,
             fileMustExist: true
           });
-          if (db.pragma('quick_check', true) !== 'ok') {
+          if (db.prepare('PRAGMA quick_check').pluck().get() !== 'ok') {
             passed = false;
           }
         } catch (e) {
@@ -57,7 +64,7 @@ export default function SqliteConnectionValidation(connection) {
     id: customJoi.string().required(),
     name: customJoi.string().required(),
     color: customJoi.string(),
-    database: customJoi.string().file().file_exists().sqlite_valid().required(),
+    database: customJoi.string().file_is_valid().file_has_absolute_path().file_exists().sqlite_valid().required(),
     type: customJoi.string().required()
   });
 

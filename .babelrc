@@ -3,6 +3,14 @@
     "stage-0",
     "flow"
   ],
+  "plugins": [
+    ["module-resolver", {
+      "root": ["./packages"],
+      "alias": {
+        "@falcon-client/sql-formatter": "./packages/sql-formatter"
+      }
+    }]
+  ],
   "env": {
     "development": {
       "presets": [

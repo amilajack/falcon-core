@@ -59,53 +59,64 @@ describe('Connections', function testConnections() {
   });
 
   it('should perform basic validation', async () => {
-    expect(() => {
-      this.connections.validateBeforeCreation({
+    try {
+      await this.connections.add({
         id: 12,
         database: 'aJ@#LJ#@KL$KL@#sdf',
         type: 'sqlite'
       });
-    }).toThrowErrorMatchingSnapshot();
-    expect(() => {
-      this.connections.validateBeforeCreation({
+    } catch (e) {
+      expect(e).toMatchSnapshot();
+    }
+    try {
+      await this.connections.add({
         id: 12,
         database: '/usr/foo',
         type: 'sqlite'
       });
-    }).toThrowErrorMatchingSnapshot();
-    expect(() => {
-      this.connections.validateBeforeCreation({
-        id: 'foo',
+    } catch (e) {
+      expect(e).toMatchSnapshot();
+    }
+    try {
+      await this.connections.add({
+        id: 12,
         database: '/usr/foo',
         type: 'sqlite'
       });
-    }).toThrowErrorMatchingSnapshot();
-    expect(() => {
-      this.connections.validateBeforeCreation({
+    } catch (e) {
+      expect(e).toMatchSnapshot();
+    }
+    try {
+      await this.connections.add({
         id: 'foo',
         name: 'foo',
         database: '/usr/foo',
         type: 'sqlite'
       });
-    }).toThrowErrorMatchingSnapshot();
-    expect(() => {
-      this.connections.validateBeforeCreation({
+    } catch (e) {
+      expect(e).toMatchSnapshot();
+    }
+    try {
+      await this.connections.add({
         id: 'foo',
         name: 'foo',
         database: '/usr/local/bin/npm',
         type: 'sqlite'
       });
-    }).toThrowErrorMatchingSnapshot();
+    } catch (e) {
+      expect(e).toMatchSnapshot();
+    }
   });
 
   it('should check if a sqlite file is valid or not', async () => {
+    const database = '/Users/amila/Desktop/demo.sqlite';
     expect(
-      this.connections.validateBeforeCreation({
+      await this.connections.add({
         id: 'foo',
         name: 'foo',
-        database: '/Users/amila/Desktop/demo.sqlite',
-        type: 'sqlite'
+        type: 'sqlite',
+        database
       })
-    ).toEqual(undefined);
+    ).toMatchSnapshot();
   });
 });

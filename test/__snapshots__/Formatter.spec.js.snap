@@ -1,0 +1,253 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Formatters SqliteFormatter DELETEs formatting of ' DELETE' 1`] = `"DELETE foo bar"`;
+
+exports[`Formatters SqliteFormatter DELETEs formatting of 'DELETE' 1`] = `"DELETE foo bar"`;
+
+exports[`Formatters SqliteFormatter SELECTs Formatting when selecting multiple fields 1`] = `
+"SELECT
+  foo,
+  bar,
+  baz"
+`;
+
+exports[`Formatters SqliteFormatter SELECTs formatting of ' SELECT' 1`] = `
+"SELECT
+  foo bar"
+`;
+
+exports[`Formatters SqliteFormatter SELECTs formatting of '( SELECT' 1`] = `
+"foo (
+  SELECT
+    bar"
+`;
+
+exports[`Formatters SqliteFormatter SELECTs formatting of '(SELECT' 1`] = `
+"foo (
+  SELECT
+    bar"
+`;
+
+exports[`Formatters SqliteFormatter SELECTs formatting of ') SELECT' 1`] = `
+"foo
+)
+SELECT
+  bar"
+`;
+
+exports[`Formatters SqliteFormatter SELECTs formatting of ')SELECT' 1`] = `
+"foo
+)
+SELECT
+  bar"
+`;
+
+exports[`Formatters SqliteFormatter SELECTs formatting of 'SELECT' 1`] = `
+"SELECT
+  foo bar"
+`;
+
+exports[`Formatters SqliteFormatter UPDATEs formatting of ' UPDATE' 1`] = `
+"UPDATE
+  foo bar"
+`;
+
+exports[`Formatters SqliteFormatter UPDATEs formatting of 'UPDATE' 1`] = `
+"UPDATE
+  foo bar"
+`;
+
+exports[`Formatters SqliteFormatter formatting of tabbed keywords formatting of 'AND' 1`] = `
+"foo
+AND bar"
+`;
+
+exports[`Formatters SqliteFormatter formatting of tabbed keywords formatting of 'BETWEEN' 1`] = `"foo BETWEEN bar"`;
+
+exports[`Formatters SqliteFormatter formatting of tabbed keywords formatting of 'CASE' 1`] = `
+"foo CASE
+  bar"
+`;
+
+exports[`Formatters SqliteFormatter formatting of tabbed keywords formatting of 'ELSE' 1`] = `
+"foo
+ELSE bar"
+`;
+
+exports[`Formatters SqliteFormatter formatting of tabbed keywords formatting of 'END' 1`] = `
+"foo
+END bar"
+`;
+
+exports[`Formatters SqliteFormatter formatting of tabbed keywords formatting of 'ON' 1`] = `"foo ON bar"`;
+
+exports[`Formatters SqliteFormatter formatting of tabbed keywords formatting of 'OR' 1`] = `
+"foo
+OR bar"
+`;
+
+exports[`Formatters SqliteFormatter formatting of tabbed keywords formatting of 'OVER' 1`] = `"foo OVER bar"`;
+
+exports[`Formatters SqliteFormatter formatting of tabbed keywords formatting of 'WHEN' 1`] = `
+"foo
+WHEN bar"
+`;
+
+exports[`Formatters SqliteFormatter formatting of unchanged keywords formatting of 'ALL' 1`] = `"foo ALL bar"`;
+
+exports[`Formatters SqliteFormatter formatting of unchanged keywords formatting of 'AS' 1`] = `"foo AS bar"`;
+
+exports[`Formatters SqliteFormatter formatting of unchanged keywords formatting of 'ASC' 1`] = `"foo ASC bar"`;
+
+exports[`Formatters SqliteFormatter formatting of unchanged keywords formatting of 'DESC' 1`] = `"foo DESC bar"`;
+
+exports[`Formatters SqliteFormatter formatting of unchanged keywords formatting of 'DISTINCT' 1`] = `"foo DISTINCT bar"`;
+
+exports[`Formatters SqliteFormatter formatting of unchanged keywords formatting of 'EXISTS' 1`] = `"foo EXISTS bar"`;
+
+exports[`Formatters SqliteFormatter formatting of unchanged keywords formatting of 'IN' 1`] = `"foo IN bar"`;
+
+exports[`Formatters SqliteFormatter formatting of unchanged keywords formatting of 'LIKE' 1`] = `"foo LIKE bar"`;
+
+exports[`Formatters SqliteFormatter formatting of unchanged keywords formatting of 'NOT' 1`] = `"foo NOT bar"`;
+
+exports[`Formatters SqliteFormatter formatting of unchanged keywords formatting of 'NULL' 1`] = `"foo NULL bar"`;
+
+exports[`Formatters SqliteFormatter formatting of untabbed keywords formatting of 'CROSS JOIN' 1`] = `
+"foo
+CROSS JOIN bar"
+`;
+
+exports[`Formatters SqliteFormatter formatting of untabbed keywords formatting of 'FROM' 1`] = `
+"foo
+FROM
+  bar"
+`;
+
+exports[`Formatters SqliteFormatter formatting of untabbed keywords formatting of 'GROUP BY' 1`] = `
+"foo
+GROUP BY
+  bar"
+`;
+
+exports[`Formatters SqliteFormatter formatting of untabbed keywords formatting of 'HAVING' 1`] = `
+"foo
+HAVING
+  bar"
+`;
+
+exports[`Formatters SqliteFormatter formatting of untabbed keywords formatting of 'INNER JOIN' 1`] = `
+"foo
+INNER JOIN bar"
+`;
+
+exports[`Formatters SqliteFormatter formatting of untabbed keywords formatting of 'JOIN' 1`] = `
+"foo
+JOIN bar"
+`;
+
+exports[`Formatters SqliteFormatter formatting of untabbed keywords formatting of 'LEFT JOIN' 1`] = `
+"foo
+LEFT JOIN bar"
+`;
+
+exports[`Formatters SqliteFormatter formatting of untabbed keywords formatting of 'ORDER BY' 1`] = `
+"foo
+ORDER BY
+  bar"
+`;
+
+exports[`Formatters SqliteFormatter formatting of untabbed keywords formatting of 'RIGHT JOIN' 1`] = `
+"foo
+RIGHT JOIN bar"
+`;
+
+exports[`Formatters SqliteFormatter formatting of untabbed keywords formatting of 'SET' 1`] = `
+"foo
+SET
+  bar"
+`;
+
+exports[`Formatters SqliteFormatter formatting of untabbed keywords formatting of 'WHERE' 1`] = `
+"foo
+WHERE
+  bar"
+`;
+
+exports[`Formatters SqliteFormatter formatting of untabbed keywords formatting of 'WITH' 1`] = `"foo WITH bar"`;
+
+exports[`Formatters SqliteFormatter nested queries formatting of multiple nested queries 1`] = `
+"SELECT
+  foo
+FROM
+  (
+    SELECT
+      bar
+    FROM
+      (
+        SELECT
+          baz
+        FROM
+          quux
+      )
+  )"
+`;
+
+exports[`Formatters SqliteFormatter nested queries formatting of single nested query 1`] = `
+"SELECT
+  foo
+FROM
+  (
+    SELECT
+      bar
+    FROM
+      baz
+  )"
+`;
+
+exports[`Formatters SqliteFormatter special case keywords formatting of 'THEN' 1`] = `"foo THEN bar"`;
+
+exports[`Formatters SqliteFormatter special case keywords formatting of 'UNION' 1`] = `
+"foo
+UNION
+  bar"
+`;
+
+exports[`Formatters SqliteFormatter special case keywords formatting of 'USING' 1`] = `"foo USING bar"`;
+
+exports[`Formatters formatting a full DELETE query 1`] = `
+"DELETE FROM
+  a
+WHERE
+  a.b = 1
+  AND a.c = 2"
+`;
+
+exports[`Formatters formatting a full SELECT query 1`] = `
+"SELECT
+  a.b,
+  c.d
+FROM
+  a
+  JOIN b on a.b = c.d
+WHERE
+  a.b = 1
+  AND c.d = 1"
+`;
+
+exports[`Formatters formatting a full UPDATE query 1`] = `
+"UPDATE
+  a
+SET
+  a.b = 1,
+  a.c = 2
+WHERE
+  a.d = 3"
+`;
+
+exports[`Formatters should format basic sqlite statement 1`] = `
+"SELECT
+  *
+FROM
+  users"
+`;
