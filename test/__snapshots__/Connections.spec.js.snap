@@ -1,5 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Connections should check if a sqlite file is valid or not 1`] = `
+Object {
+  "data": Object {
+    "item": Object {
+      "color": "gray",
+      "database": "/Users/amila/Desktop/demo.sqlite",
+      "id": "foo",
+      "name": "foo",
+      "type": "sqlite",
+    },
+  },
+  "errorMessages": Array [],
+  "passed": true,
+}
+`;
+
 exports[`Connections should delete a single connection 1`] = `
 Array [
   Object {
@@ -55,15 +71,15 @@ Array [
 ]
 `;
 
-exports[`Connections should perform basic validation 1`] = `"Failed validation: [{\\"message\\":\\"\\\\\\"id\\\\\\" must be a string\\",\\"fieldName\\":\\"id\\"},{\\"message\\":\\"\\\\\\"name\\\\\\" is required\\",\\"fieldName\\":\\"name\\"},{\\"message\\":\\"\\\\\\"database\\\\\\" needs to be a file\\",\\"fieldName\\":\\"database\\"},{\\"message\\":\\"\\\\\\"database\\\\\\" does not exist\\",\\"fieldName\\":\\"database\\"},{\\"message\\":\\"\\\\\\"database\\\\\\" is not valid\\",\\"fieldName\\":\\"database\\"}]"`;
+exports[`Connections should perform basic validation 1`] = `[Error: Failed validation: [{"message":"\\"id\\" must be a string","fieldName":"id"},{"message":"\\"name\\" is required","fieldName":"name"},{"message":"\\"database\\" needs to be a file","fieldName":"database"},{"message":"\\"database\\" needs to be an absolute path","fieldName":"database"},{"message":"\\"database\\" does not exist","fieldName":"database"},{"message":"\\"database\\" is not valid","fieldName":"database"}]]`;
 
-exports[`Connections should perform basic validation 2`] = `"Failed validation: [{\\"message\\":\\"\\\\\\"id\\\\\\" must be a string\\",\\"fieldName\\":\\"id\\"},{\\"message\\":\\"\\\\\\"name\\\\\\" is required\\",\\"fieldName\\":\\"name\\"},{\\"message\\":\\"\\\\\\"database\\\\\\" does not exist\\",\\"fieldName\\":\\"database\\"},{\\"message\\":\\"\\\\\\"database\\\\\\" is not valid\\",\\"fieldName\\":\\"database\\"}]"`;
+exports[`Connections should perform basic validation 2`] = `[Error: Failed validation: [{"message":"\\"id\\" must be a string","fieldName":"id"},{"message":"\\"name\\" is required","fieldName":"name"},{"message":"\\"database\\" does not exist","fieldName":"database"},{"message":"\\"database\\" is not valid","fieldName":"database"}]]`;
 
-exports[`Connections should perform basic validation 3`] = `"Failed validation: [{\\"message\\":\\"\\\\\\"name\\\\\\" is required\\",\\"fieldName\\":\\"name\\"},{\\"message\\":\\"\\\\\\"database\\\\\\" does not exist\\",\\"fieldName\\":\\"database\\"},{\\"message\\":\\"\\\\\\"database\\\\\\" is not valid\\",\\"fieldName\\":\\"database\\"}]"`;
+exports[`Connections should perform basic validation 3`] = `[Error: Failed validation: [{"message":"\\"id\\" must be a string","fieldName":"id"},{"message":"\\"name\\" is required","fieldName":"name"},{"message":"\\"database\\" does not exist","fieldName":"database"},{"message":"\\"database\\" is not valid","fieldName":"database"}]]`;
 
-exports[`Connections should perform basic validation 4`] = `"Failed validation: [{\\"message\\":\\"\\\\\\"database\\\\\\" does not exist\\",\\"fieldName\\":\\"database\\"},{\\"message\\":\\"\\\\\\"database\\\\\\" is not valid\\",\\"fieldName\\":\\"database\\"}]"`;
+exports[`Connections should perform basic validation 4`] = `[Error: Failed validation: [{"message":"\\"database\\" does not exist","fieldName":"database"},{"message":"\\"database\\" is not valid","fieldName":"database"}]]`;
 
-exports[`Connections should perform basic validation 5`] = `"Failed validation: [{\\"message\\":\\"\\\\\\"database\\\\\\" is not valid\\",\\"fieldName\\":\\"database\\"}]"`;
+exports[`Connections should perform basic validation 5`] = `[Error: Failed validation: [{"message":"\\"database\\" is not valid","fieldName":"database"}]]`;
 
 exports[`Connections should update a single connection 1`] = `
 Array [

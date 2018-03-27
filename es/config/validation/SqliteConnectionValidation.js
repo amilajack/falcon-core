@@ -41,7 +41,7 @@ export default function SqliteConnectionValidation(connection) {
             readonly: true,
             fileMustExist: true
           });
-          if (db.pragma('quick_check', true) !== 'ok') {
+          if (db.prepare('PRAGMA quick_check').pluck().get() !== 'ok') {
             passed = false;
           }
         } catch (e) {
@@ -64,9 +64,7 @@ export default function SqliteConnectionValidation(connection) {
     id: customJoi.string().required(),
     name: customJoi.string().required(),
     color: customJoi.string(),
-    database: customJoi.string().file_is_valid()
-    // .file_has_absolute_path()
-    .file_exists().sqlite_valid().required(),
+    database: customJoi.string().file_is_valid().file_has_absolute_path().file_exists().sqlite_valid().required(),
     type: customJoi.string().required()
   });
 

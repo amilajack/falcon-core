@@ -1,7 +1,5 @@
 // @flow
 /* eslint no-await-in-loop: 0 */
-// import path from 'path';
-// import { FalconError } from '../src/config/BaseManager';
 import Connections from '../src/config/ConnectionManager';
 
 async function connectionFactory(connections, connectionCount: number = 1) {
@@ -61,47 +59,56 @@ describe('Connections', function testConnections() {
   });
 
   it('should perform basic validation', async () => {
-    expect(async () => {
+    try {
       await this.connections.add({
         id: 12,
         database: 'aJ@#LJ#@KL$KL@#sdf',
         type: 'sqlite'
       });
-    }).toThrowErrorMatchingSnapshot();
-    expect(async () => {
+    } catch (e) {
+      expect(e).toMatchSnapshot();
+    }
+    try {
       await this.connections.add({
         id: 12,
         database: '/usr/foo',
         type: 'sqlite'
       });
-    }).toThrowErrorMatchingSnapshot();
-    expect(async () => {
+    } catch (e) {
+      expect(e).toMatchSnapshot();
+    }
+    try {
       await this.connections.add({
-        id: 'foo',
+        id: 12,
         database: '/usr/foo',
         type: 'sqlite'
       });
-    }).toThrowErrorMatchingSnapshot();
-    expect(async () => {
+    } catch (e) {
+      expect(e).toMatchSnapshot();
+    }
+    try {
       await this.connections.add({
         id: 'foo',
         name: 'foo',
         database: '/usr/foo',
         type: 'sqlite'
       });
-    }).toThrowErrorMatchingSnapshot();
-    expect(async () => {
+    } catch (e) {
+      expect(e).toMatchSnapshot();
+    }
+    try {
       await this.connections.add({
         id: 'foo',
         name: 'foo',
         database: '/usr/local/bin/npm',
         type: 'sqlite'
       });
-    }).toThrowErrorMatchingSnapshot();
+    } catch (e) {
+      expect(e).toMatchSnapshot();
+    }
   });
 
   it('should check if a sqlite file is valid or not', async () => {
-    // const database = path.join(__dirname, '..', 'databases/sqlite/sqlectron.db');
     const database = '/Users/amila/Desktop/demo.sqlite';
     expect(
       await this.connections.add({
@@ -110,6 +117,6 @@ describe('Connections', function testConnections() {
         type: 'sqlite',
         database
       })
-    ).toEqual(undefined);
+    ).toMatchSnapshot();
   });
 });

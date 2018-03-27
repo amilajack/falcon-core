@@ -74,3 +74,4 @@ test/fixtures/.tmp.sqlectron.json
 lib
 flow-typed
 coverage
+es

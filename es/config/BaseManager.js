@@ -46,7 +46,11 @@ export default class BaseManager {
         color: 'gray'
       }, item);
 
-      yield _this.validateBeforeCreation(item);
+      try {
+        yield _this.validateBeforeCreation(item);
+      } catch (e) {
+        throw e;
+      }
 
       const items = yield _this.getAll();
       items.push(itemWithDefaults);
