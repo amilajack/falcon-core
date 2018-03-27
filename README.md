@@ -4,7 +4,7 @@ The cross-database ORM that powers [falcon](https://github.com/falcon-client/fal
 
 **Requires `node >= 9` and `npm >= 5`**
 
-[![Build Status](https://travis-ci.com/amilajack/falcon-core.svg?branch=master&maxAge=2592)](https://travis-ci.com/amilajack/falcon-core)
+[![Build Status](https://api.travis-ci.com/amilajack/falcon-core.svg?token=stGf151gAJ11ZUi8LyvG&branch=master)](https://travis-ci.com/amilajack/falcon-core)
 
 ## Setup
 ```bash
