@@ -197,11 +197,17 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
   }
 
   async startGraphQLServer(): Promise<void> {
-    const [graphqlHTTP, tuql, express] = await Promise.all([
+    const [a, b, c] = await Promise.all([
       import('express-graphql'),
       import('tuql'),
       import('express')
     ]);
+
+    // This doesn't work with babel because of this issue:
+    // https://github.com/airbnb/babel-plugin-dynamic-import-node/issues/47
+    const { default: graphqlHTTP } = a;
+    const { default: tuql } = b;
+    const { default: express } = c;
     const { buildSchemaFromDatabase } = tuql;
 
     if (this.graphQLServerIsRunning()) {

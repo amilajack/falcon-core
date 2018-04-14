@@ -1,6 +1,6 @@
 falcon-core
 ===========
-The cross-database ORM that powers [falcon](https://github.com/falcon-client/falcon)
+The cross-database ORM that powers [falcon](https://github.com/amilajack/falcon)
 
 **Requires `node >= 9` and `yarn >= 0.22.0`**
 
@@ -17,16 +17,16 @@ yarn build
 
 ## Roadmap
 ### Release 1.0.0
-  * Add documentation
-  * Add support for sqlite
-  * Import databases as json, csv, and sqlite
-  * Export databases/tables/rows as json, csv, xlsl, xml
-  * Migrate to Typescript/Flow
-  * Refactor to class/interface based architecture
-  * Improve error messages
-  * Fix/enhance project build configuration
+  - [x] Add support for sqlite
+  - [x] Import databases as json, csv, and sqlite
+  - [x] Export databases/tables/rows as json, csv, xlsl, xml
+  - [x] Migrate to Typescript/Flow
+  - [x] Refactor to class/interface based architecture
+  - [x] Improve error messages
+  - [x] Fix/enhance project build configuration
+  - [ ] Add documentation
 ### Release 2.0.0
-  * Add support for mysql, mongo, postgres, maria, cassandra
+  - [ ] Add support for mysql, mongo, postgres, maria, cassandra
 
 ## Installation
 ```bash

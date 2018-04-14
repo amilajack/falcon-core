@@ -1,8 +1,5 @@
 ## Local Dev Setup
 ```bash
-git clone https://github.com/falcon-client/falcon-core.git
-cd falcon-core
-yarn
 docker-compose up -d
 
 # To run tests, make sure that you have docker, docker-compose, and docker-machine
