@@ -206,9 +206,8 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     // This doesn't work with babel because of this issue:
     // https://github.com/airbnb/babel-plugin-dynamic-import-node/issues/47
     const { default: graphqlHTTP } = a;
-    const { default: tuql } = b;
     const { default: express } = c;
-    const { buildSchemaFromDatabase } = tuql;
+    const { buildSchemaFromDatabase } = b;
 
     if (this.graphQLServerIsRunning()) {
       return;
