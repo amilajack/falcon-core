@@ -28,8 +28,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run prepublish && npm test && git add --all",
-      "pre-push": "npm run prepublish && npm test"
+      "pre-commit": "npm run prepublish && npm test && git add --all"
     }
   },
   "keywords": [
