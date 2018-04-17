@@ -23,7 +23,7 @@ class CassandraProvider extends BaseProvider implements ProviderInterface {
     this.connection.shutdown();
   }
 
-  listTables(database) {
+  getTables(database) {
     return new Promise((resolve, reject) => {
       const sql = `
         SELECT table_name as name
@@ -38,15 +38,15 @@ class CassandraProvider extends BaseProvider implements ProviderInterface {
     });
   }
 
-  listViews() {
+  getViews() {
     return Promise.resolve([]);
   }
 
-  listRoutines() {
+  getRoutines() {
     return Promise.resolve([]);
   }
 
-  listTableColumns(database: string, table: string) {
+  getTableColumns(database: string, table: string) {
     return new Promise((resolve, reject) => {
       const sql = `
         SELECT position, column_name, type
@@ -70,14 +70,14 @@ class CassandraProvider extends BaseProvider implements ProviderInterface {
     });
   }
 
-  listTableTriggers() {
+  getTableTriggers() {
     return Promise.resolve([]);
   }
-  listTableIndexes() {
+  getTableIndexes() {
     return Promise.resolve([]);
   }
 
-  listSchemas() {
+  getSchemas() {
     return Promise.resolve([]);
   }
 
@@ -135,7 +135,7 @@ class CassandraProvider extends BaseProvider implements ProviderInterface {
     });
   }
 
-  listDatabases() {
+  getDatabases() {
     return new Promise((resolve, reject) => {
       const sql = 'SELECT keyspace_name FROM system_schema.keyspaces';
       const params = [];

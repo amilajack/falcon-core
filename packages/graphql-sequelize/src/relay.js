@@ -6,29 +6,22 @@ import {
   connectionArgs
 } from 'graphql-relay';
 
-import {
-  GraphQLList
-} from 'graphql';
+import { GraphQLList } from 'graphql';
 
-import {
-  base64,
-  unbase64,
-} from './base64.js';
+import { base64, unbase64 } from './base64.js';
 
 import _ from 'lodash';
 import simplifyAST from './simplifyAST';
 
 export class NodeTypeMapper {
   constructor() {
-    this.map = { };
+    this.map = {};
   }
 
   mapTypes(types) {
-    Object.keys(types).forEach((k) => {
+    Object.keys(types).forEach(k => {
       let v = types[k];
-      this.map[k] = v.type
-        ? v
-        : { type: v };
+      this.map[k] = v.type ? v : { type: v };
     });
   }
 
@@ -39,7 +32,7 @@ export class NodeTypeMapper {
 
 export function idFetcher(sequelize, nodeTypeMapper) {
   return async (globalId, context) => {
-    const {type, id} = fromGlobalId(globalId);
+    const { type, id } = fromGlobalId(globalId);
 
     const nodeType = nodeTypeMapper.item(type);
     if (nodeType && typeof nodeType.resolve === 'function') {
@@ -59,20 +52,23 @@ export function idFetcher(sequelize, nodeTypeMapper) {
 
 export function typeResolver(nodeTypeMapper) {
   return obj => {
-    var type = obj.__graphqlType__
-               || (obj.Model
-                 ? obj.Model.options.name.singular
-                 : obj._modelOptions
-                 ? obj._modelOptions.name.singular
-                 : obj.name);
+    var type =
+      obj.__graphqlType__ ||
+      (obj.Model
+        ? obj.Model.options.name.singular
+        : obj._modelOptions
+          ? obj._modelOptions.name.singular
+          : obj.name);
 
     if (!type) {
-      throw new Error(`Unable to determine type of ${ typeof obj }. ` +
-        `Either specify a resolve function in 'NodeTypeMapper' object, or specify '__graphqlType__' property on object.`);
+      throw new Error(
+        `Unable to determine type of ${typeof obj}. ` +
+          `Either specify a resolve function in 'NodeTypeMapper' object, or specify '__graphqlType__' property on object.`
+      );
     }
 
     const nodeType = nodeTypeMapper.item(type);
-    return nodeType && nodeType.type || null;
+    return (nodeType && nodeType.type) || null;
   };
 }
 
@@ -112,10 +108,7 @@ export function sequelizeConnection({
   edgeFields,
   where
 }) {
-  const {
-    edgeType,
-    connectionType
-  } = connectionDefinitions({
+  const { edgeType, connectionType } = connectionDefinitions({
     name,
     nodeType,
     connectionFields,
@@ -125,8 +118,8 @@ export function sequelizeConnection({
   const SEPERATOR = '$';
   const PREFIX = 'arrayconnection' + SEPERATOR;
 
-  before = before || ((options) => options);
-  after = after || ((result) => result);
+  before = before || (options => options);
+  after = after || (result => result);
 
   let $connectionArgs = {
     ...connectionArgs
@@ -138,15 +131,17 @@ export function sequelizeConnection({
     };
   }
 
-  let orderByAttribute = function (orderAttr, {source, args, context, info}) {
-    return typeof orderAttr === 'function' ? orderAttr(source, args, context, info) : orderAttr;
+  let orderByAttribute = function(orderAttr, { source, args, context, info }) {
+    return typeof orderAttr === 'function'
+      ? orderAttr(source, args, context, info)
+      : orderAttr;
   };
 
-  let orderByDirection = function (orderDirection, args) {
+  let orderByDirection = function(orderDirection, args) {
     if (args.last) {
       return orderDirection.indexOf('ASC') >= 0
-              ? orderDirection.replace('ASC', 'DESC')
-              : orderDirection.replace('DESC', 'ASC');
+        ? orderDirection.replace('ASC', 'DESC')
+        : orderDirection.replace('DESC', 'ASC');
     }
     return orderDirection;
   };
@@ -157,8 +152,12 @@ export function sequelizeConnection({
    * @param  {Integer}  index  the index of this item within the results, 0 indexed
    * @return {String}          The Base64 encoded cursor string
    */
-  let toCursor = function (item, index) {
-    let id = item.get(item.constructor ? item.constructor.primaryKeyAttribute : item.Model.primaryKeyAttribute);
+  let toCursor = function(item, index) {
+    let id = item.get(
+      item.constructor
+        ? item.constructor.primaryKeyAttribute
+        : item.Model.primaryKeyAttribute
+    );
     return base64(PREFIX + id + SEPERATOR + index);
   };
 
@@ -167,7 +166,7 @@ export function sequelizeConnection({
    * @param  {String} cursor Base64 encoded cursor
    * @return {Object}        Object containing ID and index
    */
-  let fromCursor = function (cursor) {
+  let fromCursor = function(cursor) {
     cursor = unbase64(cursor);
     cursor = cursor.substring(PREFIX.length, cursor.length);
     let [id, index] = cursor.split(SEPERATOR);
@@ -178,7 +177,7 @@ export function sequelizeConnection({
     };
   };
 
-  let argsToWhere = function (args) {
+  let argsToWhere = function(args) {
     let result = {};
 
     if (where === undefined) return result;
@@ -191,7 +190,7 @@ export function sequelizeConnection({
     return result;
   };
 
-  let resolveEdge = function (item, index, queriedCursor, args = {}, source) {
+  let resolveEdge = function(item, index, queriedCursor, args = {}, source) {
     let startIndex = null;
     if (queriedCursor) startIndex = Number(queriedCursor.index);
     if (startIndex !== null) {
@@ -210,7 +209,7 @@ export function sequelizeConnection({
   let $resolver = require('./resolver')(targetMaybeThunk, {
     handleConnection: false,
     list: true,
-    before: function (options, args, context, info) {
+    before: function(options, args, context, info) {
       const target = info.target;
       const model = target.target ? target.target : target;
 
@@ -218,9 +217,11 @@ export function sequelizeConnection({
         options.limit = parseInt(args.first || args.last, 10);
       }
 
-      let orderBy = args.orderBy ? args.orderBy :
-                    orderByEnum ? [orderByEnum._values[0].value] :
-                    [[model.primaryKeyAttribute, 'ASC']];
+      let orderBy = args.orderBy
+        ? args.orderBy
+        : orderByEnum
+          ? [orderByEnum._values[0].value]
+          : [[model.primaryKeyAttribute, 'ASC']];
 
       if (orderByEnum && typeof orderBy === 'string') {
         orderBy = [orderByEnum._nameLookup[args.orderBy].value];
@@ -234,19 +235,25 @@ export function sequelizeConnection({
       });
       let orderDirection = orderByDirection(orderBy[0][1], args);
 
-      options.order = [
-        [orderAttribute, orderDirection]
-      ];
+      options.order = [[orderAttribute, orderDirection]];
 
       if (orderAttribute !== model.primaryKeyAttribute) {
-        options.order.push([model.primaryKeyAttribute, orderByDirection('ASC', args)]);
+        options.order.push([
+          model.primaryKeyAttribute,
+          orderByDirection('ASC', args)
+        ]);
       }
 
       if (typeof orderAttribute === 'string') {
         options.attributes.push(orderAttribute);
       }
 
-      if (options.limit && !options.attributes.some(attribute => attribute.length === 2 && attribute[1] === 'full_count')) {
+      if (
+        options.limit &&
+        !options.attributes.some(
+          attribute => attribute.length === 2 && attribute[1] === 'full_count'
+        )
+      ) {
         if (model.sequelize.dialect.name === 'postgres') {
           options.attributes.push([
             model.sequelize.literal('COUNT(*) OVER()'),
@@ -271,11 +278,8 @@ export function sequelizeConnection({
       options.attributes = _.uniq(options.attributes);
       return before(options, args, context, info);
     },
-    after: async function (values, args, context, info) {
-      const {
-        source,
-        target
-      } = info;
+    after: async function(values, args, context, info) {
+      const { source, target } = info;
 
       var cursor = null;
 
@@ -289,17 +293,30 @@ export function sequelizeConnection({
 
       let firstEdge = edges[0];
       let lastEdge = edges[edges.length - 1];
-      let fullCount = values[0] && values[0].dataValues.full_count && parseInt(values[0].dataValues.full_count, 10);
+      let fullCount =
+        values[0] &&
+        values[0].dataValues.full_count &&
+        parseInt(values[0].dataValues.full_count, 10);
 
       if (!values[0]) {
         fullCount = 0;
       }
 
-      if ((args.first || args.last) && (fullCount === null || fullCount === undefined)) {
+      if (
+        (args.first || args.last) &&
+        (fullCount === null || fullCount === undefined)
+      ) {
         // In case of `OVER()` is not available, we need to get the full count from a second query.
-        const options = await Promise.resolve(before({
-          where: argsToWhere(args)
-        }, args, context, info));
+        const options = await Promise.resolve(
+          before(
+            {
+              where: argsToWhere(args)
+            },
+            args,
+            context,
+            info
+          )
+        );
 
         if (target.count) {
           if (target.associationType) {
@@ -331,19 +348,24 @@ export function sequelizeConnection({
         }
       }
 
-      return after({
-        source,
-        args,
-        where: argsToWhere(args),
-        edges,
-        pageInfo: {
-          startCursor: firstEdge ? firstEdge.cursor : null,
-          endCursor: lastEdge ? lastEdge.cursor : null,
-          hasNextPage: hasNextPage,
-          hasPreviousPage: hasPreviousPage
+      return after(
+        {
+          source,
+          args,
+          where: argsToWhere(args),
+          edges,
+          pageInfo: {
+            startCursor: firstEdge ? firstEdge.cursor : null,
+            endCursor: lastEdge ? lastEdge.cursor : null,
+            hasNextPage: hasNextPage,
+            hasPreviousPage: hasPreviousPage
+          },
+          fullCount
         },
-        fullCount
-      }, args, context, info);
+        args,
+        context,
+        info
+      );
     }
   });
 
@@ -353,11 +375,16 @@ export function sequelizeConnection({
       return $resolver(source, args, context, info);
     }
 
-    return after({
-      source,
+    return after(
+      {
+        source,
+        args,
+        where: argsToWhere(args)
+      },
       args,
-      where: argsToWhere(args)
-    }, args, context, info);
+      context,
+      info
+    );
   };
 
   return {

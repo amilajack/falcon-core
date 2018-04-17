@@ -1,22 +1,16 @@
 'use strict';
 
-
-import {expect} from 'chai';
+import { expect } from 'chai';
 import Sequelize from 'sequelize';
 import defaultArgs from '../../src/defaultArgs';
 
 import { sequelize } from '../support/helper';
 
-import {
-  GraphQLString,
-  GraphQLInt,
-  GraphQLScalarType
-} from 'graphql';
+import { GraphQLString, GraphQLInt, GraphQLScalarType } from 'graphql';
 
-describe('defaultArgs', function () {
-  it('should return a key for a integer primary key', function () {
-    var Model
-      , args;
+describe('defaultArgs', function() {
+  it('should return a key for a integer primary key', function() {
+    var Model, args;
 
     Model = sequelize.define('DefaultArgModel', {});
 
@@ -26,9 +20,8 @@ describe('defaultArgs', function () {
     expect(args.id.type).to.equal(GraphQLInt);
   });
 
-  it('should return a key for a string primary key', function () {
-    var Model
-      , args;
+  it('should return a key for a string primary key', function() {
+    var Model, args;
 
     Model = sequelize.define('DefaultArgModel', {
       modelId: {
@@ -42,9 +35,8 @@ describe('defaultArgs', function () {
     expect(args.modelId.type).to.equal(GraphQLString);
   });
 
-  it('should return a key for a string primary key', function () {
-    var Model
-      , args;
+  it('should return a key for a string primary key', function() {
+    var Model, args;
 
     Model = sequelize.define('DefaultArgModel', {
       uuid: {
@@ -58,11 +50,9 @@ describe('defaultArgs', function () {
     expect(args.uuid.type).to.equal(GraphQLString);
   });
 
-  describe('will have an "where" argument', function () {
-
-    it('that is an GraphQLScalarType', function () {
-      var Model
-        , args;
+  describe('will have an "where" argument', function() {
+    it('that is an GraphQLScalarType', function() {
+      var Model, args;
 
       Model = sequelize.define('DefaultArgModel', {
         modelId: {
@@ -76,8 +66,5 @@ describe('defaultArgs', function () {
       expect(args).to.have.ownProperty('where');
       expect(args.where.type).to.be.an.instanceOf(GraphQLScalarType);
     });
-
   });
-
-
 });

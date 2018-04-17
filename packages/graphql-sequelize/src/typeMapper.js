@@ -1,11 +1,11 @@
 import {
-   GraphQLInt,
-   GraphQLString,
-   GraphQLBoolean,
-   GraphQLFloat,
-   GraphQLEnumType,
-   GraphQLList
- } from 'graphql';
+  GraphQLInt,
+  GraphQLString,
+  GraphQLBoolean,
+  GraphQLFloat,
+  GraphQLEnumType,
+  GraphQLList
+} from 'graphql';
 import JSONType from './types/jsonType';
 import _ from 'lodash';
 
@@ -18,7 +18,6 @@ export function mapType(mapFunc) {
   customTypeMapper = mapFunc;
 }
 
-
 /**
  * Checks the type of the sequelize data type and
  * returns the corresponding type in GraphQL
@@ -27,7 +26,6 @@ export function mapType(mapFunc) {
  * @return {Function} GraphQL type declaration
  */
 export function toGraphQL(sequelizeType, sequelizeTypes) {
-
   // did the user supply a mapping function?
   // use their mapping, if it returns truthy
   // else use our defaults
@@ -65,22 +63,24 @@ export function toGraphQL(sequelizeType, sequelizeTypes) {
 
   if (sequelizeType instanceof BOOLEAN) return GraphQLBoolean;
 
-  if (sequelizeType instanceof FLOAT ||
-      sequelizeType instanceof DOUBLE) return GraphQLFloat;
+  if (sequelizeType instanceof FLOAT || sequelizeType instanceof DOUBLE)
+    return GraphQLFloat;
 
   if (sequelizeType instanceof INTEGER) {
     return GraphQLInt;
   }
 
-  if (sequelizeType instanceof CHAR ||
-      sequelizeType instanceof STRING ||
-      sequelizeType instanceof TEXT ||
-      sequelizeType instanceof UUID ||
-      sequelizeType instanceof DATE ||
-      sequelizeType instanceof DATEONLY ||
-      sequelizeType instanceof TIME ||
-      sequelizeType instanceof BIGINT ||
-      sequelizeType instanceof DECIMAL) {
+  if (
+    sequelizeType instanceof CHAR ||
+    sequelizeType instanceof STRING ||
+    sequelizeType instanceof TEXT ||
+    sequelizeType instanceof UUID ||
+    sequelizeType instanceof DATE ||
+    sequelizeType instanceof DATEONLY ||
+    sequelizeType instanceof TIME ||
+    sequelizeType instanceof BIGINT ||
+    sequelizeType instanceof DECIMAL
+  ) {
     return GraphQLString;
   }
 
@@ -94,15 +94,15 @@ export function toGraphQL(sequelizeType, sequelizeTypes) {
       name: 'tempEnumName',
       values: _(sequelizeType.values)
         .mapKeys(sanitizeEnumValue)
-        .mapValues(v => ({value: v}))
+        .mapValues(v => ({ value: v }))
         .value()
     });
   }
 
   if (sequelizeType instanceof VIRTUAL) {
     let returnType = sequelizeType.returnType
-        ? toGraphQL(sequelizeType.returnType, sequelizeTypes)
-        : GraphQLString;
+      ? toGraphQL(sequelizeType.returnType, sequelizeTypes)
+      : GraphQLString;
     return returnType;
   }
 
@@ -111,17 +111,20 @@ export function toGraphQL(sequelizeType, sequelizeTypes) {
   }
 
   if (sequelizeType.key === 'BLOB') {
-    return _graphql.GraphQLString
+    return _graphql.GraphQLString;
   }
 
-  throw new Error(`Unable to convert ${sequelizeType.key || sequelizeType.toSql()} to a GraphQL type`);
+  throw new Error(
+    `Unable to convert ${sequelizeType.key ||
+      sequelizeType.toSql()} to a GraphQL type`
+  );
 
   function sanitizeEnumValue(value) {
     return value
       .trim()
       .replace(/([^_a-zA-Z0-9])/g, (_, p) => specialCharsMap.get(p) || ' ')
       .split(' ')
-      .map((v, i) => i ? _.upperFirst(v) : v)
+      .map((v, i) => (i ? _.upperFirst(v) : v))
       .join('')
       .replace(/(^\d)/, '_$1');
   }

@@ -1,30 +1,29 @@
 import Sequelize from 'sequelize';
-import {expect} from 'chai';
+import { expect } from 'chai';
 import sinon from 'sinon';
 import { sequelize } from '../../support/helper';
 import attributeFields from '../../../src/attributeFields';
 
-import {
-  GraphQLObjectType,
-  GraphQLSchema,
-  graphql
-} from 'graphql';
+import { GraphQLObjectType, GraphQLSchema, graphql } from 'graphql';
 
-import {
-  globalIdField
-} from 'graphql-relay';
+import { globalIdField } from 'graphql-relay';
 
-import {
-  sequelizeConnection
-} from '../../../src/relay';
+import { sequelizeConnection } from '../../../src/relay';
 
-describe('relay', function () {
-  describe('connections', function () {
-    before(function () {
-      this.User = sequelize.define('user', {}, {timestamps: false});
-      this.Task = sequelize.define('task', {title: Sequelize.STRING}, {timestamps: false});
+describe('relay', function() {
+  describe('connections', function() {
+    before(function() {
+      this.User = sequelize.define('user', {}, { timestamps: false });
+      this.Task = sequelize.define(
+        'task',
+        { title: Sequelize.STRING },
+        { timestamps: false }
+      );
 
-      this.User.Tasks = this.User.hasMany(this.Task, {as: 'tasks', foreignKey: 'userId'});
+      this.User.Tasks = this.User.hasMany(this.Task, {
+        as: 'tasks',
+        foreignKey: 'userId'
+      });
 
       this.taskType = new GraphQLObjectType({
         name: this.Task.name,
@@ -62,7 +61,7 @@ describe('relay', function () {
           fields: {
             viewer: {
               type: this.viewerType,
-              resolve: function (source, args, {viewer}) {
+              resolve: function(source, args, { viewer }) {
                 return viewer;
               }
             }
@@ -71,7 +70,7 @@ describe('relay', function () {
       });
     });
 
-    beforeEach(function () {
+    beforeEach(function() {
       this.sinon = sinon.sandbox.create();
 
       this.viewer = this.User.build({
@@ -84,26 +83,31 @@ describe('relay', function () {
       this.sinon.stub(this.User, 'findById').resolves(this.User.build());
     });
 
-    afterEach(function () {
+    afterEach(function() {
       this.sinon.restore();
     });
 
-    it('passes context, root and info to before', async function () {
-      const result = await graphql(this.schema, `
-        query {
-          viewer {
-            tasks {
-              edges {
-                node {
-                  id
+    it('passes context, root and info to before', async function() {
+      const result = await graphql(
+        this.schema,
+        `
+          query {
+            viewer {
+              tasks {
+                edges {
+                  node {
+                    id
+                  }
                 }
               }
             }
           }
+        `,
+        null,
+        {
+          viewer: this.viewer
         }
-      `, null, {
-        viewer: this.viewer
-      });
+      );
 
       if (result.errors) throw new Error(result.errors[0]);
 
@@ -139,7 +143,6 @@ describe('relay', function () {
           path: sinon.match.any
         })
       );
-
     });
   });
 });

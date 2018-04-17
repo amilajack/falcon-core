@@ -258,9 +258,9 @@ describe('Database', () => {
         });
 
         describe('List', () => {
-          describe('.listDatabases', () => {
-            it('should list all databases', async () => {
-              const databases = await dbConn.listDatabases();
+          describe('.getDatabases', () => {
+            it('should get all databases', async () => {
+              const databases = await dbConn.getDatabases();
 
               if (dbClient === 'sqlite') {
                 // The database of sqlite is the absolute path to the database file
@@ -272,25 +272,25 @@ describe('Database', () => {
             });
           });
 
-          describe('.listTables', () => {
-            it('should list all tables', async () => {
-              const tables = await dbConn.listTables();
+          describe('.getTables', () => {
+            it('should get all tables', async () => {
+              const tables = await dbConn.getTables();
               expect(tables).toMatchSnapshot();
             });
           });
 
           if (dbClient !== 'cassandra') {
-            describe('.listViews', () => {
-              it('should list all views', async () => {
-                const views = await dbConn.listViews();
+            describe('.getViews', () => {
+              it('should get all views', async () => {
+                const views = await dbConn.getViews();
                 expect(views).toMatchSnapshot();
               });
             });
           }
 
-          describe('.listRoutines', () => {
-            it('should list all routines with their type', async () => {
-              const routines = await dbConn.listRoutines();
+          describe('.getRoutines', () => {
+            it('should get all routines with their type', async () => {
+              const routines = await dbConn.getRoutines();
               expect(routines).toMatchSnapshot();
             });
           });
@@ -304,9 +304,9 @@ describe('Database', () => {
             });
           });
 
-          describe('.listTableColumns', () => {
-            it('should list all columns and their type from users table', async () => {
-              const columns = await dbConn.listTableColumns('users');
+          describe('.getTableColumns', () => {
+            it('should get all columns and their type from users table', async () => {
+              const columns = await dbConn.getTableColumns('users');
               expect(columns).toHaveLength(6);
               const column = name =>
                 columns.find(col => col.columnName === name);
@@ -320,26 +320,26 @@ describe('Database', () => {
             });
           });
 
-          describe('.listTableTriggers', () => {
-            it('should list all table related triggers', async () => {
-              const triggers = await dbConn.listTableTriggers('users');
+          describe('.getTableTriggers', () => {
+            it('should get all table related triggers', async () => {
+              const triggers = await dbConn.getTableTriggers('users');
               expect(triggers).toMatchSnapshot();
             });
           });
 
-          describe('.listTableIndexes', () => {
-            it('should list all indexes', async () => {
-              const indexes = await dbConn.listTableIndexes('users');
+          describe('.getTableIndexes', () => {
+            it('should get all indexes', async () => {
+              const indexes = await dbConn.getTableIndexes('users');
               expect(indexes).toMatchSnapshot();
             });
           });
 
-          describe('.listSchemas', () => {
-            it('should list all schema', async () => {
-              // @TODO: passing schemas to listSchemas() is currently not supported by falcon
+          describe('.getSchemas', () => {
+            it('should get all schema', async () => {
+              // @TODO: passing schemas to getSchemas() is currently not supported by falcon
               // const schemas =
-              //   await dbConn.listSchemas({ schema: { only: [dbSchema, 'dummy_schema'] } });
-              const schemas = await dbConn.listSchemas();
+              //   await dbConn.getSchemas({ schema: { only: [dbSchema, 'dummy_schema'] } });
+              const schemas = await dbConn.getSchemas();
               expect(schemas).toMatchSnapshot();
             });
           });
@@ -347,14 +347,14 @@ describe('Database', () => {
 
         describe('Get', () => {
           describe('.getTableReferences', () => {
-            it('should list all tables that selected table has references to', async () => {
+            it('should get all tables that selected table has references to', async () => {
               const references = await dbConn.getTableReferences('users');
               expect(references).toMatchSnapshot();
             });
           });
 
           describe('.getTableColumns', () => {
-            it('should list all tables keys', async () => {
+            it('should get all tables keys', async () => {
               const tableKeys = await dbConn.getTableColumns('users');
               expect(tableKeys).toMatchSnapshot();
             });
@@ -369,14 +369,14 @@ describe('Database', () => {
           });
 
           describe('.getTableValues', () => {
-            it('should list all tables keys', async () => {
+            it('should get all tables keys', async () => {
               const tableKeys = await dbConn.getTableValues('users');
               expect(tableKeys).toMatchSnapshot();
             });
           });
 
           describe('.getTablenames', () => {
-            it('should list all tables names', async () => {
+            it('should get all tables names', async () => {
               const tableNames = await dbConn.getTableNames();
               expect(tableNames).toMatchSnapshot();
             });

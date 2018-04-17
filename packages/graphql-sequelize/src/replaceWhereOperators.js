@@ -5,8 +5,7 @@
  * @returns {Object}
  */
 function replaceKeyDeep(obj, keyMap) {
-  return Object.keys(obj).reduce((memo, key)=> {
-
+  return Object.keys(obj).reduce((memo, key) => {
     // determine which key we are going to use
     let targetKey = keyMap[key] ? keyMap[key] : key;
 
@@ -20,7 +19,9 @@ function replaceKeyDeep(obj, keyMap) {
           memo[targetKey][idx] = replaceKeyDeep(val, keyMap);
         }
       });
-    } else if (Object.prototype.toString.call(memo[targetKey]) === '[object Object]') {
+    } else if (
+      Object.prototype.toString.call(memo[targetKey]) === '[object Object]'
+    ) {
       // recurse if Object
       memo[targetKey] = replaceKeyDeep(memo[targetKey], keyMap);
     }

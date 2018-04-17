@@ -1,14 +1,12 @@
 'use strict';
 
-import {expect} from 'chai';
+import { expect } from 'chai';
 import Sequelize from 'sequelize';
 import sinon from 'sinon';
 import attributeFields from '../../../src/attributeFields';
-import { sequelize } from '../../support/helper'
+import { sequelize } from '../../support/helper';
 
-import {
-  sequelizeConnection
-} from '../../../src/relay';
+import { sequelizeConnection } from '../../../src/relay';
 
 import {
   GraphQLString,
@@ -31,14 +29,21 @@ import {
   mutationWithClientMutationId
 } from 'graphql-relay';
 
-describe('relay', function () {
-  describe('mutation', function () {
-    describe('connections', function () {
-      before(function () {
-        this.User = sequelize.define('user', {}, {timestamps: false});
-        this.Task = sequelize.define('task', {title: Sequelize.STRING}, {timestamps: false});
+describe('relay', function() {
+  describe('mutation', function() {
+    describe('connections', function() {
+      before(function() {
+        this.User = sequelize.define('user', {}, { timestamps: false });
+        this.Task = sequelize.define(
+          'task',
+          { title: Sequelize.STRING },
+          { timestamps: false }
+        );
 
-        this.User.Tasks = this.User.hasMany(this.Task, {as: 'tasks', foreignKey: 'userId'});
+        this.User.Tasks = this.User.hasMany(this.Task, {
+          as: 'tasks',
+          foreignKey: 'userId'
+        });
 
         this.taskType = new GraphQLObjectType({
           name: this.Task.name,
@@ -55,7 +60,7 @@ describe('relay', function () {
           orderBy: new GraphQLEnumType({
             name: 'Viewer' + this.Task.name + 'ConnectionOrder',
             values: {
-              ID: {value: [this.Task.primaryKeyAttribute, 'ASC']},
+              ID: { value: [this.Task.primaryKeyAttribute, 'ASC'] }
             }
           })
         });
@@ -81,20 +86,21 @@ describe('relay', function () {
           outputFields: () => ({
             viewer: {
               type: this.viewerType,
-              resolve: (payload, {viewer}) => {
+              resolve: (payload, { viewer }) => {
                 return viewer;
               }
             },
             task: {
               type: this.taskType,
-              resolve: (payload) => payload.task
+              resolve: payload => payload.task
             },
             newTaskEdge: {
               type: this.viewerTaskConnection.edgeType,
-              resolve: (payload) => this.viewerTaskConnection.resolveEdge(payload.task)
+              resolve: payload =>
+                this.viewerTaskConnection.resolveEdge(payload.task)
             }
           }),
-          mutateAndGetPayload: async ({title}, {viewer}) => {
+          mutateAndGetPayload: async ({ title }, { viewer }) => {
             let task = await this.Task.create({
               title: title,
               userId: viewer.id
@@ -112,7 +118,7 @@ describe('relay', function () {
             fields: {
               viewer: {
                 type: this.viewerType,
-                resolve: function (source, args, {viewer}) {
+                resolve: function(source, args, { viewer }) {
                   return viewer;
                 }
               }
@@ -127,7 +133,7 @@ describe('relay', function () {
         });
       });
 
-      beforeEach(function () {
+      beforeEach(function() {
         this.sinon = sinon.sandbox.create();
 
         this.viewer = this.User.build({
@@ -137,22 +143,26 @@ describe('relay', function () {
         this.sinon.stub(this.Task, 'create').resolves();
       });
 
-      afterEach(function () {
+      afterEach(function() {
         this.sinon.restore();
       });
 
-      describe('addEdgeMutation', function () {
-        it('should return a appropriate cursor and node', async function () {
-          let title = Math.random().toString()
-            , id = Math.ceil(Math.random() * 999);
+      describe('addEdgeMutation', function() {
+        it('should return a appropriate cursor and node', async function() {
+          let title = Math.random().toString(),
+            id = Math.ceil(Math.random() * 999);
 
-          this.Task.create.resolves(this.Task.build({
-            id: id,
-            title: title,
-            userId: this.viewer.get('id')
-          }));
+          this.Task.create.resolves(
+            this.Task.build({
+              id: id,
+              title: title,
+              userId: this.viewer.get('id')
+            })
+          );
 
-          let result = await graphql(this.schema, `
+          let result = await graphql(
+            this.schema,
+            `
             mutation {
               addTask(input: {title: "${title}", clientMutationId: "${Math.random().toString()}"}) {
                 task {
@@ -168,15 +178,22 @@ describe('relay', function () {
                 }
               }
             }
-          `, null, {
-            viewer: this.viewer
-          });
+          `,
+            null,
+            {
+              viewer: this.viewer
+            }
+          );
 
           if (result.errors) throw new Error(result.errors[0].stack);
 
-          expect(result.data.addTask.task.id).to.equal(toGlobalId(this.Task.name, id));
+          expect(result.data.addTask.task.id).to.equal(
+            toGlobalId(this.Task.name, id)
+          );
           expect(result.data.addTask.newTaskEdge.cursor).to.be.ok;
-          expect(result.data.addTask.newTaskEdge.node.id).to.equal(toGlobalId(this.Task.name, id));
+          expect(result.data.addTask.newTaskEdge.node.id).to.equal(
+            toGlobalId(this.Task.name, id)
+          );
           expect(result.data.addTask.newTaskEdge.node.title).to.equal(title);
         });
       });

@@ -7,5 +7,5 @@ module.exports = {
   attributeFields: require('./attributeFields'),
   simplifyAST: require('./simplifyAST'),
   relay: require('./relay'),
-  JSONType: require('./types/jsonType'),
+  JSONType: require('./types/jsonType')
 };

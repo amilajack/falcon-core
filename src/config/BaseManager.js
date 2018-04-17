@@ -54,7 +54,9 @@ export default class BaseManager {
   validateBeforeCreation(item: itemType) {}
 
   async add(item: itemType): Promise<itemValidationType> {
-    let rndm = await import('rndm')
+    let rndm = await import('rndm');
+    // This doesn't work with babel because of this issue:
+    // https://github.com/airbnb/babel-plugin-dynamic-import-node/issues/47
     if (process.env.NODE_ENV !== 'test') {
       rndm = rndm.default;
     }

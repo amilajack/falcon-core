@@ -130,7 +130,7 @@ class MysqlProvider extends BaseProvider implements ProviderInterface {
       : this.runWithConnection(runQuery);
   }
 
-  async listTables() {
+  async getTables() {
     const sql = `
       SELECT table_name as name
       FROM information_schema.tables
@@ -142,7 +142,7 @@ class MysqlProvider extends BaseProvider implements ProviderInterface {
     return this.driverExecuteQuery({ query: sql }).then(res => res.data);
   }
 
-  listViews() {
+  getViews() {
     const sql = `
       SELECT table_name as name
       FROM information_schema.views
@@ -153,7 +153,7 @@ class MysqlProvider extends BaseProvider implements ProviderInterface {
     return this.driverExecuteQuery({ query: sql }).then(res => res.data);
   }
 
-  async listRoutines() {
+  async getRoutines() {
     const sql = `
       SELECT routine_name, routine_type
       FROM information_schema.routines
@@ -176,7 +176,7 @@ class MysqlProvider extends BaseProvider implements ProviderInterface {
     }));
   }
 
-  async listTableColumns(table: string) {
+  async getTableColumns(table: string) {
     const sql = `
       SELECT column_name, data_type
       FROM information_schema.columns
@@ -200,7 +200,7 @@ class MysqlProvider extends BaseProvider implements ProviderInterface {
     }));
   }
 
-  async listTableTriggers(table: string) {
+  async getTableTriggers(table: string) {
     const sql = `
       SELECT trigger_name
       FROM information_schema.triggers
@@ -213,7 +213,7 @@ class MysqlProvider extends BaseProvider implements ProviderInterface {
     return data.map(row => row.trigger_name);
   }
 
-  async listTableIndexes(database: string, table: string) {
+  async getTableIndexes(database: string, table: string) {
     const sql = 'SHOW INDEX FROM ?? FROM ??';
     const params = [table, database];
     const { data } = await this.driverExecuteQuery({ query: sql, params });
@@ -221,7 +221,7 @@ class MysqlProvider extends BaseProvider implements ProviderInterface {
     return data.map(row => row.Key_name);
   }
 
-  listSchemas() {
+  getSchemas() {
     return Promise.resolve([]);
   }
 
@@ -370,7 +370,7 @@ class MysqlProvider extends BaseProvider implements ProviderInterface {
     };
   }
 
-  async listDatabases(filter) {
+  async getDatabases(filter) {
     const sql = 'show databases';
     const { data } = await this.driverExecuteQuery({ query: sql });
 

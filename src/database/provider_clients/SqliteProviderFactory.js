@@ -301,9 +301,10 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
 
   async getPrimaryKeyColumn(table: string): Promise<tableKeyType> {
     const columns = await this.getTableColumns(table);
+    console.log(columns)
     const primaryKeyColumn = columns.find(key => key.pk === 1);
     if (!primaryKeyColumn) {
-      throw new Error(`No primary key exists in table ${table}`);
+      throw new Error(`No primary key exists in table "${table}"`);
     }
     return primaryKeyColumn;
   }
@@ -312,6 +313,14 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     const sql = `
       SELECT *
       FROM '${table}';
+    `;
+    return this.driverExecuteQuery({ query: sql }).then(res => res.data);
+  }
+
+  async getIndexValues(indexName: string) {
+    const sql = `
+      SELECT *
+      FROM pragma_index_info('${indexName}');
     `;
     return this.driverExecuteQuery({ query: sql }).then(res => res.data);
   }
@@ -495,7 +504,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     );
   }
 
-  async listTables() {
+  async getTables() {
     const sql = `
       SELECT name
       FROM sqlite_master
@@ -505,7 +514,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     return this.driverExecuteQuery({ query: sql }).then(res => res.data);
   }
 
-  async listViews() {
+  async getViews() {
     const sql = `
       SELECT name
       FROM sqlite_master
@@ -515,18 +524,18 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
   }
 
   // @NOT_SUPPORTED
-  listRoutines() {
+  getRoutines() {
     return Promise.resolve([]);
   }
 
   async getTableColumnNames(table: string) {
     this.checkIsConnected();
-    const columns = await this.listTableColumns(table);
+    const columns = await this.getTableColumns(table);
     return columns.map(column => column.columnName);
   }
 
   // @TODO: Find out how this is different from getTableColumns(table)
-  async listTableColumns(table: string) {
+  async getTableColumns(table: string) {
     const sql = `PRAGMA table_info(${table})`;
     const { data } = await this.driverExecuteQuery({ query: sql });
 
@@ -536,7 +545,17 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     }));
   }
 
-  async listTableTriggers(table: string) {
+  async getDatabaseTriggers() {
+    const sql = `
+      SELECT name
+      FROM sqlite_master
+      WHERE type = 'trigger'
+    `;
+    const { data } = await this.driverExecuteQuery({ query: sql });
+    return data.map(row => row.name);
+  }
+
+  async getTableTriggers(table: string) {
     const sql = `
       SELECT name
       FROM sqlite_master
@@ -544,11 +563,10 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
         AND tbl_name = '${table}'
     `;
     const { data } = await this.driverExecuteQuery({ query: sql });
-
     return data.map(row => row.name);
   }
 
-  async listTableIndexes(table: string) {
+  async getTableIndexes(table: string) {
     const sql = `PRAGMA INDEX_LIST('${table}')`;
     const { data } = await this.driverExecuteQuery({ query: sql });
 
@@ -556,11 +574,11 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
   }
 
   // @NOT_SUPPORTED
-  listSchemas() {
+  getSchemas() {
     return Promise.resolve([]);
   }
 
-  async listDatabases() {
+  async getDatabases() {
     const result = await this.driverExecuteQuery({
       query: 'PRAGMA database_list;'
     });
@@ -628,7 +646,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
 
   truncateAllTables(): Promise<void> {
     return this.runWithConnection(async () => {
-      const tables: Array<{ name: string }> = await this.listTables();
+      const tables: Array<{ name: string }> = await this.getTables();
 
       const truncateAllQuery = tables
         .map(

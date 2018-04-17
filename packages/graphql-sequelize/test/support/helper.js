@@ -25,16 +25,18 @@ export function createSequelize(options = {}) {
       password: env.MYSQL_ENV_MYSQL_PASSWORD,
       database: env.MYSQL_ENV_MYSQL_DATABASE
     },
-    dialect === 'postgres' && env.CI && {
-      user: 'postgres',
-      password: '',
-      database: 'test'
-    },
-    dialect === 'mysql' && env.CI && {
-      user: 'travis',
-      password: '',
-      database: 'test'
-    }
+    dialect === 'postgres' &&
+      env.CI && {
+        user: 'postgres',
+        password: '',
+        database: 'test'
+      },
+    dialect === 'mysql' &&
+      env.CI && {
+        user: 'travis',
+        password: '',
+        database: 'test'
+      }
   );
 
   return new Sequelize(config.database, config.user, config.password, {
@@ -46,7 +48,7 @@ export function createSequelize(options = {}) {
 }
 
 export function beforeRemoveAllTables() {
-  before(function () {
+  before(function() {
     if (sequelize.dialect.name === 'mysql') {
       this.timeout(10000);
       return removeAllTables(sequelize);
@@ -58,14 +60,18 @@ export function beforeRemoveAllTables() {
 // Solution ? Force remove all tables!
 export function removeAllTables(sequelize) {
   function getTables() {
-    return sequelize.query('show tables').then(tables => tables[0].map((table) => table.Tables_in_test));
+    return sequelize
+      .query('show tables')
+      .then(tables => tables[0].map(table => table.Tables_in_test));
   }
 
   return getTables()
     .then(tables => {
-      return Promise.all(tables.map(table => {
-        return sequelize.query('drop table ' + table).catch(() => {});
-      }));
+      return Promise.all(
+        tables.map(table => {
+          return sequelize.query('drop table ' + table).catch(() => {});
+        })
+      );
     })
     .then(() => {
       return getTables();

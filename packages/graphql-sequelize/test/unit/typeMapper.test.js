@@ -23,7 +23,7 @@ const {
   VIRTUAL,
   JSON,
   JSONB
-  } = Sequelize;
+} = Sequelize;
 
 import {
   GraphQLString,
@@ -35,35 +35,36 @@ import {
 } from 'graphql';
 
 describe('typeMapper', () => {
-
-  describe('ARRAY', function () {
-    it('should map to instance of GraphQLList', function () {
-      expect(toGraphQL(new ARRAY(STRING), Sequelize)).to.instanceof(GraphQLList);
+  describe('ARRAY', function() {
+    it('should map to instance of GraphQLList', function() {
+      expect(toGraphQL(new ARRAY(STRING), Sequelize)).to.instanceof(
+        GraphQLList
+      );
     });
   });
 
-  describe('BIGINT', function () {
-    it('should map to GraphQLString', function () {
+  describe('BIGINT', function() {
+    it('should map to GraphQLString', function() {
       expect(toGraphQL(new BIGINT(), Sequelize)).to.equal(GraphQLString);
     });
   });
 
-  describe('BOOLEAN', function () {
-    it('should map to GraphQLBoolean', function () {
+  describe('BOOLEAN', function() {
+    it('should map to GraphQLBoolean', function() {
       expect(toGraphQL(new BOOLEAN(), Sequelize)).to.equal(GraphQLBoolean);
     });
   });
 
-  describe('CHAR', function () {
-    it('should map to GraphQLString', function () {
+  describe('CHAR', function() {
+    it('should map to GraphQLString', function() {
       expect(toGraphQL(new CHAR(), Sequelize)).to.equal(GraphQLString);
     });
   });
 
-  describe('CUSTOM', function () {
-    before(function () {
+  describe('CUSTOM', function() {
+    before(function() {
       // setup mapping
-      mapType((type)=> {
+      mapType(type => {
         if (type instanceof BOOLEAN) {
           return GraphQLString;
         }
@@ -72,46 +73,45 @@ describe('typeMapper', () => {
         }
       });
     });
-    it('should fallback to default types if it returns false', function () {
+    it('should fallback to default types if it returns false', function() {
       expect(toGraphQL(new FLOAT(), Sequelize)).to.equal(GraphQLFloat);
     });
-    it('should allow the user to map types to anything', function () {
+    it('should allow the user to map types to anything', function() {
       expect(toGraphQL(new BOOLEAN(), Sequelize)).to.equal(GraphQLString);
     });
 
     // reset mapType
-    after(function () {
+    after(function() {
       mapType(null);
     });
-
   });
 
-  describe('DATE', function () {
-    it('should map to GraphQLString', function () {
+  describe('DATE', function() {
+    it('should map to GraphQLString', function() {
       expect(toGraphQL(new DATE(), Sequelize)).to.equal(GraphQLString);
     });
   });
 
-  describe('DATEONLY', function () {
-    it('should map to GraphQLString', function () {
+  describe('DATEONLY', function() {
+    it('should map to GraphQLString', function() {
       expect(toGraphQL(new DATEONLY(), Sequelize)).to.equal(GraphQLString);
     });
   });
 
-  describe('DECIMAL', function () {
-    it('should map to GraphQLString', function () {
+  describe('DECIMAL', function() {
+    it('should map to GraphQLString', function() {
       expect(toGraphQL(new DECIMAL(), Sequelize)).to.equal(GraphQLString);
     });
   });
 
-  describe('DOUBLE', function () {
-    it('should map to GraphQLFloat', function () {
+  describe('DOUBLE', function() {
+    it('should map to GraphQLFloat', function() {
       expect(toGraphQL(new DOUBLE(), Sequelize)).to.equal(GraphQLFloat);
     });
   });
 
-  describe('ENUM', function () {
-    it('should map to instance of GraphQLEnumType', function () {
+  describe('ENUM', function() {
+    it('should map to instance of GraphQLEnumType', function() {
       expect(
         toGraphQL(
           new ENUM(
@@ -124,70 +124,69 @@ describe('typeMapper', () => {
             '¼ ½',
             '¼_½',
             ' ¼--½_¾ - '
-          )
-          , Sequelize
+          ),
+          Sequelize
         )
       ).to.instanceof(GraphQLEnumType);
     });
   });
 
-  describe('FLOAT', function () {
-    it('should map to GraphQLFloat', function () {
+  describe('FLOAT', function() {
+    it('should map to GraphQLFloat', function() {
       expect(toGraphQL(new FLOAT(), Sequelize)).to.equal(GraphQLFloat);
     });
   });
 
-
-  describe('INTEGER', function () {
-    it('should map to GraphQLInt', function () {
+  describe('INTEGER', function() {
+    it('should map to GraphQLInt', function() {
       expect(toGraphQL(new INTEGER(), Sequelize)).to.equal(GraphQLInt);
     });
   });
 
-  describe('STRING', function () {
-    it('should map to GraphQLString', function () {
+  describe('STRING', function() {
+    it('should map to GraphQLString', function() {
       expect(toGraphQL(new STRING(), Sequelize)).to.equal(GraphQLString);
     });
   });
 
-  describe('TEXT', function () {
-    it('should map to GraphQLString', function () {
+  describe('TEXT', function() {
+    it('should map to GraphQLString', function() {
       expect(toGraphQL(new TEXT(), Sequelize)).to.equal(GraphQLString);
     });
   });
 
-  describe('TIME', function () {
-    it('should map to GraphQLString', function () {
+  describe('TIME', function() {
+    it('should map to GraphQLString', function() {
       expect(toGraphQL(new TIME(), Sequelize)).to.equal(GraphQLString);
     });
   });
 
-  describe('UUID', function () {
-    it('should map to GraphQLString', function () {
+  describe('UUID', function() {
+    it('should map to GraphQLString', function() {
       expect(toGraphQL(new UUID(), Sequelize)).to.equal(GraphQLString);
     });
   });
 
-  describe('VIRTUAL', function () {
-
-    it('should map to the sequelize return type', function () {
-      expect(toGraphQL(new VIRTUAL(BOOLEAN, ['createdAt']), Sequelize)).to.equal(GraphQLBoolean);
+  describe('VIRTUAL', function() {
+    it('should map to the sequelize return type', function() {
+      expect(
+        toGraphQL(new VIRTUAL(BOOLEAN, ['createdAt']), Sequelize)
+      ).to.equal(GraphQLBoolean);
     });
 
-    it('should default to a GraphQLString is a return type is not provided', function () {
+    it('should default to a GraphQLString is a return type is not provided', function() {
       expect(toGraphQL(new VIRTUAL(), Sequelize)).to.equal(GraphQLString);
     });
-
   });
 
-  describe('JSON', function () {
-    it('should map to JSONType', function () {
+  describe('JSON', function() {
+    it('should map to JSONType', function() {
       expect(toGraphQL(new JSON(), Sequelize)).to.equal(JSONType); // eslint-disable-line
     });
   });
 
-  describe('JSONB', function () {
-    it('should map to JSONType', function () {
+  describe('JSONB', function() {
+    it('should map to JSONType', function() {
       expect(toGraphQL(new JSONB(), Sequelize)).to.equal(JSONType);
     });
   });

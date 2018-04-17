@@ -224,55 +224,31 @@ exports[`Database sqlite given is already connected Export shoud fail on unsuppo
 
 exports[`Database sqlite given is already connected Export shoud fail when passing both "tables" and "table" 1`] = `"You cannot give both \\"tables\\" and \\"table\\". Choose one"`;
 
-exports[`Database sqlite given is already connected Get .getTableColumns should list all tables keys 1`] = `
+exports[`Database sqlite given is already connected Get .getTableColumns should get all tables keys 1`] = `
 Array [
   Object {
-    "cid": 0,
-    "dflt_value": null,
-    "name": "id",
-    "notnull": 1,
-    "pk": 1,
-    "type": "INTEGER",
+    "columnName": "id",
+    "dataType": "INTEGER",
   },
   Object {
-    "cid": 1,
-    "dflt_value": null,
-    "name": "username",
-    "notnull": 0,
-    "pk": 0,
-    "type": "VARCHAR(45)",
+    "columnName": "username",
+    "dataType": "VARCHAR(45)",
   },
   Object {
-    "cid": 2,
-    "dflt_value": null,
-    "name": "email",
-    "notnull": 0,
-    "pk": 0,
-    "type": "VARCHAR(150)",
+    "columnName": "email",
+    "dataType": "VARCHAR(150)",
   },
   Object {
-    "cid": 3,
-    "dflt_value": null,
-    "name": "password",
-    "notnull": 0,
-    "pk": 0,
-    "type": "VARCHAR(45)",
+    "columnName": "password",
+    "dataType": "VARCHAR(45)",
   },
   Object {
-    "cid": 4,
-    "dflt_value": null,
-    "name": "role_id",
-    "notnull": 0,
-    "pk": 0,
-    "type": "INT",
+    "columnName": "role_id",
+    "dataType": "INT",
   },
   Object {
-    "cid": 5,
-    "dflt_value": null,
-    "name": "createdat",
-    "notnull": 0,
-    "pk": 0,
-    "type": "DATETIME",
+    "columnName": "createdat",
+    "dataType": "DATETIME",
   },
 ]
 `;
@@ -304,7 +280,7 @@ exports[`Database sqlite given is already connected Get .getTableInsertScript sh
  VALUES (?, ?, ?, ?, ?, ?);"
 `;
 
-exports[`Database sqlite given is already connected Get .getTableReferences should list all tables that selected table has references to 1`] = `Array []`;
+exports[`Database sqlite given is already connected Get .getTableReferences should get all tables that selected table has references to 1`] = `Array []`;
 
 exports[`Database sqlite given is already connected Get .getTableSelectScript should return SELECT table script 1`] = `"SELECT \\"id\\", \\"username\\", \\"email\\", \\"password\\", \\"role_id\\", \\"createdat\\" FROM \\"users\\";"`;
 
@@ -322,7 +298,7 @@ exports[`Database sqlite given is already connected Get .getTableUpdateScript sh
  WHERE <condition>;"
 `;
 
-exports[`Database sqlite given is already connected Get .getTableValues should list all tables keys 1`] = `
+exports[`Database sqlite given is already connected Get .getTableValues should get all tables keys 1`] = `
 Array [
   Object {
     "createdat": "2016-10-25",
@@ -335,7 +311,7 @@ Array [
 ]
 `;
 
-exports[`Database sqlite given is already connected Get .getTablenames should list all tables names 1`] = `
+exports[`Database sqlite given is already connected Get .getTablenames should get all tables names 1`] = `
 Array [
   "roles",
   "users",
@@ -350,11 +326,11 @@ exports[`Database sqlite given is already connected Get .getViewCreateScript sho
   FROM users"
 `;
 
-exports[`Database sqlite given is already connected List .listRoutines should list all routines with their type 1`] = `Array []`;
+exports[`Database sqlite given is already connected List .getRoutines should get all routines with their type 1`] = `Array []`;
 
-exports[`Database sqlite given is already connected List .listSchemas should list all schema 1`] = `Array []`;
+exports[`Database sqlite given is already connected List .getSchemas should get all schema 1`] = `Array []`;
 
-exports[`Database sqlite given is already connected List .listTableColumns should list all columns and their type from users table 1`] = `
+exports[`Database sqlite given is already connected List .getTableColumns should get all columns and their type from users table 1`] = `
 Array [
   Object {
     "columnName": "id",
@@ -383,61 +359,61 @@ Array [
 ]
 `;
 
-exports[`Database sqlite given is already connected List .listTableColumns should list all columns and their type from users table 2`] = `
+exports[`Database sqlite given is already connected List .getTableColumns should get all columns and their type from users table 2`] = `
 Object {
   "columnName": "id",
   "dataType": "INTEGER",
 }
 `;
 
-exports[`Database sqlite given is already connected List .listTableColumns should list all columns and their type from users table 3`] = `
+exports[`Database sqlite given is already connected List .getTableColumns should get all columns and their type from users table 3`] = `
 Object {
   "columnName": "username",
   "dataType": "VARCHAR(45)",
 }
 `;
 
-exports[`Database sqlite given is already connected List .listTableColumns should list all columns and their type from users table 4`] = `
+exports[`Database sqlite given is already connected List .getTableColumns should get all columns and their type from users table 4`] = `
 Object {
   "columnName": "email",
   "dataType": "VARCHAR(150)",
 }
 `;
 
-exports[`Database sqlite given is already connected List .listTableColumns should list all columns and their type from users table 5`] = `
+exports[`Database sqlite given is already connected List .getTableColumns should get all columns and their type from users table 5`] = `
 Object {
   "columnName": "password",
   "dataType": "VARCHAR(45)",
 }
 `;
 
-exports[`Database sqlite given is already connected List .listTableColumns should list all columns and their type from users table 6`] = `
+exports[`Database sqlite given is already connected List .getTableColumns should get all columns and their type from users table 6`] = `
 Object {
   "columnName": "role_id",
   "dataType": "INT",
 }
 `;
 
-exports[`Database sqlite given is already connected List .listTableColumns should list all columns and their type from users table 7`] = `
+exports[`Database sqlite given is already connected List .getTableColumns should get all columns and their type from users table 7`] = `
 Object {
   "columnName": "createdat",
   "dataType": "DATETIME",
 }
 `;
 
-exports[`Database sqlite given is already connected List .listTableIndexes should list all indexes 1`] = `
+exports[`Database sqlite given is already connected List .getTableIndexes should get all indexes 1`] = `
 Array [
   "users_id_index",
 ]
 `;
 
-exports[`Database sqlite given is already connected List .listTableTriggers should list all table related triggers 1`] = `
+exports[`Database sqlite given is already connected List .getTableTriggers should get all table related triggers 1`] = `
 Array [
   "dummy_trigger",
 ]
 `;
 
-exports[`Database sqlite given is already connected List .listTables should list all tables 1`] = `
+exports[`Database sqlite given is already connected List .getTables should get all tables 1`] = `
 Array [
   Object {
     "name": "roles",
@@ -448,7 +424,7 @@ Array [
 ]
 `;
 
-exports[`Database sqlite given is already connected List .listViews should list all views 1`] = `
+exports[`Database sqlite given is already connected List .getViews should get all views 1`] = `
 Array [
   Object {
     "name": "email_view",

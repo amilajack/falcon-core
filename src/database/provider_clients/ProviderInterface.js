@@ -39,7 +39,7 @@ export type databaseType = {
   // Wraps the existing connection in a tunnel. Only used for SSH
   connection: {
     getQuerySelectTop: (table: string, limit: number, schema: string) => void,
-    listTableColumns: (table: string) => Array<Object>,
+    getTableColumns: (table: string) => Array<Object>,
     wrapIdentifier: (item: any) => any,
     disconnect: () => void
   } | null,
@@ -122,16 +122,16 @@ export interface ProviderInterface {
   //  })
 
   /**
-   * List operations:
+   * get operations:
    */
-  listTables: () => Promise<Array<{ name: string }>>;
-  listViews: () => Promise<Array<string>>;
-  listRoutines: () => Promise<Array<string>>;
-  listTableTriggers: (table: string) => Promise<Array<string>>;
-  listTableIndexes: (table: string) => Promise<Array<string>>;
-  listSchemas: () => Promise<Array<string>>;
-  listDatabases: () => Promise<Array<string>>;
-  listTableColumns: (
+  getTables: () => Promise<Array<{ name: string }>>;
+  getViews: () => Promise<Array<string>>;
+  getRoutines: () => Promise<Array<string>>;
+  getTableTriggers: (table: string) => Promise<Array<string>>;
+  getTableIndexes: (table: string) => Promise<Array<string>>;
+  getSchemas: () => Promise<Array<string>>;
+  getDatabases: () => Promise<Array<string>>;
+  getTableColumns: (
     table: string
   ) => Promise<
     Array<{
@@ -315,7 +315,7 @@ export interface ProviderInterface {
     events: boolean,
 
     /**
-     * A list of generic types that all databases will either have or not have. The actual
+     * A get of generic types that all databases will either have or not have. The actual
      * types of each database might have a different name. For example, sqlite supports
      * "BIGINT" types so here, we would mark integer as true
      */

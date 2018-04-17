@@ -15,9 +15,7 @@ import {
 
 import resolver from '../../lib/resolver';
 
-import {
-  sequelizeNodeInterface
-} from '../../lib/relay';
+import { sequelizeNodeInterface } from '../../lib/relay';
 
 import { sequelize, models } from './models';
 
@@ -58,7 +56,7 @@ const userType = new GraphQLObjectType({
       type: taskConnection.connectionType,
       args: {
         completed: {
-          type: GraphQLBoolean,
+          type: GraphQLBoolean
         },
         ...connectionArgs
       },
@@ -96,10 +94,19 @@ const projectType = new GraphQLObjectType({
   interfaces: [nodeInterface]
 });
 
-const taskConnection = connectionDefinitions({name: 'Task', nodeType: taskType})
-  , subordinateConnection = connectionDefinitions({name: 'Subordinate', nodeType: userType})
-  , subtaskConnection = connectionDefinitions({name: 'Subtask', nodeType: taskType})
-  , userConnection = connectionDefinitions({name: 'User', nodeType: userType});
+const taskConnection = connectionDefinitions({
+    name: 'Task',
+    nodeType: taskType
+  }),
+  subordinateConnection = connectionDefinitions({
+    name: 'Subordinate',
+    nodeType: userType
+  }),
+  subtaskConnection = connectionDefinitions({
+    name: 'Subtask',
+    nodeType: taskType
+  }),
+  userConnection = connectionDefinitions({ name: 'User', nodeType: userType });
 
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -143,7 +150,8 @@ const schema = new GraphQLSchema({
           before: findOptions => {
             // we only want top-level tasks, not subtasks
             findOptions.where = {
-              user_id: { // eslint-disable-line
+              user_id: {
+                // eslint-disable-line
                 $not: null
               }
             };
@@ -155,6 +163,4 @@ const schema = new GraphQLSchema({
   })
 });
 
-export {
-  schema
-};
+export { schema };

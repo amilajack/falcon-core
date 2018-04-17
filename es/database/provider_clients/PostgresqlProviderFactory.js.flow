@@ -71,7 +71,7 @@ class PostgresqlProvider extends BaseProvider implements ProviderInterface {
     this.connection.pool.end();
   }
 
-  async listTables(filter) {
+  async getTables(filter) {
     const schemaFilter = this.buildSchemaFilter(filter, 'table_schema');
     const sql = `
       SELECT
@@ -88,7 +88,7 @@ class PostgresqlProvider extends BaseProvider implements ProviderInterface {
     return data.rows;
   }
 
-  async listViews(filter) {
+  async getViews(filter) {
     const schemaFilter = this.buildSchemaFilter(filter, 'table_schema');
     const sql = `
       SELECT
@@ -104,7 +104,7 @@ class PostgresqlProvider extends BaseProvider implements ProviderInterface {
     return data.rows;
   }
 
-  async listRoutines(filter) {
+  async getRoutines(filter) {
     const schemaFilter = this.buildSchemaFilter(filter, 'routine_schema');
     const sql = `
       SELECT
@@ -126,7 +126,7 @@ class PostgresqlProvider extends BaseProvider implements ProviderInterface {
     }));
   }
 
-  async listTableColumns(database, table, defaultSchema: string) {
+  async getTableColumns(database, table, defaultSchema: string) {
     const schema = defaultSchema || (await this.getSchema());
     const sql = `
       SELECT column_name, data_type
@@ -155,7 +155,7 @@ class PostgresqlProvider extends BaseProvider implements ProviderInterface {
     }));
   }
 
-  async listTableTriggers(table, defaultSchema: string) {
+  async getTableTriggers(table, defaultSchema: string) {
     const schema = defaultSchema || (await this.getSchema());
     const sql = `
       SELECT trigger_name
@@ -168,7 +168,7 @@ class PostgresqlProvider extends BaseProvider implements ProviderInterface {
     return data.rows.map(row => row.trigger_name);
   }
 
-  async listTableIndexes(table, defaultSchema: string) {
+  async getTableIndexes(table, defaultSchema: string) {
     const schema = defaultSchema || (await this.getSchema());
     const sql = `
       SELECT indexname as index_name
@@ -182,7 +182,7 @@ class PostgresqlProvider extends BaseProvider implements ProviderInterface {
     return data.rows.map(row => row.index_name);
   }
 
-  async listSchemas(filter) {
+  async getSchemas(filter) {
     const schemaFilter = this.buildSchemaFilter(filter);
     const sql = `
       SELECT schema_name
@@ -319,7 +319,7 @@ class PostgresqlProvider extends BaseProvider implements ProviderInterface {
     );
   }
 
-  async listDatabases(filter) {
+  async getDatabases(filter) {
     const databaseFilter = this.buildDatabseFilter(filter, 'datname');
     const sql = `
       SELECT datname

@@ -14,18 +14,21 @@ var app = express();
  * ab -p test/benchmark/[FILE].json -T application/json -n 500 -c 20 http://localhost:4001/graphql
  */
 
-app.use('/graphql', graphqlHTTP({
-  schema,
-  formatError: error => {
-    console.log(error.stack);
-    return {
-      message: error.message,
-      locations: error.locations,
-      stack: error.stack
-    };
-  }
-}));
+app.use(
+  '/graphql',
+  graphqlHTTP({
+    schema,
+    formatError: error => {
+      console.log(error.stack);
+      return {
+        message: error.message,
+        locations: error.locations,
+        stack: error.stack
+      };
+    }
+  })
+);
 
-app.listen(4001, function () {
+app.listen(4001, function() {
   console.log('Benchmarking server listening on port 4001');
 });

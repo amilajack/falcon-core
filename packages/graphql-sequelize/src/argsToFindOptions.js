@@ -1,10 +1,10 @@
-import {replaceWhereOperators} from './replaceWhereOperators';
+import { replaceWhereOperators } from './replaceWhereOperators';
 
 export default function argsToFindOptions(args, targetAttributes) {
   var result = {};
 
   if (args) {
-    Object.keys(args).forEach(function (key) {
+    Object.keys(args).forEach(function(key) {
       if (~targetAttributes.indexOf(key)) {
         result.where = result.where || {};
         result.where[key] = args[key];
@@ -30,7 +30,6 @@ export default function argsToFindOptions(args, targetAttributes) {
         // setup where
         result.where = replaceWhereOperators(args.where);
       }
-
     });
   }
 

@@ -16,25 +16,35 @@ function whereQueryVarsToValues(o, vals) {
 }
 
 function resolverFactory(targetMaybeThunk, options = {}) {
-  const contextToOptions = _.assign({}, resolverFactory.contextToOptions, options.contextToOptions);
+  const contextToOptions = _.assign(
+    {},
+    resolverFactory.contextToOptions,
+    options.contextToOptions
+  );
 
-  invariant(options.include === undefined, 'Include support has been removed in favor of dataloader batching');
-  if (options.before === undefined) options.before = (options) => options;
-  if (options.after === undefined) options.after = (result) => result;
+  invariant(
+    options.include === undefined,
+    'Include support has been removed in favor of dataloader batching'
+  );
+  if (options.before === undefined) options.before = options => options;
+  if (options.after === undefined) options.after = result => result;
   if (options.handleConnection === undefined) options.handleConnection = true;
 
-  return async function (source, args, context, info) {
-    let target = typeof targetMaybeThunk === 'function' && targetMaybeThunk.findAndCountAll === undefined ?
-                 await Promise.resolve(targetMaybeThunk(source, args, context, info)) : targetMaybeThunk
-      , isModel = !!target.getTableName
-      , isAssociation = !!target.associationType
-      , association = isAssociation && target
-      , model = isAssociation && target.target || isModel && target
-      , type = info.returnType
-      , list = options.list || type instanceof GraphQLList;
+  return async function(source, args, context, info) {
+    let target =
+        typeof targetMaybeThunk === 'function' &&
+        targetMaybeThunk.findAndCountAll === undefined
+          ? await Promise.resolve(targetMaybeThunk(source, args, context, info))
+          : targetMaybeThunk,
+      isModel = !!target.getTableName,
+      isAssociation = !!target.associationType,
+      association = isAssociation && target,
+      model = (isAssociation && target.target) || (isModel && target),
+      type = info.returnType,
+      list = options.list || type instanceof GraphQLList;
 
-    let targetAttributes = Object.keys(model.rawAttributes)
-      , findOptions = argsToFindOptions(args, targetAttributes);
+    let targetAttributes = Object.keys(model.rawAttributes),
+      findOptions = argsToFindOptions(args, targetAttributes);
 
     info = {
       ...info,
@@ -59,39 +69,43 @@ function resolverFactory(targetMaybeThunk, options = {}) {
       findOptions[as] = context[key];
     });
 
-    return Promise.resolve(options.before(findOptions, args, context, info)).then(function (findOptions) {
-      if (args.where && !_.isEmpty(info.variableValues)) {
-        whereQueryVarsToValues(args.where, info.variableValues);
-        whereQueryVarsToValues(findOptions.where, info.variableValues);
-      }
+    return Promise.resolve(options.before(findOptions, args, context, info))
+      .then(function(findOptions) {
+        if (args.where && !_.isEmpty(info.variableValues)) {
+          whereQueryVarsToValues(args.where, info.variableValues);
+          whereQueryVarsToValues(findOptions.where, info.variableValues);
+        }
 
-      if (list && !findOptions.order) {
-        findOptions.order = [[model.primaryKeyAttribute, 'ASC']];
-      }
+        if (list && !findOptions.order) {
+          findOptions.order = [[model.primaryKeyAttribute, 'ASC']];
+        }
 
-      if (association) {
-        if (source.get(association.as) !== undefined) {
-          // The user did a manual include
-          const result = source.get(association.as);
-          if (options.handleConnection && isConnection(info.returnType)) {
-            return handleConnection(result, args);
-          }
-
-          return result;
-        } else {
-          return source[association.accessors.get](findOptions).then(function (result) {
+        if (association) {
+          if (source.get(association.as) !== undefined) {
+            // The user did a manual include
+            const result = source.get(association.as);
             if (options.handleConnection && isConnection(info.returnType)) {
               return handleConnection(result, args);
             }
-            return result;
-          });
-        }
-      }
 
-      return model[list ? 'findAll' : 'findOne'](findOptions);
-    }).then(function (result) {
-      return options.after(result, args, context, info);
-    });
+            return result;
+          } else {
+            return source[association.accessors.get](findOptions).then(function(
+              result
+            ) {
+              if (options.handleConnection && isConnection(info.returnType)) {
+                return handleConnection(result, args);
+              }
+              return result;
+            });
+          }
+        }
+
+        return model[list ? 'findAll' : 'findOne'](findOptions);
+      })
+      .then(function(result) {
+        return options.after(result, args, context, info);
+      });
   };
 }
 

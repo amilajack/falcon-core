@@ -181,7 +181,7 @@ export default class BaseProvider {
 
   async getTableColumnNames(table: string) {
     this.checkIsConnected();
-    const columns = await this.database.connection.listTableColumns(
+    const columns = await this.database.connection.getTableColumns(
       this.database.database,
       table
     );
