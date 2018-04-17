@@ -205,15 +205,31 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
 
     // This doesn't work with babel because of this issue:
     // https://github.com/airbnb/babel-plugin-dynamic-import-node/issues/47
-    const { default: graphqlHTTP } = a;
-    const { default: express } = c;
-    const { buildSchemaFromDatabase } = b;
+    // const { default: graphqlHTTP } = a;
+    // const { default: express } = c;
+    // const { buildSchemaFromDatabase } = b;
 
     if (this.graphQLServerIsRunning()) {
       return;
     }
 
-    const app = express();
+    let app;
+    let express;
+    let graphqlHTTP;
+    let buildSchemaFromDatabase;
+
+    if (process.env.NODE_ENV === 'test') {
+      app = c();
+      graphqlHTTP = a;
+      express = c;
+      buildSchemaFromDatabase = b.buildSchemaFromDatabase;
+    } else {
+      app = express();
+      graphqlHTTP = a.default;
+      express = c.default;
+      buildSchemaFromDatabase = b.default.buildSchemaFromDatabase;
+    }
+
     const schema = await buildSchemaFromDatabase(
       this.connection.dbConfig.database
     );
@@ -343,6 +359,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     return this.driverExecuteQuery({ query: sql }).then(res => res.data);
   }
 
+  // TODO: This needs to be wrapped in a transaction
   async renameTableColumns(
     table: string,
     columns: Array<{ oldColumnName: string, newColumnName: string }>
@@ -720,17 +737,11 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
             return reject(err);
           }
 
-          db.on('trace', (query, duration) => {
-            this.logs.push({
-              query,
-              duration: duration || 0,
-              type: 'trace'
-            });
-          });
+          // duration is given in nanoseconds
           db.on('profile', (query, duration) => {
             this.logs.push({
               query,
-              duration: duration || 0,
+              duration,
               type: 'profile'
             });
           });

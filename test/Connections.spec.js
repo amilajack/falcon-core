@@ -31,6 +31,7 @@ function assertDatabaseProperty(object: Object): Object {
 describe('Connections', function testConnections() {
   beforeEach(async () => {
     this.connections = new Connections();
+    await this.connections.removeAll();
     await connectionFactory(this.connections, 3);
   });
 

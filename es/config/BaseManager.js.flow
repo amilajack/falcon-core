@@ -54,7 +54,10 @@ export default class BaseManager {
   validateBeforeCreation(item: itemType) {}
 
   async add(item: itemType): Promise<itemValidationType> {
-    const rndm = await import('rndm');
+    let rndm = await import('rndm')
+    if (process.env.NODE_ENV !== 'test') {
+      rndm = rndm.default;
+    }
     const itemWithDefaults = {
       id: `conn-${rndm(16)}`,
       color: 'gray',

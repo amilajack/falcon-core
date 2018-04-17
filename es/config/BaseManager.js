@@ -40,7 +40,10 @@ export default class BaseManager {
     var _this = this;
 
     return _asyncToGenerator(function* () {
-      const rndm = yield import('rndm');
+      let rndm = yield import('rndm');
+      if (process.env.NODE_ENV !== 'test') {
+        rndm = rndm.default;
+      }
       const itemWithDefaults = _extends({
         id: `conn-${rndm(16)}`,
         color: 'gray'

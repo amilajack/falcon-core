@@ -202,15 +202,31 @@ class SqliteProvider extends BaseProvider {
 
       // This doesn't work with babel because of this issue:
       // https://github.com/airbnb/babel-plugin-dynamic-import-node/issues/47
-      const { default: graphqlHTTP } = a;
-      const { default: express } = c;
-      const { buildSchemaFromDatabase } = b;
+      // const { default: graphqlHTTP } = a;
+      // const { default: express } = c;
+      // const { buildSchemaFromDatabase } = b;
 
       if (_this5.graphQLServerIsRunning()) {
         return;
       }
 
-      const app = express();
+      let app;
+      let express;
+      let graphqlHTTP;
+      let buildSchemaFromDatabase;
+
+      if (process.env.NODE_ENV === 'test') {
+        app = c();
+        graphqlHTTP = a;
+        express = c;
+        buildSchemaFromDatabase = b.buildSchemaFromDatabase;
+      } else {
+        app = express();
+        graphqlHTTP = a.default;
+        express = c.default;
+        buildSchemaFromDatabase = b.default.buildSchemaFromDatabase;
+      }
+
       const schema = yield buildSchemaFromDatabase(_this5.connection.dbConfig.database);
       const port = yield getPort();
       app.use('/graphql', cors(), graphqlHTTP({ schema }));
@@ -383,6 +399,7 @@ class SqliteProvider extends BaseProvider {
     })();
   }
 
+  // TODO: This needs to be wrapped in a transaction
   renameTableColumns(table, columns) {
     var _this15 = this;
 
@@ -832,17 +849,11 @@ class SqliteProvider extends BaseProvider {
             return reject(err);
           }
 
-          db.on('trace', function (query, duration) {
-            _this31.logs.push({
-              query,
-              duration: duration || 0,
-              type: 'trace'
-            });
-          });
+          // duration is given in nanoseconds
           db.on('profile', function (query, duration) {
             _this31.logs.push({
               query,
-              duration: duration || 0,
+              duration,
               type: 'profile'
             });
           });
