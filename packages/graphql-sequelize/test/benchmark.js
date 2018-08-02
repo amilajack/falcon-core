@@ -10,7 +10,7 @@ var app = express();
  *
  * sudo docker-compose up -d postgres
  * sudo docker-compose run benchmark_server node test/benchmark/seed.js
- * npm run build && sudo docker-compose kill benchmark_server && sudo docker-compose up -d benchmark_server
+ * yarn build && sudo docker-compose kill benchmark_server && sudo docker-compose up -d benchmark_server
  * ab -p test/benchmark/[FILE].json -T application/json -n 500 -c 20 http://localhost:4001/graphql
  */
 

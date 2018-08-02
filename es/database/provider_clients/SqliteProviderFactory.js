@@ -198,34 +198,21 @@ class SqliteProvider extends BaseProvider {
     var _this5 = this;
 
     return _asyncToGenerator(function* () {
-      const [a, b, c] = yield Promise.all([import('express-graphql'), import('tuql'), import('express')]);
-
-      // This doesn't work with babel because of this issue:
-      // https://github.com/airbnb/babel-plugin-dynamic-import-node/issues/47
-      // const { default: graphqlHTTP } = a;
-      // const { default: express } = c;
-      // const { buildSchemaFromDatabase } = b;
-
       if (_this5.graphQLServerIsRunning()) {
         return;
       }
 
-      let app;
-      let express;
-      let graphqlHTTP;
-      let buildSchemaFromDatabase;
+      // See https://github.com/airbnb/babel-plugin-dynamic-import-node/issues/47
+      const [graphqlHTTP, tuql, express] = yield Promise.all([import('express-graphql').then(function (x) {
+        return x.default || x;
+      }), import('tuql').then(function (x) {
+        return x.default || x;
+      }), import('express').then(function (x) {
+        return x.default || x;
+      })]);
 
-      if (process.env.NODE_ENV === 'test') {
-        app = c();
-        graphqlHTTP = a;
-        express = c;
-        buildSchemaFromDatabase = b.buildSchemaFromDatabase;
-      } else {
-        app = express();
-        graphqlHTTP = a.default;
-        express = c.default;
-        buildSchemaFromDatabase = b.default.buildSchemaFromDatabase;
-      }
+      const { buildSchemaFromDatabase } = tuql;
+      const app = express();
 
       const schema = yield buildSchemaFromDatabase(_this5.connection.dbConfig.database);
       const port = yield getPort();

@@ -30,10 +30,10 @@ addons:
       - g++-4.7
 
 script:
-  - npm run coverage
+  - yarn coverage
 
 after_script:
-  - npm run coveralls
+  - yarn coveralls
 
 notifications:
   email: false
