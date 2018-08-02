@@ -25,6 +25,7 @@ export default class BaseManager {
       }
     });
   }
+
   /**
    * @private
    */
@@ -40,7 +41,9 @@ export default class BaseManager {
     var _this = this;
 
     return _asyncToGenerator(function* () {
-      let rndm = yield import('rndm');
+      let rndm = yield import('rndm').then(function (e) {
+        return e.default || e;
+      });
       if (process.env.NODE_ENV !== 'test') {
         rndm = rndm.default;
       }
