@@ -37,6 +37,7 @@ const FinalStore =
  */
 export default class BaseManager {
   itemType: 'connections' | 'queries';
+
   /**
    * @private
    */
@@ -54,7 +55,7 @@ export default class BaseManager {
   validateBeforeCreation(item: itemType) {}
 
   async add(item: itemType): Promise<itemValidationType> {
-    let rndm = await import('rndm')
+    let rndm = await import('rndm').then(e => e.default || e)
     if (process.env.NODE_ENV !== 'test') {
       rndm = rndm.default;
     }
