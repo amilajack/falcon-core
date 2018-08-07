@@ -1,6 +1,7 @@
 {
-  "extends": ["bliss", "prettier"],
+  "extends": ["bliss", "prettier", "prettier/flowtype"],
   "rules": {
+    "flowtype-errors/show-errors": "off",
     "class-methods-use-this": "off",
     "flowtype/boolean-style": "boolean",
     "fp/no-arguments": "off",
