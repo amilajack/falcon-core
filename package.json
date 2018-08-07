@@ -15,6 +15,7 @@
     "lint": "eslint --cache --format=node_modules/eslint-formatter-pretty .",
     "lint-fix": "yarn lint --fix; exit 0",
     "postlint-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.js'",
+    "precommit": "yarn prepublish && npm test && lint-staged",
     "prepublish": "yarn build && yarn flow-prepublish",
     "test": "yarn test-sqlite",
     "test-mysql": "cross-env NODE_ENV=test DB_CLIENTS=mysql jest test/*.js --runInBand",
@@ -26,10 +27,16 @@
     "test-all-dbs": "find ./test/databases/ -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test jest",
     "watch": "cross-env NODE_ENV=development babel --out-dir es src --source-maps --watch"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn prepublish && npm test && git add --all"
-    }
+  "lint-staged": {
+    "*.(js|jsx)": [
+      "cross-env NODE_ENV=development eslint --cache --format=node_modules/eslint-formatter-pretty",
+      "prettier --ignore-path .eslintignore --single-quote --write",
+      "git add"
+    ],
+    "*.(json|css|scss|md|yml)|.(babelrc|prettierrc|eslintrc)": [
+      "prettier --ignore-path .eslintignore --write",
+      "git add"
+    ]
   },
   "keywords": [
     "falcon",
@@ -113,9 +120,10 @@
     "flow-copy-source": "^2.0.2",
     "flow-runtime": "^0.17.0",
     "flow-typed": "^2.5.1",
-    "husky": "^0.15.0-rc.3",
+    "husky": "^0.14.3",
     "jest-cli": "^23.4.2",
     "lerna": "^3.0.0-rc.0",
+    "lint-staged": "^7.2.0",
     "prettier": "^1.14.0"
   },
   "jest": {
