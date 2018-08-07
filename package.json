@@ -124,7 +124,8 @@
     "jest-cli": "^23.4.2",
     "lerna": "^3.0.0-rc.0",
     "lint-staged": "^7.2.0",
-    "prettier": "^1.14.0"
+    "prettier": "^1.14.0",
+    "yarn": "^1.9.4"
   },
   "jest": {
     "testEnvironment": "node",
