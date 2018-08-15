@@ -4,7 +4,7 @@ The cross-database ORM that powers [falcon](https://github.com/amilajack/falcon)
 
 **Requires `node >= 9`**
 
-[![Build Status](https://api.travis-ci.com/amilajack/falcon-core.svg?token=stGf151gAJ11ZUi8LyvG&branch=master)](https://travis-ci.com/amilajack/falcon-core)
+[![Build Status](https://api.travis-ci.com/amilajack/falcon-core.svg?token=stGf151gAJ11ZUi8LyvG&branch=master)](https://travis-ci.com/amilajack/falcon-core) [![Greenkeeper badge](https://badges.greenkeeper.io/amilajack/falcon-core.svg?token=7b291f402094f6dbfcff062d24843d5af6c66ee64024992f85679cf56e8bd8af&ts=1534297447974)](https://greenkeeper.io/)
 
 ## Setup
 ```bash
