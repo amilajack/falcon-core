@@ -10,6 +10,7 @@ cache: yarn
 before_install:
   - node -v
   - yarn -v
+  - npm i -g lerna
   # postgres
   - createdb sqlectron
   - psql -d sqlectron -a -f test/databases/postgresql/schema/schema.sql
@@ -30,10 +31,10 @@ addons:
       - g++-4.7
 
 script:
+  - lerna bootstrap
+  - lerna run build
+  - lerna run test
   - yarn coverage
 
 after_script:
   - yarn coveralls
-
-notifications:
-  email: false

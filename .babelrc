@@ -7,27 +7,31 @@
     ["module-resolver", {
       "root": ["./packages"],
       "alias": {
-        "@falcon-client/sql-formatter": "./packages/sql-formatter"
+        "@falcon-client/sql-formatter": "./packages/sql-formatter",
+        "@falcon-client/graphql-sequelize": "./packages/graphql-sequelize",
+        "@falcon-client/tuql": "./packages/tuql"
       }
     }]
   ],
   "env": {
     "development": {
       "presets": [
-        ["env", { "targets": { "node": 8 } }]
+        ["env", { "targets": { "node": 10 } }],
+        "stage-0"
       ],
       "plugins": ["dynamic-import-node"]
     },
     "test": {
       "presets": [
-        ["env", { "targets": { "node": 8 } }]
+        ["env", { "targets": { "node": 10 } }],
+        "stage-0"
       ],
       "plugins": ["dynamic-import-node"]
     },
     "es": {
       "presets": [
         ["env", {
-          "targets": { "node": 8 },
+          "targets": { "node": 10 },
           "useBuiltIns": true,
           "modules": false
         }]

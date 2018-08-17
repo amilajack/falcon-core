@@ -1,0 +1,23 @@
+{
+  "env": {
+    "development": {
+      "presets": [
+        ["env", {
+          "targets": { "node": 10 },
+          "useBuiltIns": true
+        }]
+      ]
+    },
+    "test": {
+      "presets": [
+        ["env", {
+          "targets": { "node": 10 },
+          "useBuiltIns": true
+        }]
+      ]
+    },
+    "production": {
+      "presets": ["flow"]
+    }
+  }
+}

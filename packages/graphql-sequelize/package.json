@@ -8,8 +8,8 @@
     "mocha": "--require scripts/mocha-bootload"
   },
   "scripts": {
-    "prepublish": "yarn check && yarn build",
-    "check": "yarn lint && yarn test:unit",
+    "temp_disable_prepublish": "yarn quick-check && yarn build",
+    "quick-check": "yarn lint && yarn test:unit",
     "lint": "eslint src",
     "build": "rm -rf lib/* && babel src --ignore test --out-dir lib",
     "test": "yarn test:unit && yarn test:docker",
@@ -75,5 +75,8 @@
     "sinon-as-promised": "^4.0.0",
     "sinon-chai": "^2.8.0",
     "sqlite3": "^3.0.9"
+  },
+  "jest": {
+    "rootDir": "../.."
   }
 }
