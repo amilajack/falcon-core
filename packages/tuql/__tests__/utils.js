@@ -1,7 +1,7 @@
 import { TEXT, INTEGER } from 'sequelize';
 
-import definitions from '../builders/definitions';
-import { isJoinTable, findModelKey, formatTypeName } from '../utils/index';
+import definitions from '../src/builders/definitions';
+import { isJoinTable, findModelKey, formatTypeName } from '../src/utils/index';
 
 describe('definitions', () => {
   it('detects join tables', () => {

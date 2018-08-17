@@ -1,14 +1,14 @@
 import Sequelize from 'sequelize';
 import { TEXT, INTEGER, REAL, NUMERIC, BLOB } from 'sequelize';
 
+import { GraphQLString, GraphQLNonNull, GraphQLInt } from 'graphql';
 import {
   getPkFieldKey,
   makeCreateArgs,
   makeUpdateArgs,
   makeDeleteArgs,
   makePolyArgs,
-} from '../builders/arguments';
-import { GraphQLString, GraphQLNonNull, GraphQLInt } from 'graphql';
+} from '../src/builders/arguments';
 
 const db = new Sequelize({
   dialect: 'sqlite',

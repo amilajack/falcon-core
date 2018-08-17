@@ -1,14 +1,12 @@
-import { attributeFields } from 'graphql-sequelize';
+import { attributeFields } from '@falcon-client/graphql-sequelize';
 import { singular } from 'pluralize';
-import { GraphQLBoolean, GraphQLNonNull } from 'graphql';
+import { GraphQLNonNull } from 'graphql';
 import camelcase from 'camelcase';
 
-export const getPkFieldKey = model => {
-  return Object.keys(model.attributes).find(key => {
+export const getPkFieldKey = model => Object.keys(model.attributes).find(key => {
     const attr = model.attributes[key];
     return attr.primaryKey;
   });
-};
 
 export const makeCreateArgs = model => {
   const fields = attributeFields(model);

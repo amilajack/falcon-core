@@ -15,9 +15,16 @@
           "useBuiltIns": true
         }]
       ]
-    },
-    "production": {
-      "presets": ["flow"]
     }
-  }
+  },
+  "plugins": [
+    ["module-resolver", {
+      "root": ["../../"],
+      "alias": {
+        "@falcon-client/sql-formatter": "./packages/sql-formatter",
+        "@falcon-client/graphql-sequelize": "./packages/graphql-sequelize",
+        "@falcon-client/tuql": "./packages/tuql"
+      }
+    }]
+  ]
 }

@@ -1,6 +1,6 @@
 import { TEXT, INTEGER } from 'sequelize';
 
-import definitions from '../builders/definitions';
+import definitions from '../src/builders/definitions';
 
 describe('definitions', () => {
   it('does the thing', () => {

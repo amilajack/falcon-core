@@ -1,7 +1,7 @@
 import {
   tableAssociations,
   joinTableAssociations,
-} from '../builders/associations';
+} from '../src/builders/associations';
 
 describe('associations', () => {
   it('creates a basic association without fk info', () => {

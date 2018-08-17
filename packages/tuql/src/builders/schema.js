@@ -10,9 +10,9 @@ import {
   attributeFields,
   defaultListArgs,
   defaultArgs,
-} from 'graphql-sequelize';
-import { plural, singular } from 'pluralize';
-import Sequelize, { QueryTypes } from 'sequelize';
+} from '@falcon-client/graphql-sequelize';
+import { singular } from 'pluralize';
+import Sequelize from 'sequelize';
 
 import createDefinitions from './definitions';
 import {
@@ -39,8 +39,7 @@ const GenericResponseType = new GraphQLObjectType({
   },
 });
 
-export const buildSchemaFromDatabase = databaseFile => {
-  return new Promise(async (resolve, reject) => {
+export const buildSchemaFromDatabase = databaseFile => new Promise(async (resolve, reject) => {
     const db = new Sequelize({
       dialect: 'sqlite',
       storage: databaseFile,
@@ -50,10 +49,8 @@ export const buildSchemaFromDatabase = databaseFile => {
 
     resolve(await build(db));
   });
-};
 
-export const buildSchemaFromInfile = infile => {
-  return new Promise(async (resolve, reject) => {
+export const buildSchemaFromInfile = infile => new Promise(async (resolve, reject) => {
     const db = new Sequelize({
       dialect: 'sqlite',
       storage: ':memory:',
@@ -67,16 +64,14 @@ export const buildSchemaFromInfile = infile => {
       .split(/\r?\n|\r/g)
       .filter(s => s.length);
 
-    for (let stmt of statements) {
+    for (const stmt of statements) {
       await db.query(stmt);
     }
 
     resolve(await build(db));
   });
-};
 
-const build = db => {
-  return new Promise(async (resolve, reject) => {
+const build = db => new Promise(async (resolve, reject) => {
     const models = {};
     let associations = [];
 
@@ -84,7 +79,7 @@ const build = db => {
       'SELECT name FROM sqlite_master WHERE type = "table" AND name NOT LIKE "sqlite_%"'
     );
 
-    for (let table of tables) {
+    for (const table of tables) {
       const [info, infoMeta] = await db.query(`PRAGMA table_info("${table}")`);
       const foreignKeys = await db.query(`PRAGMA foreign_key_list("${table}")`);
 
@@ -269,4 +264,3 @@ const build = db => {
       })
     );
   });
-};

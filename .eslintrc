@@ -1,3 +1,8 @@
 {
-  "extends": ["bliss", "prettier"]
+  "extends": ["bliss", "prettier"],
+  "settings": {
+    "import/resolver": {
+      "babel-module": {}
+    }
+  }
 }
