@@ -14,6 +14,7 @@
     "flow-typed": "flow-typed install",
     "lint": "eslint --cache --format=node_modules/eslint-formatter-pretty .",
     "lint-fix": "yarn lint --fix; exit 0",
+    "postinstall": "yarn build",
     "postlint-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.js'",
     "prepublish": "yarn build && yarn flow-prepublish",
     "test": "lerna run test && yarn test-sqlite",
@@ -116,7 +117,8 @@
     "husky": "^0.15.0-rc.3",
     "jest-cli": "^23.5.0",
     "lerna": "^3.0.6",
-    "prettier": "^1.14.2"
+    "prettier": "^1.14.2",
+    "rollup": "^0.64.1"
   },
   "jest": {
     "testEnvironment": "node",
