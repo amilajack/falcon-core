@@ -1,14 +1,25 @@
-import debug from 'debug';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createLogger;
+exports.setLogger = setLogger;
+
+var _debug = require('debug');
+
+var _debug2 = _interopRequireDefault(_debug);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const loggers = {};
-
-export default function createLogger(namespace) {
+function createLogger(namespace) {
   if (!namespace) {
     throw new Error('Missing log namespace');
   }
 
   // default logger
-  const debugLogger = debug(`sqlectron-core:${namespace}`);
+  const debugLogger = (0, _debug2.default)(`sqlectron-core:${namespace}`);
   loggers[namespace] = {
     debug: debugLogger.bind(debugLogger),
     error: debugLogger.bind(debugLogger)
@@ -23,7 +34,7 @@ export default function createLogger(namespace) {
 /**
  * Allow use a different logger
  */
-export function setLogger(customLogger) {
+function setLogger(customLogger) {
   Object.keys(loggers).forEach(logger => {
     loggers[logger] = customLogger(logger);
   });

@@ -1,8 +1,14 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 let SqliteFactory = (() => {
   var _ref5 = _asyncToGenerator(function* (server, database) {
-    const logger = createLogger('db:clients:sqlite');
+    const logger = (0, _Logger2.default)('db:clients:sqlite');
     const dbConfig = configDatabase(server, database);
     const connection = { dbConfig };
     logger().debug('create driver client for sqlite3 with config %j', dbConfig);
@@ -20,24 +26,40 @@ let SqliteFactory = (() => {
   };
 })();
 
+var _sqlite = require('sqlite3');
+
+var _sqlite2 = _interopRequireDefault(_sqlite);
+
+var _getPort = require('get-port');
+
+var _getPort2 = _interopRequireDefault(_getPort);
+
+var _cors = require('cors');
+
+var _cors2 = _interopRequireDefault(_cors);
+
+var _sqlQueryIdentifier = require('sql-query-identifier');
+
+var _Logger = require('../../Logger');
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _BaseProvider = require('./BaseProvider');
+
+var _BaseProvider2 = _interopRequireDefault(_BaseProvider);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-import sqlite3 from 'sqlite3';
-import getPort from 'get-port';
-import cors from 'cors';
-import { identify } from 'sql-query-identifier';
+// @TODO: Why does logging in constructor vs logging in driver execute
+// return two different things
 
-import createLogger from '../../Logger';
-import BaseProvider from './BaseProvider';
 
 /**
  * Contains data about a column/property/key in a table
  */
-
-
-// @TODO: Why does logging in constructor vs logging in driver execute
-// return two different things
-class SqliteProvider extends BaseProvider {
+class SqliteProvider extends _BaseProvider2.default {
 
   constructor(server, database, connection) {
     super(server, database);
@@ -215,8 +237,8 @@ class SqliteProvider extends BaseProvider {
       const app = express();
 
       const schema = yield buildSchemaFromDatabase(_this5.connection.dbConfig.database);
-      const port = yield getPort();
-      app.use('/graphql', cors(), graphqlHTTP({ schema }));
+      const port = yield (0, _getPort2.default)();
+      app.use('/graphql', (0, _cors2.default)(), graphqlHTTP({ schema }));
 
       yield new Promise(function (resolve) {
         _this5.graphQLServer = app.listen(port, function () {
@@ -748,7 +770,7 @@ class SqliteProvider extends BaseProvider {
 
   identifyCommands(queryText) {
     try {
-      return identify(queryText, { strict: false });
+      return (0, _sqlQueryIdentifier.identify)(queryText, { strict: false });
     } catch (err) {
       return [];
     }
@@ -828,9 +850,9 @@ class SqliteProvider extends BaseProvider {
     var _this31 = this;
 
     return new Promise((resolve, reject) => {
-      sqlite3.verbose();
+      _sqlite2.default.verbose();
 
-      const db = new sqlite3.Database(this.connection.dbConfig.database, (() => {
+      const db = new _sqlite2.default.Database(this.connection.dbConfig.database, (() => {
         var _ref4 = _asyncToGenerator(function* (err) {
           if (err) {
             return reject(err);
@@ -893,5 +915,5 @@ function configDatabase(server, database) {
   };
 }
 
-export default SqliteFactory;
+exports.default = SqliteFactory;
 //# sourceMappingURL=SqliteProviderFactory.js.map

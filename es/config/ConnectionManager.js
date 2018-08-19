@@ -1,8 +1,21 @@
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _BaseManager = require('./BaseManager');
+
+var _BaseManager2 = _interopRequireDefault(_BaseManager);
+
+var _SqliteConnectionValidation = require('./validation/SqliteConnectionValidation');
+
+var _SqliteConnectionValidation2 = _interopRequireDefault(_SqliteConnectionValidation);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 // Manage saved connections to databases. Encrypts passwords
-import BaseManager from './BaseManager';
-import sqliteConnectionValidation from './validation/SqliteConnectionValidation';
 
 
 /**
@@ -11,7 +24,7 @@ import sqliteConnectionValidation from './validation/SqliteConnectionValidation'
  * example, if a specific database requires encryption, the .get()
  * method can be modified
  */
-export default class ConnectionManager extends BaseManager {
+class ConnectionManager extends _BaseManager2.default {
   constructor(...args) {
     var _temp;
 
@@ -27,7 +40,7 @@ export default class ConnectionManager extends BaseManager {
       switch (connection.type) {
         case 'sqlite':
           {
-            yield sqliteConnectionValidation(connection);
+            yield (0, _SqliteConnectionValidation2.default)(connection);
             break;
           }
         default:
@@ -38,4 +51,5 @@ export default class ConnectionManager extends BaseManager {
     })();
   }
 }
+exports.default = ConnectionManager;
 //# sourceMappingURL=ConnectionManager.js.map

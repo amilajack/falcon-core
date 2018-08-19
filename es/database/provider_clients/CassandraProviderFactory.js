@@ -1,4 +1,8 @@
+'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 /**
  * Construct the CassandraProvider. Wait for the client to connect and then instantiate
@@ -7,10 +11,10 @@
 let CassandraFactory = (() => {
   var _ref = _asyncToGenerator(function* (server, database) {
     const dbConfig = configDatabase(server, database);
-    const logger = createLogger('db:clients:cassandra');
+    const logger = (0, _Logger2.default)('db:clients:cassandra');
 
     logger().debug('creating database client %j', dbConfig);
-    const client = new Client(dbConfig);
+    const client = new _cassandraDriver.Client(dbConfig);
 
     logger().debug('connecting');
     yield client.connect();
@@ -23,17 +27,25 @@ let CassandraFactory = (() => {
   };
 })();
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+var _cassandraDriver = require('cassandra-driver');
 
-/* eslint-disable */
+var _sqlQueryIdentifier = require('sql-query-identifier');
+
+var _BaseProvider = require('./BaseProvider');
+
+var _BaseProvider2 = _interopRequireDefault(_BaseProvider);
+
+var _Logger = require('../../Logger');
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /* eslint-disable */
 // @TODO: Add flow annotation
-import { Client } from 'cassandra-driver';
-import { identify } from 'sql-query-identifier';
-import BaseProvider from './BaseProvider';
-import createLogger from '../../Logger';
 
 
-class CassandraProvider extends BaseProvider {
+class CassandraProvider extends _BaseProvider2.default {
 
   constructor(server, database, connection) {
     super(server, database);
@@ -223,7 +235,7 @@ class CassandraProvider extends BaseProvider {
 
   identifyCommands(queryText) {
     try {
-      return identify(queryText);
+      return (0, _sqlQueryIdentifier.identify)(queryText);
     } catch (err) {
       return [];
     }
@@ -249,7 +261,5 @@ function configDatabase(server, database) {
   }
 
   return config;
-}
-
-export default CassandraFactory;
+}exports.default = CassandraFactory;
 //# sourceMappingURL=CassandraProviderFactory.js.map

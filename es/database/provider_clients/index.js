@@ -1,4 +1,16 @@
-import sqlite from './SqliteProviderFactory';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.CLIENTS = undefined;
+
+var _SqliteProviderFactory = require('./SqliteProviderFactory');
+
+var _SqliteProviderFactory2 = _interopRequireDefault(_SqliteProviderFactory);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 // import cassandra from './CassandraProviderFactory';
 // import mysql from './MysqlProviderFactory';
 // import postgresql from './PostgresqlProviderFactory';
@@ -7,7 +19,7 @@ import sqlite from './SqliteProviderFactory';
 /**
  * List of supported database clients
  */
-export const CLIENTS = [{
+const CLIENTS = exports.CLIENTS = [{
   key: 'mysql',
   name: 'MySQL',
   defaultPort: 3306,
@@ -33,12 +45,11 @@ export const CLIENTS = [{
   defaultPort: 9042,
   disabledFeatures: ['server:ssl', 'server:socketPath', 'server:user', 'server:password', 'server:schema', 'server:domain', 'scriptCreateTable', 'cancelQuery']
 }];
-
-export default {
+exports.default = {
   // sqlserver,
   // postgresql,
   // mysql,
   // cassandra,
-  sqlite
+  sqlite: _SqliteProviderFactory2.default
 };
 //# sourceMappingURL=index.js.map

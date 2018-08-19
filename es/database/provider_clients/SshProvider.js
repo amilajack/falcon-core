@@ -1,10 +1,22 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _BaseProvider = require('./BaseProvider');
+
+var _BaseProvider2 = _interopRequireDefault(_BaseProvider);
+
+var _Tunnel = require('../Tunnel');
+
+var _Tunnel2 = _interopRequireDefault(_Tunnel);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-import BaseProvider from './BaseProvider';
-import Tunnel from '../Tunnel';
-
-
-export default class SshProvider extends BaseProvider {
+class SshProvider extends _BaseProvider2.default {
   connect() {
     var _this = this;
 
@@ -28,7 +40,7 @@ export default class SshProvider extends BaseProvider {
         // reuse existing tunnel
         if (_this.server.config.ssh && !_this.server.sshTunnel) {
           logger().debug('creating ssh tunnel');
-          _this.server.sshTunnel = yield Tunnel(_this.server.config);
+          _this.server.sshTunnel = yield (0, _Tunnel2.default)(_this.server.config);
 
           const { address, port } = _this.server.sshTunnel.address();
           logger().debug('ssh forwarding through local connection %s:%d', address, port);
@@ -68,4 +80,5 @@ export default class SshProvider extends BaseProvider {
     });
   }
 }
+exports.default = SshProvider;
 //# sourceMappingURL=SshProvider.js.map

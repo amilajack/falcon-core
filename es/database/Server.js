@@ -1,14 +1,22 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+exports.createServer = createServer;
+
+var _Client = require('./Client');
+
+var _Client2 = _interopRequireDefault(_Client);
+
+var _provider_clients = require('./provider_clients');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-import Client from './Client';
-import { CLIENTS } from './provider_clients';
-
-/**
- * The config passed by the user to the external createServer() API
- */
-
 
 /**
  * Create and persist a server session. Returns a server object that
@@ -17,12 +25,17 @@ import { CLIENTS } from './provider_clients';
  * This API is exposed to users. Users pass the configuration of their
  * server to this function
  */
-export function createServer(serverConfig) {
+
+
+/**
+ * The config passed by the user to the external createServer() API
+ */
+function createServer(serverConfig) {
   if (!serverConfig) {
     throw new Error('Missing server configuration');
   }
 
-  if (!CLIENTS.some(cli => cli.key === serverConfig.client)) {
+  if (!_provider_clients.CLIENTS.some(cli => cli.key === serverConfig.client)) {
     throw new Error(`Invalid SQL client: "${serverConfig.client}"`);
   }
 
@@ -84,7 +97,7 @@ export function createServer(serverConfig) {
         };
 
         // Add the connection to the 'connection pool'
-        server.db[dbName] = yield Client(server, database);
+        server.db[dbName] = yield (0, _Client2.default)(server, database);
         // @TODO: Handles only sqlite/sqlite3/db files
         return server.db[dbName];
       })();
@@ -92,5 +105,5 @@ export function createServer(serverConfig) {
   };
 }
 
-export default createServer;
+exports.default = createServer;
 //# sourceMappingURL=Server.js.map

@@ -1,17 +1,29 @@
-import BaseManager, { FalconError } from './BaseManager';
-import Joi from 'joi';
+'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _BaseManager = require('./BaseManager');
+
+var _BaseManager2 = _interopRequireDefault(_BaseManager);
+
+var _joi = require('joi');
+
+var _joi2 = _interopRequireDefault(_joi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function validateQuery(query) {
-  const schema = Joi.object().keys({
-    id: Joi.string().required(),
-    name: Joi.string().required(),
-    type: Joi.string().required(),
-    query: Joi.string().required(),
-    color: Joi.string()
+  const schema = _joi2.default.object().keys({
+    id: _joi2.default.string().required(),
+    name: _joi2.default.string().required(),
+    type: _joi2.default.string().required(),
+    query: _joi2.default.string().required(),
+    color: _joi2.default.string()
   });
 
-  const errors = Joi.validate(query, schema, {
+  const errors = _joi2.default.validate(query, schema, {
     abortEarly: false
   });
 
@@ -22,12 +34,12 @@ function validateQuery(query) {
         fieldName: detail.context.label
       }));
 
-      throw new FalconError(`Failed validation: ${JSON.stringify(errorsMessages)}`, { errors });
+      throw new _BaseManager.FalconError(`Failed validation: ${JSON.stringify(errorsMessages)}`, { errors });
     }
   }
 }
 
-export default class QueryManager extends BaseManager {
+class QueryManager extends _BaseManager2.default {
   constructor(...args) {
     var _temp;
 
@@ -48,4 +60,5 @@ export default class QueryManager extends BaseManager {
     }
   }
 }
+exports.default = QueryManager;
 //# sourceMappingURL=QueryManager.js.map

@@ -1,13 +1,23 @@
-import SqliteProviderFactory from './provider_clients/SqliteProviderFactory';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = Client;
+
+var _SqliteProviderFactory = require('./provider_clients/SqliteProviderFactory');
+
+var _SqliteProviderFactory2 = _interopRequireDefault(_SqliteProviderFactory);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 // import CassandraProviderFactory from './provider_clients/CassandraProviderFactory';
 // import MysqlProviderFactory from './provider_clients/MysqlProviderFactory';
 // import PostgresqlProviderFactory from './provider_clients/PostgresqlProviderFactory';
-
-
-export default function Client(server, database) {
+function Client(server, database) {
   switch (server.config.client) {
     case 'sqlite':
-      return SqliteProviderFactory(server, database);
+      return (0, _SqliteProviderFactory2.default)(server, database);
     // case 'cassandra':
     //   return CassandraProviderFactory(server, database);
     // case 'mysql':

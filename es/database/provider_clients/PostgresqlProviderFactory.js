@@ -1,13 +1,19 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 let PostgresqlProviderFactory = (() => {
   var _ref3 = _asyncToGenerator(function* (server, database) {
     const dbConfig = configDatabase(server, database);
-    const logger = createLogger('db:clients:postgresql');
+    const logger = (0, _Logger2.default)('db:clients:postgresql');
     logger().debug('create driver client for postgres with config %j', dbConfig);
 
     const connection = {
-      pool: new pg.Pool(dbConfig)
+      pool: new _pg2.default.Pool(dbConfig)
     };
 
     logger().debug('connected');
@@ -23,16 +29,30 @@ let PostgresqlProviderFactory = (() => {
   };
 })();
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+var _pg = require('pg');
 
-/* eslint-disable */
+var _pg2 = _interopRequireDefault(_pg);
+
+var _sqlQueryIdentifier = require('sql-query-identifier');
+
+var _BaseProvider = require('./BaseProvider');
+
+var _BaseProvider2 = _interopRequireDefault(_BaseProvider);
+
+var _Logger = require('../../Logger');
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _Utils = require('../../Utils');
+
+var _Errors = require('../../Errors');
+
+var _Errors2 = _interopRequireDefault(_Errors);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /* eslint-disable */
 // @TODO: Add flow annotation
-import pg from 'pg';
-import { identify } from 'sql-query-identifier';
-import BaseProvider from './BaseProvider';
-import createLogger from '../../Logger';
-import { createCancelablePromise } from '../../Utils';
-import errors from '../../Errors';
 
 
 /**
@@ -42,11 +62,11 @@ import errors from '../../Errors';
  * @TODO: Do not convert as well these same types with array
  *        (types 1115, 1182, 1185)
  */
-pg.types.setTypeParser(1082, 'text', val => val); // date
-pg.types.setTypeParser(1114, 'text', val => val); // timestamp without timezone
-pg.types.setTypeParser(1184, 'text', val => val); // timestamp
+_pg2.default.types.setTypeParser(1082, 'text', val => val); // date
+_pg2.default.types.setTypeParser(1114, 'text', val => val); // timestamp without timezone
+_pg2.default.types.setTypeParser(1184, 'text', val => val); // timestamp
 
-class PostgresqlProvider extends BaseProvider {
+class PostgresqlProvider extends _BaseProvider2.default {
 
   constructor(server, database, connection) {
     super(server, database);
@@ -277,7 +297,7 @@ class PostgresqlProvider extends BaseProvider {
   query(queryText) {
     let pid = null;
     let canceling = false;
-    const cancelable = createCancelablePromise(_extends({}, errors.CANCELED_BY_USER, {
+    const cancelable = (0, _Utils.createCancelablePromise)(_extends({}, _Errors2.default.CANCELED_BY_USER, {
       sqlectronError: 'CANCELED_BY_USER'
     }));
 
@@ -552,7 +572,7 @@ class PostgresqlProvider extends BaseProvider {
 
   identifyCommands(queryText) {
     try {
-      return identify(queryText);
+      return (0, _sqlQueryIdentifier.identify)(queryText);
     } catch (err) {
       return [];
     }
@@ -616,5 +636,5 @@ function configDatabase(server, database) {
   return config;
 }
 
-export default PostgresqlProviderFactory;
+exports.default = PostgresqlProviderFactory;
 //# sourceMappingURL=PostgresqlProviderFactory.js.map

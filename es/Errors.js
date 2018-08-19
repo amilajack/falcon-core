@@ -1,4 +1,9 @@
-export default {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
   CANCELED_BY_USER: {
     code: 'CANCELED_BY_USER',
     name: 'Query canceled by user',

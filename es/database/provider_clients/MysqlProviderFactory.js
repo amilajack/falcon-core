@@ -1,13 +1,19 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 let MysqlProviderFactory = (() => {
   var _ref4 = _asyncToGenerator(function* (server, database) {
     const databaseConfig = configDatabase(server, database);
-    const logger = createLogger('db:clients:mysql');
+    const logger = (0, _Logger2.default)('db:clients:mysql');
     logger().debug('create driver client for mysql with config %j', databaseConfig);
 
     const connection = {
-      pool: mysql.createPool(databaseConfig)
+      pool: _mysql2.default.createPool(databaseConfig)
     };
     const provider = new MysqlProvider(server, database, connection);
 
@@ -22,16 +28,30 @@ let MysqlProviderFactory = (() => {
   };
 })();
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+var _mysql = require('mysql');
 
-/* eslint-disable */
+var _mysql2 = _interopRequireDefault(_mysql);
+
+var _sqlQueryIdentifier = require('sql-query-identifier');
+
+var _BaseProvider = require('./BaseProvider');
+
+var _BaseProvider2 = _interopRequireDefault(_BaseProvider);
+
+var _Logger = require('../../Logger');
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _Utils = require('../../Utils');
+
+var _Errors = require('../../Errors');
+
+var _Errors2 = _interopRequireDefault(_Errors);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /* eslint-disable */
 // @TODO: Add flow annotation
-import mysql from 'mysql';
-import { identify } from 'sql-query-identifier';
-import BaseProvider from './BaseProvider';
-import createLogger from '../../Logger';
-import { createCancelablePromise } from '../../Utils';
-import errors from '../../Errors';
 
 
 /**
@@ -41,7 +61,7 @@ import errors from '../../Errors';
  *        Add typings for the responses of driverExecuteQuery(). Each response
  *        is different
  */
-class MysqlProvider extends BaseProvider {
+class MysqlProvider extends _BaseProvider2.default {
 
   constructor(server, database, connection) {
     super(server, database);
@@ -339,7 +359,7 @@ class MysqlProvider extends BaseProvider {
   query(queryText) {
     let pid = null;
     let canceling = false;
-    const cancelable = createCancelablePromise(_extends({}, errors.CANCELED_BY_USER, {
+    const cancelable = (0, _Utils.createCancelablePromise)(_extends({}, _Errors2.default.CANCELED_BY_USER, {
       sqlectronError: 'CANCELED_BY_USER'
     }));
 
@@ -519,7 +539,7 @@ class MysqlProvider extends BaseProvider {
 
   identifyCommands(queryText) {
     try {
-      return identify(queryText);
+      return (0, _sqlQueryIdentifier.identify)(queryText);
     } catch (err) {
       return [];
     }
@@ -556,5 +576,5 @@ function configDatabase(server, database) {
   return config;
 }
 
-export default MysqlProviderFactory;
+exports.default = MysqlProviderFactory;
 //# sourceMappingURL=MysqlProviderFactory.js.map

@@ -1,13 +1,36 @@
-import isFilePath from 'is-valid-path';
-import Joi from 'joi';
-import fs from 'fs';
-import path from 'path';
-import Database from 'better-sqlite3';
-import { FalconError } from '../BaseManager';
+'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = SqliteConnectionValidation;
 
-export default function SqliteConnectionValidation(connection) {
-  const customJoi = Joi.extend(joi => ({
+var _isValidPath = require('is-valid-path');
+
+var _isValidPath2 = _interopRequireDefault(_isValidPath);
+
+var _joi = require('joi');
+
+var _joi2 = _interopRequireDefault(_joi);
+
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+var _betterSqlite = require('better-sqlite3');
+
+var _betterSqlite2 = _interopRequireDefault(_betterSqlite);
+
+var _BaseManager = require('../BaseManager');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function SqliteConnectionValidation(connection) {
+  const customJoi = _joi2.default.extend(joi => ({
     base: joi.string(),
     name: 'string',
     language: {
@@ -19,17 +42,17 @@ export default function SqliteConnectionValidation(connection) {
     rules: [{
       name: 'file_has_absolute_path',
       validate(params, value, state, options) {
-        return !path.isAbsolute(value) ? this.createError('string.file_has_absolute_path', { v: value, q: params.q }, state, options) : value;
+        return !_path2.default.isAbsolute(value) ? this.createError('string.file_has_absolute_path', { v: value, q: params.q }, state, options) : value;
       }
     }, {
       name: 'file_is_valid',
       validate(params, value, state, options) {
-        return !isFilePath(value) ? this.createError('string.file_is_valid', { v: value, q: params.q }, state, options) : value;
+        return !(0, _isValidPath2.default)(value) ? this.createError('string.file_is_valid', { v: value, q: params.q }, state, options) : value;
       }
     }, {
       name: 'file_exists',
       validate(params, value, state, options) {
-        return fs.existsSync(value) ? value : this.createError('string.file_exists', { v: value, q: params.q }, state, options);
+        return _fs2.default.existsSync(value) ? value : this.createError('string.file_exists', { v: value, q: params.q }, state, options);
       }
     }, {
       name: 'sqlite_valid',
@@ -37,7 +60,7 @@ export default function SqliteConnectionValidation(connection) {
         let db;
         let passed = true;
         try {
-          db = new Database(value, {
+          db = new _betterSqlite2.default(value, {
             readonly: true,
             fileMustExist: true
           });
@@ -79,7 +102,7 @@ export default function SqliteConnectionValidation(connection) {
         fieldName: detail.context.label
       }));
 
-      throw new FalconError(`Failed validation: ${JSON.stringify(errorsMessages)}`, { errors });
+      throw new _BaseManager.FalconError(`Failed validation: ${JSON.stringify(errorsMessages)}`, { errors });
     }
   }
 }

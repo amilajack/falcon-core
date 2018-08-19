@@ -1,25 +1,53 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _util = require('util');
+
+var _util2 = _interopRequireDefault(_util);
+
+var _fs = require('fs');
+
+var _json2csv = require('json2csv');
+
+var _sqliteJsonExport = require('sqlite-json-export');
+
+var _sqliteJsonExport2 = _interopRequireDefault(_sqliteJsonExport);
+
+var _util3 = require('util.promisify');
+
+var _util4 = _interopRequireDefault(_util3);
+
+var _ = require('./');
+
+var _2 = _interopRequireDefault(_);
+
+var _Config = require('../../Config');
+
+var config = _interopRequireWildcard(_Config);
+
+var _Logger = require('../../Logger');
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-import util from 'util';
-import { writeFile } from 'fs';
-import { Parser as Json2CsvParser } from 'json2csv';
-import SqliteJsonExport from 'sqlite-json-export';
-import promisify from 'util.promisify';
-import clients from './';
-import * as config from '../../Config';
-import createLogger from '../../Logger';
+_util4.default.shim();
 
+const writeFileAsync = _util2.default.promisify(_fs.writeFile);
 
-promisify.shim();
-
-const writeFileAsync = util.promisify(writeFile);
-
-const logger = createLogger('db');
+const logger = (0, _Logger2.default)('db');
 
 /**
  * Common superclass of all other providers. Contains common functionalities
  */
-export default class BaseProvider {
+class BaseProvider {
 
   constructor(server, database) {
     this.logs = [];
@@ -49,7 +77,7 @@ export default class BaseProvider {
           _this.database.connection.disconnect();
         }
 
-        const driver = clients[_this.server.config.client];
+        const driver = _2.default[_this.server.config.client];
         const connection = yield driver(_this.server, _this.database);
         _this.database.connection = connection;
       } catch (err) {
@@ -220,7 +248,7 @@ export default class BaseProvider {
     var _this7 = this;
 
     return _asyncToGenerator(function* () {
-      const exporter = new SqliteJsonExport(_this7.connection.dbConfig.database);
+      const exporter = new _sqliteJsonExport2.default(_this7.connection.dbConfig.database);
       _this7.checkUnsupported(exportOptions);
 
       if ('tables' in exportOptions && 'table' in exportOptions) {
@@ -264,7 +292,7 @@ export default class BaseProvider {
       }
       const jsonString = yield _this8.getJsonString(exportOptions);
       const parsedJson = JSON.parse(jsonString);
-      const json2csvParser = new Json2CsvParser({
+      const json2csvParser = new _json2csv.Parser({
         fields: Object.keys(parsedJson[0])
       });
       return json2csvParser.parse(parsedJson);
@@ -291,6 +319,7 @@ export default class BaseProvider {
     })();
   }
 }
+exports.default = BaseProvider;
 BaseProvider.DEFAULT_LIMIT = 1000;
 BaseProvider.limitSelect = null;
 //# sourceMappingURL=BaseProvider.js.map
