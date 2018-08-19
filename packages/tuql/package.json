@@ -1,6 +1,6 @@
 {
   "name": "@falcon-client/tuql",
-  "version": "0.0.2-alpha.3",
+  "version": "0.0.2-alpha.4",
   "description": "",
   "main": "src/index.js",
   "module": "src/index.js",
