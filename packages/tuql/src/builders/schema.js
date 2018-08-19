@@ -32,8 +32,6 @@ import {
   getPolyKeys,
 } from './arguments';
 
-console.log(foo, defaultArgs, defaultListArgs)
-
 const GenericResponseType = new GraphQLObjectType({
   name: 'GenericResponse',
   fields: {

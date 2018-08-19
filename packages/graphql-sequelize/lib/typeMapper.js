@@ -100,8 +100,6 @@ function toGraphQL(sequelizeType, sequelizeTypes) {
     return _jsonType2.default;
   }
 
-  console.log(sequelizeType);
-
   if (sequelizeType.key === 'BLOB') {
     return _graphql.GraphQLString;
   }

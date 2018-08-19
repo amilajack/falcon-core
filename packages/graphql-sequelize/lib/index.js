@@ -86,6 +86,4 @@ Object.defineProperty(exports, 'JSONType', {
   }
 });
 
-
-console.log('foo', _defaultListArgs.defaultListArgs);
 //# sourceMappingURL=index.js.map

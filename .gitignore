@@ -71,5 +71,7 @@ node_modules
 .eslintcache
 test/fixtures/.tmp.sqlectron.json
 
-packages/tuql/es
+es
+!./es
+
 *.tgz

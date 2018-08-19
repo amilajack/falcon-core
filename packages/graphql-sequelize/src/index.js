@@ -9,5 +9,3 @@ export { relay } from './relay'
 export { JSONType } from './types/jsonType'
 
 import { defaultListArgs } from './defaultListArgs'
-
-console.log('foo', defaultListArgs)
