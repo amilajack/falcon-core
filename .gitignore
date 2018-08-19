@@ -72,3 +72,4 @@ node_modules
 test/fixtures/.tmp.sqlectron.json
 
 packages/tuql/es
+*.tgz

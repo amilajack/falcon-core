@@ -7,6 +7,9 @@
   "bin": {
     "tuql": "es/bin/index.js"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "prepublish": "exit 0",
     "start": "NODE_ENV=development babel-node src/index.js",
