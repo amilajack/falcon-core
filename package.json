@@ -17,7 +17,7 @@
     "lint-fix": "yarn lint --fix; exit 0",
     "precommit": "yarn build && yarn flow-prepublish && yarn test && lint-staged",
     "postlint-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.js'",
-    "test": "lerna run test && yarn test-sqlite",
+    "test": "lerna run build && lerna run test && yarn test-sqlite",
     "test-mysql": "cross-env NODE_ENV=test DB_CLIENTS=mysql jest test/*.js --runInBand",
     "test-sqlite": "find ./test/databases/sqlite -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=sqlite jest test/*.js --runInBand",
     "test-sqlserver": "find ./test/databases/sqlserver -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=sqlserver jest test/*.js --runInBand",
