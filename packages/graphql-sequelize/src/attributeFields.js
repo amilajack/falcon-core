@@ -2,7 +2,7 @@ import * as typeMapper from './typeMapper';
 import { GraphQLNonNull, GraphQLEnumType } from 'graphql';
 import { globalIdField } from 'graphql-relay';
 
-module.exports = function (Model, options = {}) {
+export default function (Model, options = {}) {
   var cache = options.cache || {};
   var result = Object.keys(Model.rawAttributes).reduce(function (memo, key) {
     if (options.exclude) {

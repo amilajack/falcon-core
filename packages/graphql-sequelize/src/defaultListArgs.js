@@ -1,7 +1,7 @@
 import { GraphQLInt, GraphQLString } from 'graphql';
 import JSONType from './types/jsonType';
 
-module.exports = function () {
+export default function () {
   return {
     limit: {
       type: GraphQLInt

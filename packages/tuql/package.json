@@ -30,7 +30,7 @@
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
     "graphql-relay": "^0.5.5",
-    "graphql-sequelize": "^9.0.1",
+    "@falcon-client/graphql-sequelize": "0.0.2-alpha.3",
     "pluralize": "^7.0.0",
     "sequelize": "^4.38.0",
     "sqlite3": "^4.0.2"

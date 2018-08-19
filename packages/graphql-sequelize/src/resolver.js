@@ -97,4 +97,4 @@ function resolverFactory(targetMaybeThunk, options = {}) {
 
 resolverFactory.contextToOptions = {};
 
-module.exports = resolverFactory;
+export default resolverFactory;
