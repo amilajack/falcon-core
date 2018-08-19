@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/index.js"],"names":["buildSchemaFromDatabase","buildSchemaFromInfile"],"mappings":";;;;;;;AAAA;;QAKSA,uB,GAAAA,+B;QAAyBC,qB,GAAAA,6B","file":"index.js","sourcesContent":["import {\n  buildSchemaFromDatabase,\n  buildSchemaFromInfile,\n} from './builders/schema';\n\nexport { buildSchemaFromDatabase, buildSchemaFromInfile };\n"]}

@@ -2,8 +2,8 @@
   "name": "@falcon-client/graphql-sequelize",
   "version": "0.0.2-alpha.4",
   "description": "GraphQL & Relay for MySQL & Postgres via Sequelize",
-  "main": "src",
-  "module": "src",
+  "main": "lib",
+  "module": "es",
   "options": {
     "mocha": "--require scripts/mocha-bootload"
   },
@@ -11,6 +11,10 @@
     "access": "public"
   },
   "scripts": {
+    "build": "yarn build:es & yarn build:lib",
+    "build:es": "rm -rf es && cross-env BABEL_ENV=es NODE_ENV=production babel -d es/ src/ --source-maps",
+    "build:lib": "rm -rf lib && cross-env NODE_ENV=production babel -d lib/ src/ --source-maps",
+    "prepublish": "yarn build",
     "quick-check": "npm run lint && npm run test:unit",
     "lint": "eslint src",
     "disabled-test": "npm run test:unit && npm run test:docker",

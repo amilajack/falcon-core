@@ -3,12 +3,20 @@
   "version": "0.0.2-alpha.4",
   "author": "Amila Welihinda <amilajack@gmail.com>",
   "license": "MIT",
-  "main": "./src/index.js",
-  "module": "./src/index.js",
+  "main": "lib",
+  "module": "es",
   "publishConfig": {
     "access": "public"
   },
+  "files": [
+    "lib",
+    "es"
+  ],
   "scripts": {
+    "build": "yarn build:es & yarn build:lib",
+    "build:es": "rm -rf es && cross-env BABEL_ENV=es NODE_ENV=production babel -d es/ src/ --source-maps",
+    "build:lib": "rm -rf lib && cross-env NODE_ENV=production babel -d lib/ src/ --source-maps",
+    "prepublish": "yarn build",
     "test": "jest test/*.spec.js",
     "watch": "cross-env NODE_ENV=development babel --out-dir lib src --source-maps --watch"
   },

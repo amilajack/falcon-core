@@ -15,6 +15,7 @@
     "flow-typed": "flow-typed install",
     "lint": "eslint --cache --format=node_modules/eslint-formatter-pretty .",
     "lint-fix": "yarn lint --fix; exit 0",
+    "precommit": "yarn build && yarn flow-prepublish && yarn test && lint-staged",
     "postlint-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.js'",
     "test": "lerna run test && yarn test-sqlite",
     "test-mysql": "cross-env NODE_ENV=test DB_CLIENTS=mysql jest test/*.js --runInBand",
@@ -22,7 +23,7 @@
     "test-sqlserver": "find ./test/databases/sqlserver -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=sqlserver jest test/*.js --runInBand",
     "test-postgresql": "find ./test/databases/postgresql -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=postgresql jest test/*.js --runInBand",
     "test-cassandra": "find ./test/databases/cassandra -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=cassandra jest test/*.js --runInBand",
-    "test-all": "yarn lint && yarn flow && npm test && yarn build",
+    "test-all": "yarn lint && yarn flow && yarn test && yarn build",
     "test-all-dbs": "find ./test/databases/ -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test jest",
     "watch": "cross-env NODE_ENV=development babel --out-dir es src --source-maps --watch"
   },
@@ -70,9 +71,9 @@
     "electron-store": "^2.0.0",
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
-    "@falcon-client/sql-formatter": "0.0.2-alpha.2",
-    "@falcon-client/graphql-sequelize": "0.0.2-alpha.2",
-    "@falcon-client/tuql": "0.0.2-alpha.2",
+    "@falcon-client/sql-formatter": "0.0.2-alpha.4",
+    "@falcon-client/graphql-sequelize": "0.0.2-alpha.4",
+    "@falcon-client/tuql": "0.0.2-alpha.4",
     "get-port": "^4.0.0",
     "is-valid-path": "^0.1.1",
     "joi": "^13.6.0",
@@ -128,11 +129,6 @@
     "prettier": "^1.14.2",
     "rollup": "^0.64.1",
     "yarn": "^1.9.4"
-  },
-  "peerDependencies": {
-    "@falcon-client/tuql": "^0.0.1",
-    "@falcon-client/sql-formatter": "^0.0.1",
-    "@falcon-client/graphql-sequelize": "^0.0.1"
   },
   "jest": {
     "testEnvironment": "node",

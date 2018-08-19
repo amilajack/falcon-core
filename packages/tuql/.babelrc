@@ -1,18 +1,32 @@
 {
-  "presets": [
-    ["env", {
-      "targets": { "node": 10 },
-      "useBuiltIns": true
-    }]
-  ],
-  "plugins": [
-    ["module-resolver", {
-      "root": ["../../"],
-      "alias": {
-        "@falcon-client/sql-formatter": "./packages/sql-formatter",
-        "@falcon-client/graphql-sequelize": "./packages/graphql-sequelize",
-        "@falcon-client/tuql": "./packages/tuql"
-      }
-    }]
-  ]
+  "env": {
+    "production": {
+      "presets": [
+        ["env", {
+          "targets": { "node": 10 },
+          "useBuiltIns": true
+        }],
+        "stage-0"
+      ]
+    },
+    "test": {
+      "presets": [
+        ["env", {
+          "targets": { "node": 10 },
+          "useBuiltIns": true
+        }],
+        "stage-0"
+      ]
+    },
+    "es": {
+      "presets": [
+        ["env", {
+          "targets": { "node": 10 },
+          "useBuiltIns": true,
+          "modules": false
+        }],
+        "stage-0"
+      ]
+    }
+  }
 }

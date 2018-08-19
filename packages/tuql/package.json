@@ -2,8 +2,12 @@
   "name": "@falcon-client/tuql",
   "version": "0.0.2-alpha.4",
   "description": "",
-  "main": "src/index.js",
-  "module": "src/index.js",
+  "main": "lib",
+  "module": "es",
+  "files": [
+    "lib",
+    "es"
+  ],
   "bin": {
     "tuql": "es/bin/index.js"
   },
@@ -11,7 +15,10 @@
     "access": "public"
   },
   "scripts": {
-    "prepublish": "exit 0",
+    "build": "yarn build:es & yarn build:lib",
+    "build:es": "rm -rf es && cross-env BABEL_ENV=es NODE_ENV=production babel -d es/ src/ --source-maps",
+    "build:lib": "rm -rf lib && cross-env NODE_ENV=production babel -d lib/ src/ --source-maps",
+    "prepublish": "yarn build",
     "start": "babel-node src/index.js",
     "disabled-test": "jest",
     "test:watch": "yarn test --watch"
