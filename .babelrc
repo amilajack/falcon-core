@@ -1,33 +1,24 @@
 {
-  "presets": [
-    "stage-0",
-    "flow"
-  ],
+  "presets": ["stage-0", "flow"],
   "env": {
     "development": {
-      "presets": [
-        ["env", { "targets": { "node": 10 } }],
-        "stage-0"
-      ],
-      "plugins": [
-        "dynamic-import-node"
-      ]
+      "presets": [["env", { "targets": { "node": 10 } }], "stage-0"],
+      "plugins": ["dynamic-import-node"]
     },
     "test": {
-      "presets": [
-        ["env", { "targets": { "node": 10 } }],
-        "stage-0"
-      ],
-      "plugins": [
-        "dynamic-import-node"
-      ]
+      "presets": [["env", { "targets": { "node": 10 } }], "stage-0"],
+      "plugins": ["dynamic-import-node"]
     },
     "es": {
       "presets": [
-        ["env", {
-          "targets": { "node": 10 },
-          "useBuiltIns": true
-        }]
+        [
+          "env",
+          {
+            "targets": { "node": 10 },
+            "useBuiltIns": true,
+            "modules": false
+          }
+        ]
       ]
     }
   }
