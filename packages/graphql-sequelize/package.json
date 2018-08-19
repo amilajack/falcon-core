@@ -1,6 +1,6 @@
 {
   "name": "@falcon-client/graphql-sequelize",
-  "version": "0.0.2-alpha.2",
+  "version": "0.0.2-alpha.3",
   "description": "GraphQL & Relay for MySQL & Postgres via Sequelize",
   "main": "src",
   "module": "src",

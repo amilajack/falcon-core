@@ -1,6 +1,6 @@
 {
   "name": "@falcon-client/tuql",
-  "version": "0.0.2-alpha.2",
+  "version": "0.0.2-alpha.3",
   "description": "",
   "main": "src/index.js",
   "module": "src/index.js",
@@ -12,8 +12,8 @@
   },
   "scripts": {
     "prepublish": "exit 0",
-    "start": "NODE_ENV=development babel-node src/index.js",
-    "disabled-test": "NODE_ENV=development jest",
+    "start": "babel-node src/index.js",
+    "disabled-test": "jest",
     "test:watch": "yarn test --watch"
   },
   "author": "Brad Daily <brad.daily@gmail.com>",
@@ -30,12 +30,12 @@
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
     "graphql-relay": "^0.5.5",
-    "@falcon-client/graphql-sequelize": "0.0.2-alpha.3",
     "pluralize": "^7.0.0",
     "sequelize": "^4.38.0",
     "sqlite3": "^4.0.2"
   },
   "peerDependencies": {
+    "@falcon-client/graphql-sequelize": "0.0.2-alpha.3",
     "graphql": "^0.13.2"
   },
   "jest": {

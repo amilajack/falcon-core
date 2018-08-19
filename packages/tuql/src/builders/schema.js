@@ -5,7 +5,7 @@ import {
   GraphQLList,
   GraphQLBoolean,
 } from 'graphql';
-import {
+import foo, {
   resolver,
   attributeFields,
   defaultListArgs,
@@ -31,6 +31,8 @@ import {
   makePolyArgs,
   getPolyKeys,
 } from './arguments';
+
+console.log(foo, defaultArgs, defaultListArgs)
 
 const GenericResponseType = new GraphQLObjectType({
   name: 'GenericResponse',

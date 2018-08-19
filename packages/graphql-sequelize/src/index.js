@@ -7,3 +7,7 @@ export { attributeFields } from './attributeFields'
 export { simplifyAST } from './simplifyAST'
 export { relay } from './relay'
 export { JSONType } from './types/jsonType'
+
+import { defaultListArgs } from './defaultListArgs'
+
+console.log('foo', defaultListArgs)

@@ -4,9 +4,9 @@ import { GraphQLNonNull } from 'graphql';
 import camelcase from 'camelcase';
 
 export const getPkFieldKey = model => Object.keys(model.attributes).find(key => {
-    const attr = model.attributes[key];
-    return attr.primaryKey;
-  });
+  const attr = model.attributes[key];
+  return attr.primaryKey;
+});
 
 export const makeCreateArgs = model => {
   const fields = attributeFields(model);

@@ -1,6 +1,6 @@
 {
   "name": "@falcon-client/sql-formatter",
-  "version": "0.0.2-alpha.2",
+  "version": "0.0.2-alpha.3",
   "author": "Amila Welihinda <amilajack@gmail.com>",
   "license": "MIT",
   "main": "./src/index.js",
