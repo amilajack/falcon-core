@@ -8,7 +8,6 @@
     "mocha": "--require scripts/mocha-bootload"
   },
   "scripts": {
-    "prepublish": "npm run quick-check",
     "quick-check": "npm run lint && npm run test:unit",
     "lint": "eslint src",
     "disabled-test": "npm run test:unit && npm run test:docker",
@@ -69,5 +68,6 @@
     "sinon-as-promised": "^4.0.0",
     "sinon-chai": "^2.8.0",
     "sqlite3": "^3.0.9"
-  }
+  },
+  "gitHead": "2bbac9ae4909b29dc7d2be4070624b28dacd2664"
 }

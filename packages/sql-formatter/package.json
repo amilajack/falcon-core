@@ -8,5 +8,6 @@
   "scripts": {
     "test": "jest test/*.spec.js",
     "watch": "cross-env NODE_ENV=development babel --out-dir lib src --source-maps --watch"
-  }
+  },
+  "gitHead": "2bbac9ae4909b29dc7d2be4070624b28dacd2664"
 }
