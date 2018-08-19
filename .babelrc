@@ -3,30 +3,40 @@
     "stage-0",
     "flow"
   ],
-  "plugins": [
-    ["module-resolver", {
-      "root": ["./packages"],
-      "alias": {
-        "@falcon-client/sql-formatter": "./packages/sql-formatter",
-        "@falcon-client/graphql-sequelize": "./packages/graphql-sequelize",
-        "@falcon-client/tuql": "./packages/tuql"
-      }
-    }]
-  ],
   "env": {
     "development": {
       "presets": [
         ["env", { "targets": { "node": 10 } }],
         "stage-0"
       ],
-      "plugins": ["dynamic-import-node"]
+      "plugins": [
+        "dynamic-import-node",
+        ["module-resolver", {
+          "root": ["./packages"],
+          "alias": {
+            "@falcon-client/sql-formatter": "./packages/sql-formatter",
+            "@falcon-client/graphql-sequelize": "./packages/graphql-sequelize",
+            "@falcon-client/tuql": "./packages/tuql"
+          }
+        }]
+      ]
     },
     "test": {
       "presets": [
         ["env", { "targets": { "node": 10 } }],
         "stage-0"
       ],
-      "plugins": ["dynamic-import-node"]
+      "plugins": [
+        "dynamic-import-node",
+        ["module-resolver", {
+          "root": ["./packages"],
+          "alias": {
+            "@falcon-client/sql-formatter": "./packages/sql-formatter",
+            "@falcon-client/graphql-sequelize": "./packages/graphql-sequelize",
+            "@falcon-client/tuql": "./packages/tuql"
+          }
+        }]
+      ]
     },
     "es": {
       "presets": [
