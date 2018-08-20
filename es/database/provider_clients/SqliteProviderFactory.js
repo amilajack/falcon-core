@@ -205,7 +205,7 @@ class SqliteProvider extends BaseProvider {
       // See https://github.com/airbnb/babel-plugin-dynamic-import-node/issues/47
       const [graphqlHTTP, tuql, express] = yield Promise.all([import('express-graphql').then(function (x) {
         return x.default || x;
-      }), import('tuql').then(function (x) {
+      }), import('@falcon-client/tuql').then(function (x) {
         return x.default || x;
       }), import('express').then(function (x) {
         return x.default || x;

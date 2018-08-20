@@ -1,36 +1,24 @@
 {
-  "presets": [
-    "stage-0",
-    "flow"
-  ],
-  "plugins": [
-    ["module-resolver", {
-      "root": ["./packages"],
-      "alias": {
-        "@falcon-client/sql-formatter": "./packages/sql-formatter"
-      }
-    }]
-  ],
+  "presets": ["stage-0", "flow"],
   "env": {
     "development": {
-      "presets": [
-        ["env", { "targets": { "node": 8 } }]
-      ],
+      "presets": [["env", { "targets": { "node": 10 } }], "stage-0"],
       "plugins": ["dynamic-import-node"]
     },
     "test": {
-      "presets": [
-        ["env", { "targets": { "node": 8 } }]
-      ],
+      "presets": [["env", { "targets": { "node": 10 } }], "stage-0"],
       "plugins": ["dynamic-import-node"]
     },
     "es": {
       "presets": [
-        ["env", {
-          "targets": { "node": 8 },
-          "useBuiltIns": true,
-          "modules": false
-        }]
+        [
+          "env",
+          {
+            "targets": { "node": 10 },
+            "useBuiltIns": true,
+            "modules": false
+          }
+        ]
       ]
     }
   }

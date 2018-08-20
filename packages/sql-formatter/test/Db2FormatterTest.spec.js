@@ -4,8 +4,6 @@ import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 describe('Db2Formatter', () => {
   behavesLikeSqlFormatter('db2');
 
-  console.log('asdf');
-
   it('formats FETCH FIRST like LIMIT', () => {
     expect(
       sqlFormatter.format(

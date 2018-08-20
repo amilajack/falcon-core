@@ -27,5 +27,10 @@
     "no-use-before-define": "off",
     "no-console": "off",
     "promise/avoid-new": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "babel-module": {}
+    }
   }
 }

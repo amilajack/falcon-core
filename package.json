@@ -5,8 +5,9 @@
   "main": "es/index.js",
   "module": "es/index.js",
   "author": "The Falcon Team",
+  "private": true,
   "scripts": {
-    "build": "rm -rf es && cross-env BABEL_ENV=es NODE_ENV=production babel -d es/ src/ --source-maps && yarn flow-prepublish",
+    "build": "lerna run build && rm -rf es && cross-env BABEL_ENV=es NODE_ENV=production babel -d es/ src/ --source-maps && yarn flow-prepublish",
     "coverage": "yarn test-sqlite --coverage",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "flow": "flow",
@@ -14,16 +15,15 @@
     "flow-typed": "flow-typed install",
     "lint": "eslint --cache --format=node_modules/eslint-formatter-pretty .",
     "lint-fix": "yarn lint --fix; exit 0",
+    "precommit": "yarn build && yarn flow-prepublish && yarn test && lint-staged",
     "postlint-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.js'",
-    "precommit": "yarn prepublish && npm test && lint-staged",
-    "prepublish": "yarn build && yarn flow-prepublish",
     "test": "yarn test-sqlite",
     "test-mysql": "cross-env NODE_ENV=test DB_CLIENTS=mysql jest test/*.js --runInBand",
     "test-sqlite": "find ./test/databases/sqlite -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=sqlite jest test/*.js --runInBand",
     "test-sqlserver": "find ./test/databases/sqlserver -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=sqlserver jest test/*.js --runInBand",
     "test-postgresql": "find ./test/databases/postgresql -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=postgresql jest test/*.js --runInBand",
     "test-cassandra": "find ./test/databases/cassandra -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test DB_CLIENTS=cassandra jest test/*.js --runInBand",
-    "test-all": "yarn lint && yarn flow && npm test && yarn build",
+    "test-all": "yarn lint && yarn flow && yarn test && yarn build",
     "test-all-dbs": "find ./test/databases/ -name \"sqlectron.db\" -type f -delete && cross-env NODE_ENV=test jest",
     "watch": "cross-env NODE_ENV=development babel --out-dir es src --source-maps --watch"
   },
@@ -64,6 +64,8 @@
     "npm": ">=5"
   },
   "dependencies": {
+    "@falcon-client/sql-formatter": "^0.0.2-alpha.8",
+    "@falcon-client/tuql": "0.0.2-alpha.8",
     "better-sqlite3": "^4.1.4",
     "cassandra-driver": "^3.5.0",
     "cors": "^2.8.4",
@@ -73,22 +75,20 @@
     "express-graphql": "^0.6.12",
     "get-port": "^4.0.0",
     "is-valid-path": "^0.1.1",
-    "joi": "^13.5.2",
-    "json2csv": "^4.2.0",
+    "joi": "^13.6.0",
+    "json2csv": "^4.2.1",
     "lodash": "^4.17.10",
     "mssql": "^4.1.0",
     "mysql": "^2.16.0",
     "pg": "^7.4.3",
-    "portfinder": "^1.0.13",
+    "portfinder": "^1.0.16",
     "rndm": "^1.2.0",
     "sql-query-identifier": "^1.1.0",
     "sqlite-json-export": "0.1.0",
     "sqlite3": "^4.0.2",
     "ssh2": "^0.6.1",
-    "tuql": "^1.5.0",
     "util.promisify": "^1.0.0",
-    "uuid": "^3.3.2",
-    "valida": "^2.4.0"
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -110,21 +110,23 @@
     "coveralls": "^3.0.2",
     "cross-env": "^5.2.0",
     "dotenv": "^6.0.0",
-    "eslint": "^5.2.0",
-    "eslint-config-bliss": "^2.1.0",
-    "eslint-config-prettier": "^2.9.0",
+    "eslint": "^5.4.0",
+    "eslint-config-bliss": "^2.2.0",
+    "eslint-config-prettier": "^3.0.1",
     "eslint-formatter-pretty": "^1.3.0",
+    "eslint-import-resolver-babel-module": "^4.0.0",
     "eslint-plugin-flowtype-errors": "^3.6.1-0",
     "eslint-plugin-prettier": "^2.6.2",
-    "flow-bin": "^0.77.0",
+    "flow-bin": "^0.79.1",
     "flow-copy-source": "^2.0.2",
     "flow-runtime": "^0.17.0",
     "flow-typed": "^2.5.1",
     "husky": "^0.14.3",
-    "jest-cli": "^23.4.2",
-    "lerna": "^3.0.0-rc.0",
-    "lint-staged": "^7.2.0",
-    "prettier": "^1.14.0",
+    "jest-cli": "^23.5.0",
+    "lerna": "^3.1.1",
+    "lint-staged": "^7.2.2",
+    "prettier": "^1.14.2",
+    "rollup": "^0.64.1",
     "yarn": "^1.9.4"
   },
   "jest": {
@@ -132,5 +134,11 @@
     "collectCoverageFrom": [
       "src/database/provider_clients/SqliteProviderFactory.js"
     ]
-  }
+  },
+  "resolutions": {
+    "graphql": "0.11.7"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

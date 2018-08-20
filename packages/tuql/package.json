@@ -1,0 +1,52 @@
+{
+  "name": "@falcon-client/tuql",
+  "version": "0.0.2-alpha.8",
+  "description": "",
+  "main": "lib",
+  "module": "es",
+  "files": [
+    "lib",
+    "es"
+  ],
+  "bin": {
+    "tuql": "es/bin/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "yarn build:es & yarn build:lib",
+    "build:es": "rm -rf es && cross-env BABEL_ENV=es NODE_ENV=production babel -d es/ src/ --source-maps",
+    "build:lib": "rm -rf lib && cross-env NODE_ENV=production babel -d lib/ src/ --source-maps",
+    "prepublish": "yarn build",
+    "start": "babel-node src/index.js",
+    "disabled-test": "jest",
+    "test:watch": "yarn test --watch"
+  },
+  "author": "Brad Daily <brad.daily@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "graphql",
+    "sqlite"
+  ],
+  "dependencies": {
+    "@falcon-client/graphql-sequelize": "^0.0.2-alpha.8",
+    "camelcase": "^5.0.0",
+    "command-line-args": "^5.0.2",
+    "command-line-usage": "^5.0.5",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "express-graphql": "^0.6.12",
+    "graphql-relay": "^0.5.5",
+    "pluralize": "^7.0.0",
+    "sequelize": "^4.38.0",
+    "sqlite3": "^4.0.2"
+  },
+  "peerDependencies": {
+    "graphql": "^0.13.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "gitHead": "2bbac9ae4909b29dc7d2be4070624b28dacd2664"
+}

@@ -19,7 +19,7 @@ import type {
 
 type queryArgsType = {
   query: string,
-  multiple?: boolean,
+  multiple?: bool,
   params?: Array<string>
 };
 
@@ -55,7 +55,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
   /**
    * @private
    */
-  privateGraphQLServerIsRunning: boolean = false;
+  privateGraphQLServerIsRunning: bool = false;
 
   constructor(server: Object, database: Object, connection: Object) {
     super(server, database);
@@ -204,7 +204,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     // See https://github.com/airbnb/babel-plugin-dynamic-import-node/issues/47
     const [graphqlHTTP, tuql, express] = await Promise.all([
       import('express-graphql').then(x => x.default || x),
-      import('tuql').then(x => x.default || x),
+      import('@falcon-client/tuql').then(x => x.default || x),
       import('express').then(x => x.default || x)
     ]);
 
@@ -271,7 +271,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
    */
   async getTableColumns(
     table: string,
-    raw: boolean = false
+    raw: bool = false
   ): Promise<Array<tableKeyType>> {
     const sql = `PRAGMA table_info(${table})`;
     const rawResults = this.driverExecuteQuery({ query: sql }).then(

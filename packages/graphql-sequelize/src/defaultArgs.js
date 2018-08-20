@@ -1,7 +1,7 @@
 import * as typeMapper from './typeMapper';
 import JSONType from './types/jsonType';
 
-module.exports = function (Model) {
+export default function (Model) {
   var result = {}
     , key = Model.primaryKeyAttribute
     , attribute = Model.rawAttributes[key]

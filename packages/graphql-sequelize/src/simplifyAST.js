@@ -56,7 +56,7 @@ function simplifyValue(value, info) {
   }
 }
 
-module.exports = function simplifyAST(ast, info, parent) {
+export default function simplifyAST(ast, info, parent) {
   var selections;
   info = info || {};
 

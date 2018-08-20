@@ -70,3 +70,5 @@ node_modules
 .idea
 .eslintcache
 test/fixtures/.tmp.sqlectron.json
+
+*.tgz

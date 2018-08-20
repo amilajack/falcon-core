@@ -1,11 +1,9 @@
-module.exports = {
-  argsToFindOptions: require('./argsToFindOptions'),
-  resolver: require('./resolver'),
-  defaultListArgs: require('./defaultListArgs'),
-  defaultArgs: require('./defaultArgs'),
-  typeMapper: require('./typeMapper'),
-  attributeFields: require('./attributeFields'),
-  simplifyAST: require('./simplifyAST'),
-  relay: require('./relay'),
-  JSONType: require('./types/jsonType'),
-};
+export { default as argsToFindOptions } from './argsToFindOptions'
+export { default as resolver } from './resolver'
+export { default as defaultListArgs } from './defaultListArgs'
+export { default as defaultArgs } from './defaultArgs'
+export { default as typeMapper } from './typeMapper'
+export { default as attributeFields } from './attributeFields'
+export { default as simplifyAST } from './simplifyAST'
+export { default as relay } from './relay'
+export { default as JSONType } from './types/jsonType'
