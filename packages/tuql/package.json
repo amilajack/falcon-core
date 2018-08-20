@@ -1,6 +1,6 @@
 {
   "name": "@falcon-client/tuql",
-  "version": "0.0.2-alpha.7",
+  "version": "0.0.2-alpha.8",
   "description": "",
   "main": "lib",
   "module": "es",
@@ -30,7 +30,7 @@
     "sqlite"
   ],
   "dependencies": {
-    "@falcon-client/graphql-sequelize": "0.0.2-alpha.7",
+    "@falcon-client/graphql-sequelize": "^0.0.2-alpha.8",
     "camelcase": "^5.0.0",
     "command-line-args": "^5.0.2",
     "command-line-usage": "^5.0.5",
