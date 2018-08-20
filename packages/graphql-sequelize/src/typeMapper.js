@@ -111,7 +111,7 @@ export function toGraphQL(sequelizeType, sequelizeTypes) {
   }
 
   if (sequelizeType.key === 'BLOB') {
-    return _graphql.GraphQLString
+    return GraphQLString
   }
 
   throw new Error(`Unable to convert ${sequelizeType.key || sequelizeType.toSql()} to a GraphQL type`);

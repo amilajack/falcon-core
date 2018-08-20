@@ -5,7 +5,7 @@ import {
   GraphQLList,
   GraphQLBoolean,
 } from 'graphql';
-import foo, {
+import {
   resolver,
   attributeFields,
   defaultListArgs,
