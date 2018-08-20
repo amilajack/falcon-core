@@ -64,6 +64,7 @@
     "npm": ">=5"
   },
   "dependencies": {
+    "@falcon-client/sql-formatter": "^0.0.2-alpha.8",
     "@falcon-client/tuql": "0.0.2-alpha.8",
     "better-sqlite3": "^4.1.4",
     "cassandra-driver": "^3.5.0",
