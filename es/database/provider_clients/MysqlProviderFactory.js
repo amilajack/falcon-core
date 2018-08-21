@@ -280,7 +280,7 @@ class MysqlProvider extends BaseProvider {
     })();
   }
 
-  getTableValues(tableName) {
+  getTableRows(tableName) {
     var _this9 = this;
 
     return _asyncToGenerator(function* () {

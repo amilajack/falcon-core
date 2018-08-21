@@ -171,7 +171,7 @@ class SqliteProvider extends BaseProvider {
     var _this4 = this;
 
     return _asyncToGenerator(function* () {
-      const tablePrimaryKey = yield _this4.getPrimaryKeyColumn(table);
+      const tablePrimaryKey = yield _this4.getTableKey(table);
       const queries = records.map(function (record) {
         const columnNames = Object.keys(record.changes);
         const edits = columnNames.map(function (columnName) {
@@ -190,71 +190,15 @@ class SqliteProvider extends BaseProvider {
     })();
   }
 
-  getGraphQLServerPort() {
-    return this.graphQLServerPort;
-  }
-
-  startGraphQLServer() {
-    var _this5 = this;
-
-    return _asyncToGenerator(function* () {
-      if (_this5.graphQLServerIsRunning()) {
-        return;
-      }
-
-      // See https://github.com/airbnb/babel-plugin-dynamic-import-node/issues/47
-      const [graphqlHTTP, tuql, express] = yield Promise.all([import('express-graphql').then(function (x) {
-        return x.default || x;
-      }), import('@falcon-client/tuql').then(function (x) {
-        return x.default || x;
-      }), import('express').then(function (x) {
-        return x.default || x;
-      })]);
-
-      const { buildSchemaFromDatabase } = tuql;
-      const app = express();
-
-      const schema = yield buildSchemaFromDatabase(_this5.connection.dbConfig.database);
-      const port = yield getPort();
-      app.use('/graphql', cors(), graphqlHTTP({ schema }));
-
-      yield new Promise(function (resolve) {
-        _this5.graphQLServer = app.listen(port, function () {
-          _this5.graphQLServerPort = port;
-          console.log(` > Running at http://localhost:${port}/graphql`);
-          resolve();
-        });
-        _this5.privateGraphQLServerIsRunning = true;
-      });
-    })();
-  }
-
-  stopGraphQLServer() {
-    var _this6 = this;
-
-    return _asyncToGenerator(function* () {
-      if (_this6.graphQLServerIsRunning()) {
-        _this6.graphQLServer.close();
-        _this6.graphQLServer = undefined;
-        _this6.graphQLServerPort = undefined;
-        _this6.privateGraphQLServerIsRunning = false;
-      }
-    })();
-  }
-
-  graphQLServerIsRunning() {
-    return this.privateGraphQLServerIsRunning;
-  }
-
   /**
    * Deletes records from a table. Finds table's primary key then deletes
    * specified columns
    */
   delete(table, keys) {
-    var _this7 = this;
+    var _this5 = this;
 
     return _asyncToGenerator(function* () {
-      const primaryKey = yield _this7.getPrimaryKeyColumn(table);
+      const primaryKey = yield _this5.getTableKey(table);
       const conditions = keys.map(function (key) {
         return `${primaryKey.name} = "${key}"`;
       });
@@ -262,7 +206,7 @@ class SqliteProvider extends BaseProvider {
       DELETE FROM ${table}
       WHERE ${conditions.join(' OR ')}
     `;
-      const results = yield _this7.driverExecuteQuery({ query }).then(function (res) {
+      const results = yield _this5.driverExecuteQuery({ query }).then(function (res) {
         return res.data;
       });
       return results;
@@ -277,11 +221,11 @@ class SqliteProvider extends BaseProvider {
    * Gets data about columns (properties) in a table
    */
   getTableColumns(table, raw = false) {
-    var _this8 = this;
+    var _this6 = this;
 
     return _asyncToGenerator(function* () {
       const sql = `PRAGMA table_info(${table})`;
-      const rawResults = _this8.driverExecuteQuery({ query: sql }).then(function (res) {
+      const rawResults = _this6.driverExecuteQuery({ query: sql }).then(function (res) {
         return res.data;
       });
       return raw ? rawResults : rawResults.then(function (res) {
@@ -290,37 +234,55 @@ class SqliteProvider extends BaseProvider {
     })();
   }
 
-  getPrimaryKeyColumn(table) {
-    var _this9 = this;
+  getTableKey(table) {
+    var _this7 = this;
 
     return _asyncToGenerator(function* () {
-      const columns = yield _this9.getTableColumns(table);
+      const columns = yield _this7.getTableColumns(table);
       const primaryKeyColumn = columns.find(function (key) {
         return key.pk === 1;
       });
-      if (!primaryKeyColumn) {
-        throw new Error(`No primary key exists in table ${table}`);
-      }
-      return primaryKeyColumn;
+      return primaryKeyColumn === undefined ? 'rowid' : primaryKeyColumn;
     })();
   }
 
-  getTableValues(table) {
-    var _this10 = this;
+  /**
+   * Returns the rows of a table along with its metadata
+   * @TODO: Method does not handle WITHOUT ROWID tables
+   * @TODO: If rowid is a hidden field, should hide it in the results
+   */
+  getTableRows(table) {
+    var _this8 = this;
 
     return _asyncToGenerator(function* () {
-      const sql = `
+      // sqlite statement for actual row data
+      const key = yield _this8.getTableKey(table);
+      const sqlIds = `
+      SELECT ${key.name}
+      FROM '${table}';
+    `;
+      const sqlData = `
       SELECT *
       FROM '${table}';
     `;
-      return _this10.driverExecuteQuery({ query: sql }).then(function (res) {
-        return res.data;
+
+      const [rows, rowid] = yield Promise.all([_this8.driverExecuteQuery({ query: sqlData }),
+      // @HACK: HARDCODE. SQLITE ONLY
+      _this8.driverExecuteQuery({ query: sqlIds })]);
+      return rows.data.map(function (row, i) {
+        return {
+          row,
+          metadata: {
+            id: rowid.data[i][key.name],
+            tableKey: key.name
+          }
+        };
       });
     })();
   }
 
   getTableNames() {
-    var _this11 = this;
+    var _this9 = this;
 
     return _asyncToGenerator(function* () {
       const sql = `
@@ -328,7 +290,7 @@ class SqliteProvider extends BaseProvider {
       FROM sqlite_master
       WHERE type='table'
     `;
-      return _this11.driverExecuteQuery({ query: sql }).then(function (res) {
+      return _this9.driverExecuteQuery({ query: sql }).then(function (res) {
         return res.data.map(function (table) {
           return table.name;
         });
@@ -340,14 +302,14 @@ class SqliteProvider extends BaseProvider {
    * Renames a table in the database
    */
   renameTable(oldTableName, newTableName) {
-    var _this12 = this;
+    var _this10 = this;
 
     return _asyncToGenerator(function* () {
       const sql = `
       ALTER TABLE ${oldTableName}
         RENAME TO ${newTableName};
     `;
-      return _this12.driverExecuteQuery({ query: sql }).then(function (res) {
+      return _this10.driverExecuteQuery({ query: sql }).then(function (res) {
         return res.data;
       });
     })();
@@ -357,13 +319,13 @@ class SqliteProvider extends BaseProvider {
    * Drops a table from the database
    */
   dropTable(table) {
-    var _this13 = this;
+    var _this11 = this;
 
     return _asyncToGenerator(function* () {
       const sql = `
       DROP TABLE ${table};
     `;
-      return _this13.driverExecuteQuery({ query: sql }).then(function (res) {
+      return _this11.driverExecuteQuery({ query: sql }).then(function (res) {
         return res.data;
       });
     })();
@@ -373,14 +335,14 @@ class SqliteProvider extends BaseProvider {
    * Adds a column to the table
    */
   addTableColumn(table, columnName, columnType) {
-    var _this14 = this;
+    var _this12 = this;
 
     return _asyncToGenerator(function* () {
       const sql = `
     ALTER TABLE ${table}
       ADD COLUMN "${columnName}" ${columnType};
     `;
-      return _this14.driverExecuteQuery({ query: sql }).then(function (res) {
+      return _this12.driverExecuteQuery({ query: sql }).then(function (res) {
         return res.data;
       });
     })();
@@ -388,18 +350,18 @@ class SqliteProvider extends BaseProvider {
 
   // TODO: This needs to be wrapped in a transaction
   renameTableColumns(table, columns) {
-    var _this15 = this;
+    var _this13 = this;
 
     return _asyncToGenerator(function* () {
       // Used to make verify that each columns actually exist within the table
-      const originalColumns = yield _this15.getTableColumnNames(table);
+      const originalColumns = yield _this13.getTableColumnNames(table);
       columns.forEach(function (column) {
         if (!originalColumns.includes(column.oldColumnName)) {
           throw new Error(`${column.oldColumnName} is not a column in ${table}`);
         }
       });
 
-      const propertiesArr = yield _this15.getTablePropertiesSql(table);
+      const propertiesArr = yield _this13.getTablePropertiesSql(table);
       let sql = `
     PRAGMA foreign_keys=off;
     BEGIN TRANSACTION;
@@ -423,7 +385,7 @@ class SqliteProvider extends BaseProvider {
         sql = sql.replace(column.oldColumnName, column.newColumnName);
       });
 
-      return _this15.driverExecuteQuery({ query: sql }).then(function (res) {
+      return _this13.driverExecuteQuery({ query: sql }).then(function (res) {
         return res.data;
       });
     })();
@@ -436,10 +398,10 @@ class SqliteProvider extends BaseProvider {
    * @param {*} columnsToDrop array of columns which client wants to drop
    */
   dropTableColumns(table, columnsToDrop) {
-    var _this16 = this;
+    var _this14 = this;
 
     return _asyncToGenerator(function* () {
-      const temp = yield _this16.getTableColumnNames(table);
+      const temp = yield _this14.getTableColumnNames(table);
 
       columnsToDrop.forEach(function (e) {
         if (!temp.includes(e)) {
@@ -451,7 +413,7 @@ class SqliteProvider extends BaseProvider {
         return !columnsToDrop.includes(col);
       });
       // Create an sql statement that creates a new table excluding dropped columns
-      const propertiesArr = yield _this16.getTablePropertiesSql(table);
+      const propertiesArr = yield _this14.getTablePropertiesSql(table);
       const filteredPropertiesArr = propertiesArr.filter(function (row) {
         return !columnsToDrop.includes(row.substring(row.indexOf('"') + 1, row.lastIndexOf('"')));
       });
@@ -472,7 +434,7 @@ class SqliteProvider extends BaseProvider {
 
     COMMIT;
     PRAGMA foreign_keys=on;`;
-      return _this16.driverExecuteQuery({ query: sql }).then(function (res) {
+      return _this14.driverExecuteQuery({ query: sql }).then(function (res) {
         return res.data;
       });
     })();
@@ -485,10 +447,10 @@ class SqliteProvider extends BaseProvider {
    * will be in its own line
    */
   getCreateTableSql(table) {
-    var _this17 = this;
+    var _this15 = this;
 
     return _asyncToGenerator(function* () {
-      const createTableArgs = yield _this17.getTablePropertiesSql(table);
+      const createTableArgs = yield _this15.getTablePropertiesSql(table);
       return `CREATE TABLE ${table} (${createTableArgs.join()})`;
     })();
   }
@@ -498,7 +460,7 @@ class SqliteProvider extends BaseProvider {
    * in a format such that getCreateTableSql() and dropTable() can
    */
   getTablePropertiesSql(table) {
-    var _this18 = this;
+    var _this16 = this;
 
     return _asyncToGenerator(function* () {
       const sql = `
@@ -506,7 +468,7 @@ class SqliteProvider extends BaseProvider {
       FROM sqlite_master
       WHERE name='${table}';
     `;
-      const creationScript = yield _this18.driverExecuteQuery({
+      const creationScript = yield _this16.driverExecuteQuery({
         query: sql
       }).then(function (res) {
         return res.data[0].sql.trim();
@@ -525,7 +487,7 @@ class SqliteProvider extends BaseProvider {
   }
 
   listTables() {
-    var _this19 = this;
+    var _this17 = this;
 
     return _asyncToGenerator(function* () {
       const sql = `
@@ -534,14 +496,14 @@ class SqliteProvider extends BaseProvider {
       WHERE type='table'
       ORDER BY name
     `;
-      return _this19.driverExecuteQuery({ query: sql }).then(function (res) {
+      return _this17.driverExecuteQuery({ query: sql }).then(function (res) {
         return res.data;
       });
     })();
   }
 
   listViews() {
-    var _this20 = this;
+    var _this18 = this;
 
     return _asyncToGenerator(function* () {
       const sql = `
@@ -549,7 +511,7 @@ class SqliteProvider extends BaseProvider {
       FROM sqlite_master
       WHERE type = 'view'
     `;
-      return _this20.driverExecuteQuery({ query: sql }).then(function (res) {
+      return _this18.driverExecuteQuery({ query: sql }).then(function (res) {
         return res.data;
       });
     })();
@@ -561,11 +523,11 @@ class SqliteProvider extends BaseProvider {
   }
 
   getTableColumnNames(table) {
-    var _this21 = this;
+    var _this19 = this;
 
     return _asyncToGenerator(function* () {
-      _this21.checkIsConnected();
-      const columns = yield _this21.listTableColumns(table);
+      _this19.checkIsConnected();
+      const columns = yield _this19.listTableColumns(table);
       return columns.map(function (column) {
         return column.columnName;
       });
@@ -574,11 +536,11 @@ class SqliteProvider extends BaseProvider {
 
   // @TODO: Find out how this is different from getTableColumns(table)
   listTableColumns(table) {
-    var _this22 = this;
+    var _this20 = this;
 
     return _asyncToGenerator(function* () {
       const sql = `PRAGMA table_info(${table})`;
-      const { data } = yield _this22.driverExecuteQuery({ query: sql });
+      const { data } = yield _this20.driverExecuteQuery({ query: sql });
 
       return data.map(function (row) {
         return {
@@ -590,7 +552,7 @@ class SqliteProvider extends BaseProvider {
   }
 
   listTableTriggers(table) {
-    var _this23 = this;
+    var _this21 = this;
 
     return _asyncToGenerator(function* () {
       const sql = `
@@ -599,7 +561,7 @@ class SqliteProvider extends BaseProvider {
       WHERE type = 'trigger'
         AND tbl_name = '${table}'
     `;
-      const { data } = yield _this23.driverExecuteQuery({ query: sql });
+      const { data } = yield _this21.driverExecuteQuery({ query: sql });
 
       return data.map(function (row) {
         return row.name;
@@ -608,11 +570,11 @@ class SqliteProvider extends BaseProvider {
   }
 
   listTableIndexes(table) {
-    var _this24 = this;
+    var _this22 = this;
 
     return _asyncToGenerator(function* () {
       const sql = `PRAGMA INDEX_LIST('${table}')`;
-      const { data } = yield _this24.driverExecuteQuery({ query: sql });
+      const { data } = yield _this22.driverExecuteQuery({ query: sql });
 
       return data.map(function (row) {
         return row.name;
@@ -626,10 +588,10 @@ class SqliteProvider extends BaseProvider {
   }
 
   listDatabases() {
-    var _this25 = this;
+    var _this23 = this;
 
     return _asyncToGenerator(function* () {
-      const result = yield _this25.driverExecuteQuery({
+      const result = yield _this23.driverExecuteQuery({
         query: 'PRAGMA database_list;'
       });
 
@@ -649,7 +611,7 @@ class SqliteProvider extends BaseProvider {
   }
 
   getTableCreateScript(table) {
-    var _this26 = this;
+    var _this24 = this;
 
     return _asyncToGenerator(function* () {
       const sql = `
@@ -657,7 +619,7 @@ class SqliteProvider extends BaseProvider {
       FROM sqlite_master
       WHERE name = '${table}';
     `;
-      const { data } = yield _this26.driverExecuteQuery({ query: sql });
+      const { data } = yield _this24.driverExecuteQuery({ query: sql });
 
       return data.map(function (row) {
         return row.sql;
@@ -666,7 +628,7 @@ class SqliteProvider extends BaseProvider {
   }
 
   getViewCreateScript(view) {
-    var _this27 = this;
+    var _this25 = this;
 
     return _asyncToGenerator(function* () {
       const sql = `
@@ -674,7 +636,7 @@ class SqliteProvider extends BaseProvider {
       FROM sqlite_master
       WHERE name = '${view}';
     `;
-      const { data } = yield _this27.driverExecuteQuery({ query: sql });
+      const { data } = yield _this25.driverExecuteQuery({ query: sql });
 
       return data.map(function (row) {
         return row.sql;
@@ -699,14 +661,14 @@ class SqliteProvider extends BaseProvider {
   }
 
   truncateTable(table) {
-    var _this28 = this;
+    var _this26 = this;
 
     return this.runWithConnection(_asyncToGenerator(function* () {
       const truncateSingleQuery = `DELETE FROM ${table}`;
 
       // @TODO: Check if sqlite_sequence exists then execute:
       //        DELETE FROM sqlite_sequence WHERE name='${table}';
-      const result = yield _this28.driverExecuteQuery({
+      const result = yield _this26.driverExecuteQuery({
         query: truncateSingleQuery
       });
       return result;
@@ -714,10 +676,10 @@ class SqliteProvider extends BaseProvider {
   }
 
   truncateAllTables() {
-    var _this29 = this;
+    var _this27 = this;
 
     return this.runWithConnection(_asyncToGenerator(function* () {
-      const tables = yield _this29.listTables();
+      const tables = yield _this27.listTables();
 
       const truncateAllQuery = tables.map(function (table) {
         return `
@@ -727,7 +689,7 @@ class SqliteProvider extends BaseProvider {
 
       // @TODO: Check if sqlite_sequence exists then execute:
       //        DELETE FROM sqlite_sequence WHERE name='${table}';
-      const result = yield _this29.driverExecuteQuery({ query: truncateAllQuery });
+      const result = yield _this27.driverExecuteQuery({ query: truncateAllQuery });
       return result;
     }));
   }
@@ -765,12 +727,12 @@ class SqliteProvider extends BaseProvider {
    * @private
    */
   driverExecuteQuery(queryArgs) {
-    var _this30 = this;
+    var _this28 = this;
 
     return _asyncToGenerator(function* () {
       const runQuery = function (connection, { executionType, text }) {
         return new Promise(function (resolve, reject) {
-          const method = _this30.resolveExecutionType(executionType);
+          const method = _this28.resolveExecutionType(executionType);
           // Callback used by node-sqlite3 to return results of query
           function queryCallback(err, data) {
             if (err) {
@@ -803,7 +765,7 @@ class SqliteProvider extends BaseProvider {
       // Called in runWithConnection. connection is the node-sqlite3 db object
       const identifyStatementsRunQuery = (() => {
         var _ref3 = _asyncToGenerator(function* (connection) {
-          const statements = _this30.identifyCommands(queryArgs.query);
+          const statements = _this28.identifyCommands(queryArgs.query);
           const results = statements.map(function (statement) {
             return runQuery(connection, statement).then(function (result) {
               return _extends({}, result, {
@@ -820,12 +782,12 @@ class SqliteProvider extends BaseProvider {
         };
       })();
 
-      return _this30.connection.connection ? yield identifyStatementsRunQuery(_this30.connection.connection) : _this30.runWithConnection(identifyStatementsRunQuery);
+      return _this28.connection.connection ? identifyStatementsRunQuery(_this28.connection.connection) : _this28.runWithConnection(identifyStatementsRunQuery);
     })();
   }
 
   runWithConnection(run) {
-    var _this31 = this;
+    var _this29 = this;
 
     return new Promise((resolve, reject) => {
       sqlite3.verbose();
@@ -838,21 +800,30 @@ class SqliteProvider extends BaseProvider {
 
           // duration is given in nanoseconds
           db.on('profile', function (query, duration) {
-            _this31.logs.push({
+            _this29.logs.push({
               query,
               duration,
               type: 'profile'
             });
           });
 
+          let failed = false;
+          let fn = function () {};
+
           try {
             db.serialize();
             return resolve(run(db));
           } catch (runErr) {
-            reject(runErr);
+            failed = true;
+            fn = reject(runErr);
           } finally {
             db.close();
           }
+
+          if (failed) {
+            return fn();
+          }
+          return true;
         });
 
         return function (_x2) {
@@ -884,6 +855,62 @@ class SqliteProvider extends BaseProvider {
     if (hasUnsupported) {
       throw new Error(`Unsupported properties passed: ${JSON.stringify(exportOptions)}`);
     }
+  }
+
+  getGraphQLServerPort() {
+    return this.graphQLServerPort;
+  }
+
+  startGraphQLServer() {
+    var _this30 = this;
+
+    return _asyncToGenerator(function* () {
+      if (_this30.graphQLServerIsRunning()) {
+        return;
+      }
+
+      // See https://github.com/airbnb/babel-plugin-dynamic-import-node/issues/47
+      const [graphqlHTTP, tuql, express] = yield Promise.all([import('express-graphql').then(function (x) {
+        return x.default || x;
+      }), import('@falcon-client/tuql').then(function (x) {
+        return x.default || x;
+      }), import('express').then(function (x) {
+        return x.default || x;
+      })]);
+
+      const { buildSchemaFromDatabase } = tuql;
+      const app = express();
+
+      const schema = yield buildSchemaFromDatabase(_this30.connection.dbConfig.database);
+      const port = yield getPort();
+      app.use('/graphql', cors(), graphqlHTTP({ schema }));
+
+      yield new Promise(function (resolve) {
+        _this30.graphQLServer = app.listen(port, function () {
+          _this30.graphQLServerPort = port;
+          console.log(` > Running at http://localhost:${port}/graphql`);
+          resolve();
+        });
+        _this30.privateGraphQLServerIsRunning = true;
+      });
+    })();
+  }
+
+  stopGraphQLServer() {
+    var _this31 = this;
+
+    return _asyncToGenerator(function* () {
+      if (_this31.graphQLServerIsRunning()) {
+        _this31.graphQLServer.close();
+        _this31.graphQLServer = undefined;
+        _this31.graphQLServerPort = undefined;
+        _this31.privateGraphQLServerIsRunning = false;
+      }
+    })();
+  }
+
+  graphQLServerIsRunning() {
+    return this.privateGraphQLServerIsRunning;
   }
 }
 

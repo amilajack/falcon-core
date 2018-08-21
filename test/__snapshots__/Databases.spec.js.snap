@@ -28,12 +28,18 @@ Array [
 exports[`Database sqlite given is already connected CRUD .delete should add 2 then delete 3 rows in the table 1`] = `
 Array [
   Object {
-    "createdat": "2016-10-25",
-    "email": "maxcnunes@gmail.com",
-    "id": 1,
-    "password": "123456",
-    "role_id": 1,
-    "username": "maxcnunes",
+    "metadata": Object {
+      "id": 1,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": "2016-10-25",
+      "email": "maxcnunes@gmail.com",
+      "id": 1,
+      "password": "123456",
+      "role_id": 1,
+      "username": "maxcnunes",
+    },
   },
 ]
 `;
@@ -45,12 +51,18 @@ exports[`Database sqlite given is already connected CRUD .delete should add 2 th
 exports[`Database sqlite given is already connected CRUD .insert should insert 1 empty record and 1 filled record 1`] = `
 Array [
   Object {
-    "createdat": "2016-10-25",
-    "email": "maxcnunes@gmail.com",
-    "id": 1,
-    "password": "123456",
-    "role_id": 1,
-    "username": "maxcnunes",
+    "metadata": Object {
+      "id": 1,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": "2016-10-25",
+      "email": "maxcnunes@gmail.com",
+      "id": 1,
+      "password": "123456",
+      "role_id": 1,
+      "username": "maxcnunes",
+    },
   },
 ]
 `;
@@ -58,28 +70,18 @@ Array [
 exports[`Database sqlite given is already connected CRUD .insert should insert 1 empty record and 1 filled record 2`] = `
 Array [
   Object {
-    "createdat": "2016-10-25",
-    "email": "maxcnunes@gmail.com",
-    "id": 1,
-    "password": "123456",
-    "role_id": 1,
-    "username": "maxcnunes",
-  },
-  Object {
-    "createdat": null,
-    "email": null,
-    "id": 2,
-    "password": null,
-    "role_id": null,
-    "username": null,
-  },
-  Object {
-    "createdat": "2017-7-20",
-    "email": "jptran318@gmail.com",
-    "id": 3,
-    "password": "password123",
-    "role_id": 1,
-    "username": "jooohhn",
+    "metadata": Object {
+      "id": 1,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": "2016-10-25",
+      "email": "maxcnunes@gmail.com",
+      "id": 1,
+      "password": "123456",
+      "role_id": 1,
+      "username": "maxcnunes",
+    },
   },
 ]
 `;
@@ -87,28 +89,140 @@ Array [
 exports[`Database sqlite given is already connected CRUD .insert should insert 1 empty record and 1 filled record 3`] = `
 Array [
   Object {
-    "createdat": "2016-10-25",
-    "email": "maxcnunes@gmail.com",
-    "id": 1,
-    "password": "123456",
-    "role_id": 1,
-    "username": "maxcnunes",
+    "metadata": Object {
+      "id": 1,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": "2016-10-25",
+      "email": "maxcnunes@gmail.com",
+      "id": 1,
+      "password": "123456",
+      "role_id": 1,
+      "username": "maxcnunes",
+    },
   },
   Object {
-    "createdat": null,
-    "email": null,
-    "id": 2,
-    "password": null,
-    "role_id": null,
-    "username": null,
+    "metadata": Object {
+      "id": 2,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": null,
+      "email": null,
+      "id": 2,
+      "password": null,
+      "role_id": null,
+      "username": null,
+    },
   },
   Object {
-    "createdat": "2017-7-20",
-    "email": "jptran318@gmail.com",
-    "id": 3,
-    "password": "password123",
-    "role_id": 1,
-    "username": "jooohhn",
+    "metadata": Object {
+      "id": 3,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": "2017-7-20",
+      "email": "jptran318@gmail.com",
+      "id": 3,
+      "password": "password123",
+      "role_id": 1,
+      "username": "jooohhn",
+    },
+  },
+]
+`;
+
+exports[`Database sqlite given is already connected CRUD .insert should insert 1 empty record and 1 filled record 4`] = `
+Array [
+  Object {
+    "metadata": Object {
+      "id": 1,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": "2016-10-25",
+      "email": "maxcnunes@gmail.com",
+      "id": 1,
+      "password": "123456",
+      "role_id": 1,
+      "username": "maxcnunes",
+    },
+  },
+  Object {
+    "metadata": Object {
+      "id": 2,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": null,
+      "email": null,
+      "id": 2,
+      "password": null,
+      "role_id": null,
+      "username": null,
+    },
+  },
+  Object {
+    "metadata": Object {
+      "id": 3,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": "2017-7-20",
+      "email": "jptran318@gmail.com",
+      "id": 3,
+      "password": "password123",
+      "role_id": 1,
+      "username": "jooohhn",
+    },
+  },
+]
+`;
+
+exports[`Database sqlite given is already connected CRUD .insert should insert 1 empty record and 1 filled record 5`] = `
+Array [
+  Object {
+    "metadata": Object {
+      "id": 1,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": "2016-10-25",
+      "email": "maxcnunes@gmail.com",
+      "id": 1,
+      "password": "123456",
+      "role_id": 1,
+      "username": "maxcnunes",
+    },
+  },
+  Object {
+    "metadata": Object {
+      "id": 2,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": null,
+      "email": null,
+      "id": 2,
+      "password": null,
+      "role_id": null,
+      "username": null,
+    },
+  },
+  Object {
+    "metadata": Object {
+      "id": 3,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": "2017-7-20",
+      "email": "jptran318@gmail.com",
+      "id": 3,
+      "password": "password123",
+      "role_id": 1,
+      "username": "jooohhn",
+    },
   },
 ]
 `;
@@ -116,12 +230,18 @@ Array [
 exports[`Database sqlite given is already connected CRUD .update should insert an empty record then update it 1`] = `
 Array [
   Object {
-    "createdat": "2016-10-25",
-    "email": "maxcnunes@gmail.com",
-    "id": 1,
-    "password": "123456",
-    "role_id": 1,
-    "username": "maxcnunes",
+    "metadata": Object {
+      "id": 1,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": "2016-10-25",
+      "email": "maxcnunes@gmail.com",
+      "id": 1,
+      "password": "123456",
+      "role_id": 1,
+      "username": "maxcnunes",
+    },
   },
 ]
 `;
@@ -129,20 +249,18 @@ Array [
 exports[`Database sqlite given is already connected CRUD .update should insert an empty record then update it 2`] = `
 Array [
   Object {
-    "createdat": "2016-10-25",
-    "email": "maxcnunes@gmail.com",
-    "id": 1,
-    "password": "123456",
-    "role_id": 1,
-    "username": "maxcnunes",
-  },
-  Object {
-    "createdat": "2017-7-20",
-    "email": "jptran318@gmail.com",
-    "id": 2,
-    "password": "password123",
-    "role_id": 1,
-    "username": "jooohhn",
+    "metadata": Object {
+      "id": 1,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": "2016-10-25",
+      "email": "maxcnunes@gmail.com",
+      "id": 1,
+      "password": "123456",
+      "role_id": 1,
+      "username": "maxcnunes",
+    },
   },
 ]
 `;
@@ -150,20 +268,98 @@ Array [
 exports[`Database sqlite given is already connected CRUD .update should insert an empty record then update it 3`] = `
 Array [
   Object {
-    "createdat": "2016-10-25",
-    "email": "maxcnunes@gmail.com",
-    "id": 1,
-    "password": "123456",
-    "role_id": 1,
-    "username": "maxcnunes",
+    "metadata": Object {
+      "id": 1,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": "2016-10-25",
+      "email": "maxcnunes@gmail.com",
+      "id": 1,
+      "password": "123456",
+      "role_id": 1,
+      "username": "maxcnunes",
+    },
   },
   Object {
-    "createdat": "2017-7-20",
-    "email": "jptran318@gmail.com",
-    "id": 2,
-    "password": "password123",
-    "role_id": 1,
-    "username": "jooohhn",
+    "metadata": Object {
+      "id": 2,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": "2017-7-20",
+      "email": "jptran318@gmail.com",
+      "id": 2,
+      "password": "password123",
+      "role_id": 1,
+      "username": "jooohhn",
+    },
+  },
+]
+`;
+
+exports[`Database sqlite given is already connected CRUD .update should insert an empty record then update it 4`] = `
+Array [
+  Object {
+    "metadata": Object {
+      "id": 1,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": "2016-10-25",
+      "email": "maxcnunes@gmail.com",
+      "id": 1,
+      "password": "123456",
+      "role_id": 1,
+      "username": "maxcnunes",
+    },
+  },
+  Object {
+    "metadata": Object {
+      "id": 2,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": "2017-7-20",
+      "email": "jptran318@gmail.com",
+      "id": 2,
+      "password": "password123",
+      "role_id": 1,
+      "username": "jooohhn",
+    },
+  },
+]
+`;
+
+exports[`Database sqlite given is already connected CRUD .update should insert an empty record then update it 5`] = `
+Array [
+  Object {
+    "metadata": Object {
+      "id": 1,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": "2016-10-25",
+      "email": "maxcnunes@gmail.com",
+      "id": 1,
+      "password": "123456",
+      "role_id": 1,
+      "username": "maxcnunes",
+    },
+  },
+  Object {
+    "metadata": Object {
+      "id": 2,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": "2017-7-20",
+      "email": "jptran318@gmail.com",
+      "id": 2,
+      "password": "password123",
+      "role_id": 1,
+      "username": "jooohhn",
+    },
   },
 ]
 `;
@@ -306,6 +502,25 @@ exports[`Database sqlite given is already connected Get .getTableInsertScript sh
 
 exports[`Database sqlite given is already connected Get .getTableReferences should list all tables that selected table has references to 1`] = `Array []`;
 
+exports[`Database sqlite given is already connected Get .getTableRows should list all tables keys 1`] = `
+Array [
+  Object {
+    "metadata": Object {
+      "id": 1,
+      "tableKey": "id",
+    },
+    "row": Object {
+      "createdat": "2016-10-25",
+      "email": "maxcnunes@gmail.com",
+      "id": 1,
+      "password": "123456",
+      "role_id": 1,
+      "username": "maxcnunes",
+    },
+  },
+]
+`;
+
 exports[`Database sqlite given is already connected Get .getTableSelectScript should return SELECT table script 1`] = `"SELECT \\"id\\", \\"username\\", \\"email\\", \\"password\\", \\"role_id\\", \\"createdat\\" FROM \\"users\\";"`;
 
 exports[`Database sqlite given is already connected Get .getTableSelectScript should return SELECT table script with schema if defined 1`] = `"SELECT \\"id\\", \\"username\\", \\"email\\", \\"password\\", \\"role_id\\", \\"createdat\\" FROM \\"public\\".\\"users\\";"`;
@@ -320,19 +535,6 @@ exports[`Database sqlite given is already connected Get .getTableUpdateScript sh
 "UPDATE \\"public\\".\\"users\\"
  SET \\"id\\"=?, \\"username\\"=?, \\"email\\"=?, \\"password\\"=?, \\"role_id\\"=?, \\"createdat\\"=?
  WHERE <condition>;"
-`;
-
-exports[`Database sqlite given is already connected Get .getTableValues should list all tables keys 1`] = `
-Array [
-  Object {
-    "createdat": "2016-10-25",
-    "email": "maxcnunes@gmail.com",
-    "id": 1,
-    "password": "123456",
-    "role_id": 1,
-    "username": "maxcnunes",
-  },
-]
 `;
 
 exports[`Database sqlite given is already connected Get .getTablenames should list all tables names 1`] = `

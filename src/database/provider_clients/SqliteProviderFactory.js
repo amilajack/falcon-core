@@ -19,7 +19,7 @@ import type {
 
 type queryArgsType = {
   query: string,
-  multiple?: bool,
+  multiple?: boolean,
   params?: Array<string>
 };
 
@@ -43,6 +43,11 @@ type tableKeyType = {
   pk: 0 | 1 | 2
 };
 
+type RowMetadata = {
+  id: string | number,
+  tableKey: string
+};
+
 // @TODO: Why does logging in constructor vs logging in driver execute
 // return two different things
 class SqliteProvider extends BaseProvider implements ProviderInterface {
@@ -55,7 +60,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
   /**
    * @private
    */
-  privateGraphQLServerIsRunning: bool = false;
+  privateGraphQLServerIsRunning: boolean = false;
 
   constructor(server: Object, database: Object, connection: Object) {
     super(server, database);
@@ -172,11 +177,11 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
   async update(
     table: string,
     records: Array<{
-      rowPrimaryKeyValue: string,
+      rowPrimaryKey: { [string]: any },
       changes: { [string]: any }
     }>
   ): Promise<{ timing: number }> {
-    const tablePrimaryKey = await this.getPrimaryKeyColumn(table);
+    const tablePrimaryKey = await this.getTableKey(table);
     const queries = records.map(record => {
       const columnNames = Object.keys(record.changes);
       const edits = columnNames.map(
@@ -192,54 +197,6 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     return this.driverExecuteQuery({ query: finalQuery }).then(res => res.data);
   }
 
-  getGraphQLServerPort() {
-    return this.graphQLServerPort;
-  }
-
-  async startGraphQLServer(): Promise<void> {
-    if (this.graphQLServerIsRunning()) {
-      return;
-    }
-
-    // See https://github.com/airbnb/babel-plugin-dynamic-import-node/issues/47
-    const [graphqlHTTP, tuql, express] = await Promise.all([
-      import('express-graphql').then(x => x.default || x),
-      import('@falcon-client/tuql').then(x => x.default || x),
-      import('express').then(x => x.default || x)
-    ]);
-
-    const { buildSchemaFromDatabase } = tuql;
-    const app = express();
-
-    const schema = await buildSchemaFromDatabase(
-      this.connection.dbConfig.database
-    );
-    const port = await getPort();
-    app.use('/graphql', cors(), graphqlHTTP({ schema }));
-
-    await new Promise(resolve => {
-      this.graphQLServer = app.listen(port, () => {
-        this.graphQLServerPort = port;
-        console.log(` > Running at http://localhost:${port}/graphql`);
-        resolve();
-      });
-      this.privateGraphQLServerIsRunning = true;
-    });
-  }
-
-  async stopGraphQLServer(): Promise<void> {
-    if (this.graphQLServerIsRunning()) {
-      this.graphQLServer.close();
-      this.graphQLServer = undefined;
-      this.graphQLServerPort = undefined;
-      this.privateGraphQLServerIsRunning = false;
-    }
-  }
-
-  graphQLServerIsRunning() {
-    return this.privateGraphQLServerIsRunning;
-  }
-
   /**
    * Deletes records from a table. Finds table's primary key then deletes
    * specified columns
@@ -248,7 +205,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     table: string,
     keys: Array<string | number>
   ): Promise<{ timing: number }> {
-    const primaryKey = await this.getPrimaryKeyColumn(table);
+    const primaryKey = await this.getTableKey(table);
     const conditions = keys.map(key => `${primaryKey.name} = "${key}"`);
     const query = `
       DELETE FROM ${table}
@@ -271,7 +228,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
    */
   async getTableColumns(
     table: string,
-    raw: bool = false
+    raw: boolean = false
   ): Promise<Array<tableKeyType>> {
     const sql = `PRAGMA table_info(${table})`;
     const rawResults = this.driverExecuteQuery({ query: sql }).then(
@@ -280,21 +237,43 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     return raw ? rawResults : rawResults.then(res => res);
   }
 
-  async getPrimaryKeyColumn(table: string): Promise<tableKeyType> {
+  async getTableKey(table: string): Promise<tableKeyType> {
     const columns = await this.getTableColumns(table);
     const primaryKeyColumn = columns.find(key => key.pk === 1);
-    if (!primaryKeyColumn) {
-      throw new Error(`No primary key exists in table ${table}`);
-    }
-    return primaryKeyColumn;
+    return primaryKeyColumn === undefined ? 'rowid' : primaryKeyColumn;
   }
 
-  async getTableValues(table: string) {
-    const sql = `
+  /**
+   * Returns the rows of a table along with its metadata
+   * @TODO: Method does not handle WITHOUT ROWID tables
+   * @TODO: If rowid is a hidden field, should hide it in the results
+   */
+  async getTableRows(
+    table: string
+  ): [{ rows: { [string]: any }, metadata: RowMetadata }] {
+    // sqlite statement for actual row data
+    const key = await this.getTableKey(table);
+    const sqlIds = `
+      SELECT ${key.name}
+      FROM '${table}';
+    `;
+    const sqlData = `
       SELECT *
       FROM '${table}';
     `;
-    return this.driverExecuteQuery({ query: sql }).then(res => res.data);
+
+    const [rows, rowid] = await Promise.all([
+      this.driverExecuteQuery({ query: sqlData }),
+      // @HACK: HARDCODE. SQLITE ONLY
+      this.driverExecuteQuery({ query: sqlIds })
+    ]);
+    return rows.data.map((row, i) => ({
+      row,
+      metadata: {
+        id: rowid.data[i][key.name],
+        tableKey: key.name
+      }
+    }));
   }
 
   async getTableNames() {
@@ -703,7 +682,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
     };
 
     return this.connection.connection
-      ? await identifyStatementsRunQuery(this.connection.connection)
+      ? identifyStatementsRunQuery(this.connection.connection)
       : this.runWithConnection(identifyStatementsRunQuery);
   }
 
@@ -727,14 +706,23 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
             });
           });
 
+          let failed = false;
+          let fn = () => {};
+
           try {
             db.serialize();
             return resolve(run(db));
           } catch (runErr) {
-            reject(runErr);
+            failed = true;
+            fn = reject(runErr);
           } finally {
             db.close();
           }
+
+          if (failed) {
+            return fn();
+          }
+          return true;
         }
       );
     });
@@ -766,6 +754,54 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
         `Unsupported properties passed: ${JSON.stringify(exportOptions)}`
       );
     }
+  }
+
+  getGraphQLServerPort() {
+    return this.graphQLServerPort;
+  }
+
+  async startGraphQLServer(): Promise<void> {
+    if (this.graphQLServerIsRunning()) {
+      return;
+    }
+
+    // See https://github.com/airbnb/babel-plugin-dynamic-import-node/issues/47
+    const [graphqlHTTP, tuql, express] = await Promise.all([
+      import('express-graphql').then(x => x.default || x),
+      import('@falcon-client/tuql').then(x => x.default || x),
+      import('express').then(x => x.default || x)
+    ]);
+
+    const { buildSchemaFromDatabase } = tuql;
+    const app = express();
+
+    const schema = await buildSchemaFromDatabase(
+      this.connection.dbConfig.database
+    );
+    const port = await getPort();
+    app.use('/graphql', cors(), graphqlHTTP({ schema }));
+
+    await new Promise(resolve => {
+      this.graphQLServer = app.listen(port, () => {
+        this.graphQLServerPort = port;
+        console.log(` > Running at http://localhost:${port}/graphql`);
+        resolve();
+      });
+      this.privateGraphQLServerIsRunning = true;
+    });
+  }
+
+  async stopGraphQLServer(): Promise<void> {
+    if (this.graphQLServerIsRunning()) {
+      this.graphQLServer.close();
+      this.graphQLServer = undefined;
+      this.graphQLServerPort = undefined;
+      this.privateGraphQLServerIsRunning = false;
+    }
+  }
+
+  graphQLServerIsRunning() {
+    return this.privateGraphQLServerIsRunning;
   }
 }
 
