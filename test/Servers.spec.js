@@ -1,3 +1,4 @@
+/* eslint-disable */
 import path from 'path';
 import { servers } from '../src';
 import { readJSONFile, writeJSONFile } from '../src/Utils';

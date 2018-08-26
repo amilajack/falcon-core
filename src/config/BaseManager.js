@@ -52,7 +52,7 @@ export default class BaseManager {
    * @private
    * @abstract
    */
-  validateBeforeCreation(item: itemType) {}
+  validateBeforeCreation() {}
 
   async add(item: itemType): Promise<itemValidationType> {
     const rndm = await import('rndm').then(e => e.default || e)

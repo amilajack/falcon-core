@@ -43,7 +43,6 @@ const unchangedKeywords = [
 
 describe('Formatters', () => {
   const numSpaces = 2;
-  const tab = ' '.repeat(numSpaces);
 
   it('should format basic sqlite statement', () => {
     expect(SqliteFormatter('SELECT * FROM users')).toMatchSnapshot();
