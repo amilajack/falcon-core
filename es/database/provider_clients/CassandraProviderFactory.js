@@ -127,7 +127,7 @@ class CassandraProvider extends BaseProvider {
     });
   }
 
-  getTableValues() {
+  getTableRows() {
     return Promise.resolve([]);
   }
 

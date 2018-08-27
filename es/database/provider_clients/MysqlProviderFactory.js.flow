@@ -261,7 +261,7 @@ class MysqlProvider extends BaseProvider implements ProviderInterface {
     }));
   }
 
-  async getTableValues(tableName: string) {
+  async getTableRows(tableName: string) {
     const sql = `
       SELECT * FROM ${tableName};
     `;

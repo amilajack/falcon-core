@@ -1,6 +1,6 @@
 // @flow
-import BaseManager, { FalconError } from './BaseManager';
 import Joi from 'joi';
+import BaseManager, { FalconError } from './BaseManager';
 import type { ManagerInterface } from './ManagerInterface';
 import type { databasesType } from '../database/provider_clients/ProviderInterface';
 

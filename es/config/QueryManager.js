@@ -1,5 +1,5 @@
-import BaseManager, { FalconError } from './BaseManager';
 import Joi from 'joi';
+import BaseManager, { FalconError } from './BaseManager';
 
 
 function validateQuery(query) {

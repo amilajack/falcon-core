@@ -111,7 +111,7 @@ class CassandraProvider extends BaseProvider implements ProviderInterface {
     });
   }
 
-  getTableValues() {
+  getTableRows() {
     return Promise.resolve([]);
   }
 

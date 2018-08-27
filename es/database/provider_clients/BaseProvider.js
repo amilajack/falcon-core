@@ -5,7 +5,7 @@ import { writeFile } from 'fs';
 import { Parser as Json2CsvParser } from 'json2csv';
 import SqliteJsonExport from 'sqlite-json-export';
 import promisify from 'util.promisify';
-import clients from './';
+import clients from '.';
 import * as config from '../../Config';
 import createLogger from '../../Logger';
 

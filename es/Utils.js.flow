@@ -95,6 +95,7 @@ export function createCancelablePromise(error: Error, timeIdle: number = 100) {
   return {
     async wait() {
       while (!canceled && !discarded) {
+        // eslint-disable-next-line
         await wait(timeIdle);
       }
 
@@ -102,6 +103,7 @@ export function createCancelablePromise(error: Error, timeIdle: number = 100) {
         const err = new Error(error.message || 'Promise canceled.');
 
         Object.getOwnPropertyNames(error).forEach(
+          // eslint-disable-next-line
           key => (err[key] = error[key])
         );
 

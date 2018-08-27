@@ -146,7 +146,7 @@ export interface ProviderInterface {
   getVersion: () => Promise<string | number>;
   getConnectionType: () => Promise<'local' | 'ssh' | 'insecure'>;
   getTableReferences: (table: string) => Promise<Array<string>>;
-  getTableValues: (table: string) => Promise<Array<Object>>;
+  getTableRows: (table: string) => Promise<Array<Object>>;
   getTableNames: () => Promise<Array<string>>;
   /**
    * Gets columns of a table

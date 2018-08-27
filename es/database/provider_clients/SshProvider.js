@@ -2,6 +2,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 import BaseProvider from './BaseProvider';
 import Tunnel from '../Tunnel';
+import { CLIENTS } from '.';
 
 
 export default class SshProvider extends BaseProvider {
@@ -27,23 +28,23 @@ export default class SshProvider extends BaseProvider {
 
         // reuse existing tunnel
         if (_this.server.config.ssh && !_this.server.sshTunnel) {
-          logger().debug('creating ssh tunnel');
+          console.log('creating ssh tunnel');
           _this.server.sshTunnel = yield Tunnel(_this.server.config);
 
           const { address, port } = _this.server.sshTunnel.address();
-          logger().debug('ssh forwarding through local connection %s:%d', address, port);
+          console.log('ssh forwarding through local connection %s:%d', address, port);
 
           _this.server.config.localHost = address;
           _this.server.config.localPort = port;
         }
 
-        const driver = clients[_this.server.config.client];
+        const driver = CLIENTS[_this.server.config.client];
 
         const [connection] = yield Promise.all([driver(_this.server, _this.database), _this.handleSSHError(_this.server.sshTunnel)]);
 
         _this.database.connection = connection;
       } catch (err) {
-        logger().error('Connection error %j', err);
+        console.log('Connection error %j', err);
         _this.disconnect();
         throw err;
       } finally {
@@ -60,7 +61,7 @@ export default class SshProvider extends BaseProvider {
 
       sshTunnel.on('success', resolve);
       sshTunnel.on('error', error => {
-        logger().error('ssh error %j', error);
+        console.log('ssh error %j', error);
         reject(error);
       });
 

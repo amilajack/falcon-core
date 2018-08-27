@@ -22,10 +22,10 @@ const SUPPORTED_DB_CLIENTS = [
   'cassandra'
 ];
 
-const dbSchemas = {
-  postgresql: 'public',
-  sqlserver: 'dbo'
-};
+// const dbSchemas = {
+//   postgresql: 'public',
+//   sqlserver: 'dbo'
+// };
 
 const delay = (time: number) =>
   new Promise(resolve => setTimeout(resolve, time));
@@ -63,7 +63,9 @@ describe('Database', () => {
   });
 
   dbClients.forEach(dbClient => {
-    const dbSchema = dbSchemas[dbClient];
+    // In the future we'll need to test against multiple db's. Use dbScheams
+    // for this:
+    // const dbSchema = dbSchemas[dbClient];
 
     describe(dbClient, () => {
       describe('.connect', () => {
@@ -157,31 +159,44 @@ describe('Database', () => {
         describe('CRUD', () => {
           describe('.delete', () => {
             it('should add 2 then delete 3 rows in the table', async () => {
-              const usersValuesBefore = await dbConn.getTableValues('users');
+              const usersValuesBefore = await dbConn.getTableRows('users');
               expect(usersValuesBefore).toHaveLength(1);
-              expect(await dbConn.getTableValues('users')).toMatchSnapshot();
+              expect(await dbConn.getTableRows('users')).toMatchSnapshot();
               await dbConn.delete('users', ['1', '3']);
-              expect(await dbConn.getTableValues('users')).toMatchSnapshot();
+              expect(await dbConn.getTableRows('users')).toMatchSnapshot();
               await dbConn.delete('users', [2], true);
-              expect(await dbConn.getTableValues('users')).toMatchSnapshot();
-              const usersValuesAfter = await dbConn.getTableValues('users');
+              expect(await dbConn.getTableRows('users')).toMatchSnapshot();
+              const usersValuesAfter = await dbConn.getTableRows('users');
               expect(usersValuesAfter).toHaveLength(0);
+            });
+
+            it('should delete row from table without primary key', async () => {
+              await dbConn.executeQuery('DROP TABLE IF EXISTS foobar');
+              await dbConn.executeQuery(`
+                CREATE TABLE IF NOT EXISTS foobar (
+                  id INTEGER NOT NULL,
+                  name VARCHAR(100) NULL
+                )
+              `);
+              await dbConn.insert('foobar', [
+                {
+                  id: 'jooohhn',
+                  name: 'john'
+                }
+              ]);
+              expect(await dbConn.getTableRows('foobar')).toMatchSnapshot();
+              await dbConn.delete('foobar', [1]);
+              expect(await dbConn.getTableRows('foobar')).toEqual([]);
+              await dbConn.executeQuery('DROP TABLE IF EXISTS foobar');
             });
           });
 
           describe('.insert', () => {
             it('should insert 1 empty record and 1 filled record', async () => {
-              const usersValuesBefore = await dbConn.getTableValues('users');
+              const usersValuesBefore = await dbConn.getTableRows('users');
               expect(usersValuesBefore).toHaveLength(1);
-              expect(await dbConn.getTableValues('users')).toMatchSnapshot();
-              expect(usersValuesBefore[0]).toEqual({
-                id: 1,
-                username: 'maxcnunes',
-                email: 'maxcnunes@gmail.com',
-                password: '123456',
-                role_id: 1,
-                createdat: '2016-10-25'
-              });
+              expect(await dbConn.getTableRows('users')).toMatchSnapshot();
+              expect(usersValuesBefore).toMatchSnapshot();
               await dbConn.insert('users', [
                 {},
                 {
@@ -192,41 +207,19 @@ describe('Database', () => {
                   createdat: '2017-7-20'
                 }
               ]);
-              const usersValuesAfter = await dbConn.getTableValues('users');
-              expect(await dbConn.getTableValues('users')).toMatchSnapshot();
-              expect(usersValuesAfter[1]).toEqual({
-                id: 2,
-                username: null,
-                email: null,
-                password: null,
-                role_id: null,
-                createdat: null
-              });
-              expect(usersValuesAfter[2]).toEqual({
-                id: 3,
-                username: 'jooohhn',
-                email: 'jptran318@gmail.com',
-                password: 'password123',
-                role_id: 1,
-                createdat: '2017-7-20'
-              });
-              expect(await dbConn.getTableValues('users')).toMatchSnapshot();
+              const usersValuesAfter = await dbConn.getTableRows('users');
+              expect(await dbConn.getTableRows('users')).toMatchSnapshot();
+              expect(usersValuesAfter).toMatchSnapshot();
+              expect(await dbConn.getTableRows('users')).toMatchSnapshot();
             });
           });
 
           describe('.update', () => {
             it('should insert an empty record then update it', async () => {
-              const usersValuesBefore = await dbConn.getTableValues('users');
+              const usersValuesBefore = await dbConn.getTableRows('users');
               expect(usersValuesBefore).toHaveLength(1);
-              expect(await dbConn.getTableValues('users')).toMatchSnapshot();
-              expect(usersValuesBefore[0]).toEqual({
-                id: 1,
-                username: 'maxcnunes',
-                email: 'maxcnunes@gmail.com',
-                password: '123456',
-                role_id: 1,
-                createdat: '2016-10-25'
-              });
+              expect(await dbConn.getTableRows('users')).toMatchSnapshot();
+              expect(usersValuesBefore).toMatchSnapshot();
               expect(usersValuesBefore).toHaveLength(1);
               await dbConn.insert('users', [{}]);
               await dbConn.update('users', [
@@ -241,18 +234,50 @@ describe('Database', () => {
                   }
                 }
               ]);
-              expect(await dbConn.getTableValues('users')).toMatchSnapshot();
-              const usersValuesAfter = await dbConn.getTableValues('users');
+              expect(await dbConn.getTableRows('users')).toMatchSnapshot();
+              const usersValuesAfter = await dbConn.getTableRows('users');
               expect(usersValuesAfter).toHaveLength(2);
-              expect(usersValuesAfter[1]).toEqual({
-                id: 2,
-                username: 'jooohhn',
-                email: 'jptran318@gmail.com',
-                password: 'password123',
-                role_id: 1,
-                createdat: '2017-7-20'
-              });
-              expect(await dbConn.getTableValues('users')).toMatchSnapshot();
+              expect(usersValuesAfter).toMatchSnapshot();
+              expect(await dbConn.getTableRows('users')).toMatchSnapshot();
+            });
+
+            it('should update rows with table with no pk', async () => {
+              await dbConn.executeQuery('DROP TABLE IF EXISTS foobar');
+              await dbConn.executeQuery(`
+                CREATE TABLE IF NOT EXISTS foobar (
+                  id INTEGER NULL,
+                  name VARCHAR(100) NULL
+                )
+              `);
+              await dbConn.insert('foobar', [
+                {
+                  id: 'jooohhn',
+                  name: 'john'
+                }
+              ]);
+              expect(await dbConn.getTableRows('foobar')).toMatchSnapshot();
+              await dbConn.update('foobar', [
+                {
+                  rowPrimaryKeyValue: '1',
+                  changes: {
+                    id: 'jooohhn',
+                    name: 'jptran318@gmail.com'
+                  }
+                }
+              ]);
+              expect(await dbConn.getTableRows('foobar')).toEqual([
+                {
+                  metadata: {
+                    id: 1,
+                    tableKey: 'rowid'
+                  },
+                  row: {
+                    id: 'jooohhn',
+                    name: 'jptran318@gmail.com'
+                  }
+                }
+              ]);
+              await dbConn.executeQuery('DROP TABLE IF EXISTS foobar');
             });
           });
         });
@@ -368,9 +393,9 @@ describe('Database', () => {
             });
           });
 
-          describe('.getTableValues', () => {
+          describe('.getTableRows', () => {
             it('should list all tables keys', async () => {
-              const tableKeys = await dbConn.getTableValues('users');
+              const tableKeys = await dbConn.getTableRows('users');
               expect(tableKeys).toMatchSnapshot();
             });
           });
