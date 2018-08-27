@@ -240,6 +240,45 @@ describe('Database', () => {
               expect(usersValuesAfter).toMatchSnapshot();
               expect(await dbConn.getTableRows('users')).toMatchSnapshot();
             });
+
+            it('should update rows with table with no pk', async () => {
+              await dbConn.executeQuery('DROP TABLE IF EXISTS foobar');
+              await dbConn.executeQuery(`
+                CREATE TABLE IF NOT EXISTS foobar (
+                  id INTEGER NULL,
+                  name VARCHAR(100) NULL
+                )
+              `);
+              await dbConn.insert('foobar', [
+                {
+                  id: 'jooohhn',
+                  name: 'john'
+                }
+              ]);
+              expect(await dbConn.getTableRows('foobar')).toMatchSnapshot();
+              await dbConn.update('foobar', [
+                {
+                  rowPrimaryKeyValue: '1',
+                  changes: {
+                    id: 'jooohhn',
+                    name: 'jptran318@gmail.com'
+                  }
+                }
+              ]);
+              expect(await dbConn.getTableRows('foobar')).toEqual([
+                {
+                  metadata: {
+                    id: 1,
+                    tableKey: 'rowid'
+                  },
+                  row: {
+                    id: 'jooohhn',
+                    name: 'jptran318@gmail.com'
+                  }
+                }
+              ]);
+              await dbConn.executeQuery('DROP TABLE IF EXISTS foobar');
+            });
           });
         });
 
