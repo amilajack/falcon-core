@@ -23,7 +23,6 @@ function executeQuery(client, query) {
       if (err) {
         return reject(err);
       }
-
       return resolve();
     });
   });

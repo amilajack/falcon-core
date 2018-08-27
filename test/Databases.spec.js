@@ -169,6 +169,26 @@ describe('Database', () => {
               const usersValuesAfter = await dbConn.getTableRows('users');
               expect(usersValuesAfter).toHaveLength(0);
             });
+
+            it('should delete row from table without primary key', async () => {
+              await dbConn.executeQuery('DROP TABLE IF EXISTS foobar');
+              await dbConn.executeQuery(`
+                CREATE TABLE IF NOT EXISTS foobar (
+                  id INTEGER NOT NULL,
+                  name VARCHAR(100) NULL
+                )
+              `);
+              await dbConn.insert('foobar', [
+                {
+                  id: 'jooohhn',
+                  name: 'john'
+                }
+              ]);
+              expect(await dbConn.getTableRows('foobar')).toMatchSnapshot();
+              await dbConn.delete('foobar', [1]);
+              expect(await dbConn.getTableRows('foobar')).toEqual([]);
+              await dbConn.executeQuery('DROP TABLE IF EXISTS foobar');
+            });
           });
 
           describe('.insert', () => {

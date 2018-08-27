@@ -242,7 +242,7 @@ class SqliteProvider extends BaseProvider {
       const primaryKeyColumn = columns.find(function (key) {
         return key.pk === 1;
       });
-      return primaryKeyColumn === undefined ? 'rowid' : primaryKeyColumn;
+      return primaryKeyColumn || { name: 'rowid' };
     })();
   }
 

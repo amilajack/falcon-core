@@ -48,6 +48,21 @@ exports[`Database sqlite given is already connected CRUD .delete should add 2 th
 
 exports[`Database sqlite given is already connected CRUD .delete should add 2 then delete 3 rows in the table 3`] = `Array []`;
 
+exports[`Database sqlite given is already connected CRUD .delete should delete row from table without primary key 1`] = `
+Array [
+  Object {
+    "metadata": Object {
+      "id": 1,
+      "tableKey": "rowid",
+    },
+    "row": Object {
+      "id": "jooohhn",
+      "name": "john",
+    },
+  },
+]
+`;
+
 exports[`Database sqlite given is already connected CRUD .insert should insert 1 empty record and 1 filled record 1`] = `
 Array [
   Object {

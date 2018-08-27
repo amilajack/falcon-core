@@ -240,7 +240,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
   async getTableKey(table: string): Promise<tableKeyType> {
     const columns = await this.getTableColumns(table);
     const primaryKeyColumn = columns.find(key => key.pk === 1);
-    return primaryKeyColumn === undefined ? 'rowid' : primaryKeyColumn;
+    return primaryKeyColumn || { name: 'rowid' };
   }
 
   /**
