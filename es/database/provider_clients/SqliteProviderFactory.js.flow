@@ -19,7 +19,7 @@ import type {
 
 type queryArgsType = {
   query: string,
-  multiple?: bool,
+  multiple?: boolean,
   params?: Array<string>
 };
 
@@ -60,7 +60,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
   /**
    * @private
    */
-  privateGraphQLServerIsRunning: bool = false;
+  privateGraphQLServerIsRunning: boolean = false;
 
   constructor(server: Object, database: Object, connection: Object) {
     super(server, database);
@@ -228,7 +228,7 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
    */
   async getTableColumns(
     table: string,
-    raw: bool = false
+    raw: boolean = false
   ): Promise<Array<tableKeyType>> {
     const sql = `PRAGMA table_info(${table})`;
     const rawResults = this.driverExecuteQuery({ query: sql }).then(
@@ -248,9 +248,11 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
    * @TODO: Method does not handle WITHOUT ROWID tables
    * @TODO: If rowid is a hidden field, should hide it in the results
    */
-  async getTableRows(table: string): [{rows: { [string]: any }, metadata: RowMetadata}] {
+  async getTableRows(
+    table: string
+  ): [{ rows: { [string]: any }, metadata: RowMetadata }] {
     // sqlite statement for actual row data
-    const key = await this.getTableKey(table)
+    const key = await this.getTableKey(table);
     const sqlIds = `
       SELECT ${key.name}
       FROM '${table}';
@@ -265,12 +267,12 @@ class SqliteProvider extends BaseProvider implements ProviderInterface {
       // @HACK: HARDCODE. SQLITE ONLY
       this.driverExecuteQuery({ query: sqlIds })
     ]);
-     return rows.data.map((row, i) => ({
-        row,
-        metadata: {
-          id: rowid.data[i][key.name],
-          tableKey: key.name
-        }
+    return rows.data.map((row, i) => ({
+      row,
+      metadata: {
+        id: rowid.data[i][key.name],
+        tableKey: key.name
+      }
     }));
   }
 

@@ -93,13 +93,16 @@ export function createCancelablePromise(error, timeIdle = 100) {
     wait() {
       return _asyncToGenerator(function* () {
         while (!canceled && !discarded) {
+          // eslint-disable-next-line
           yield wait(timeIdle);
         }
 
         if (canceled) {
           const err = new Error(error.message || 'Promise canceled.');
 
-          Object.getOwnPropertyNames(error).forEach(function (key) {
+          Object.getOwnPropertyNames(error).forEach(
+          // eslint-disable-next-line
+          function (key) {
             return err[key] = error[key];
           });
 

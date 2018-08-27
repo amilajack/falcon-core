@@ -7,6 +7,14 @@ compiler: gcc
 node_js:
   - 9
 
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.7
+      - g++-4.7
+
 cache: yarn
 
 before_install:
@@ -24,17 +32,11 @@ before_install:
   # - sqlcmd -S localhost,1433 -U sa -P Password12! -i test/databases/sqlserver/schema/schema.sql -d "sqlectron"
   # - sqlcmd -S localhost,1433 -U sa -P Password12! -Q "select table_name from information_schema.tables" -d "sqlectron"
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - gcc-4.7
-      - g++-4.7
+install:
+  - lerna bootstrap
 
 script:
   - yarn lint
-  - lerna bootstrap
   - lerna run build
   - lerna run test
   - yarn coverage

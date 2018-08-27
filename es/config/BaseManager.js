@@ -35,7 +35,7 @@ export default class BaseManager {
    * @private
    * @abstract
    */
-  validateBeforeCreation(item) {}
+  validateBeforeCreation() {}
 
   add(item) {
     var _this = this;

@@ -1,6 +1,7 @@
 // @flow
 import BaseProvider from './BaseProvider';
 import Tunnel from '../Tunnel';
+import { CLIENTS } from '.';
 import type { sshTunnelType } from '../Tunnel';
 
 export default class SshProvider extends BaseProvider {
@@ -27,11 +28,11 @@ export default class SshProvider extends BaseProvider {
 
       // reuse existing tunnel
       if (this.server.config.ssh && !this.server.sshTunnel) {
-        logger().debug('creating ssh tunnel');
+        console.log('creating ssh tunnel');
         this.server.sshTunnel = await Tunnel(this.server.config);
 
         const { address, port } = this.server.sshTunnel.address();
-        logger().debug(
+        console.log(
           'ssh forwarding through local connection %s:%d',
           address,
           port
@@ -41,7 +42,7 @@ export default class SshProvider extends BaseProvider {
         this.server.config.localPort = port;
       }
 
-      const driver = clients[this.server.config.client];
+      const driver = CLIENTS[this.server.config.client];
 
       const [connection] = await Promise.all([
         driver(this.server, this.database),
@@ -50,7 +51,7 @@ export default class SshProvider extends BaseProvider {
 
       this.database.connection = connection;
     } catch (err) {
-      logger().error('Connection error %j', err);
+      console.log('Connection error %j', err);
       this.disconnect();
       throw err;
     } finally {
@@ -66,7 +67,7 @@ export default class SshProvider extends BaseProvider {
 
       sshTunnel.on('success', resolve);
       sshTunnel.on('error', error => {
-        logger().error('ssh error %j', error);
+        console.log('ssh error %j', error);
         reject(error);
       });
 
